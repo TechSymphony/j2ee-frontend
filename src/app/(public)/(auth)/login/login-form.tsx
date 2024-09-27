@@ -1,5 +1,5 @@
 "use client";
-import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
+import { LoginBody, LoginBodyType } from "@/schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
