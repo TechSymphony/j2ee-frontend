@@ -1,26 +1,48 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import envConfig from "@/config";
 
-type CustomOptions = RequestInit & {
+type CustomOptions = Omit<RequestInit, "method"> & {
   baseUrl?: string | undefined;
+};
+
+const ENTITY_ERROR_STATUS = 400;
+
+type EntityErrorPayload = {
+  statusCode: string;
+  title: string;
+  detail: string;
+  fieldErrors: string[];
 };
 
 export class HttpError extends Error {
   status: number;
-  payload: {
-    message: string;
-    [key: string]: any;
-  };
+  payload: any;
   constructor({
     status,
     payload,
-    message = "HTTP Error",
+    message = "Http Error",
   }: {
     status: number;
     payload: any;
     message?: string;
   }) {
     super(message);
+    this.status = status;
+    this.payload = payload;
+  }
+}
+
+export class EntityError extends HttpError {
+  status: typeof ENTITY_ERROR_STATUS;
+  payload: EntityErrorPayload;
+  constructor({
+    status,
+    payload,
+  }: {
+    status: 400;
+    payload: EntityErrorPayload;
+  }) {
+    super({ status, payload, message: "Enity Error" });
     this.status = status;
     this.payload = payload;
   }
@@ -34,6 +56,7 @@ const request = async <Response>(
   const body = options?.body ? JSON.stringify(options.body) : undefined;
   const baseHeaders = {
     "Content-Type": "application/json",
+    Authorization: `Bearer ${envConfig.NEXT_PUBLIC_ACCESS_TOKEN}`,
   };
 
   /**
@@ -63,12 +86,23 @@ const request = async <Response>(
     method,
   });
   const payload: Response = await res.json();
+
   const data = {
     status: res.status,
     payload,
   };
+
   if (!res.ok) {
-    throw new HttpError(data);
+    if (res.status === ENTITY_ERROR_STATUS) {
+      throw new EntityError(
+        data as {
+          status: 400;
+          payload: EntityErrorPayload;
+        }
+      );
+    } else {
+      throw new HttpError(data);
+    }
   }
 
   return data;
