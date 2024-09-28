@@ -5,7 +5,7 @@ type CustomOptions = Omit<RequestInit, "method"> & {
   baseUrl?: string | undefined;
 };
 
-const ENTITY_ERROR_STATUS = 400;
+const ENTITY_ERROR_STATUS = 422;
 
 type EntityErrorPayload = {
   statusCode: string;
@@ -39,7 +39,7 @@ export class EntityError extends HttpError {
     status,
     payload,
   }: {
-    status: 400;
+    status: 422;
     payload: EntityErrorPayload;
   }) {
     super({ status, payload, message: "Enity Error" });
@@ -96,7 +96,7 @@ const request = async <Response>(
     if (res.status === ENTITY_ERROR_STATUS) {
       throw new EntityError(
         data as {
-          status: 400;
+          status: 422;
           payload: EntityErrorPayload;
         }
       );
