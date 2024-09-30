@@ -6,6 +6,8 @@ export const useGetRoleListQuery = () => {
   return useQuery({
     queryKey: ["roles"],
     queryFn: roleApi.getRoleList,
+    staleTime: 0,
+    enabled: true,
   });
 };
 

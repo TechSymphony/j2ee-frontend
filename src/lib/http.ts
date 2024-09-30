@@ -6,6 +6,7 @@ type CustomOptions = Omit<RequestInit, "method"> & {
 };
 
 const ENTITY_ERROR_STATUS = 422;
+const NO_CONTENT = 204;
 
 type EntityErrorPayload = {
   statusCode: string;
@@ -39,7 +40,7 @@ export class EntityError extends HttpError {
     status,
     payload,
   }: {
-    status: 422;
+    status: typeof ENTITY_ERROR_STATUS;
     payload: EntityErrorPayload;
   }) {
     super({ status, payload, message: "Enity Error" });
@@ -85,18 +86,22 @@ const request = async <Response>(
     body,
     method,
   });
-  const payload: Response = await res.json();
+
+  const payload: Response = res.status === NO_CONTENT ? {} : await res.json();
 
   const data = {
     status: res.status,
     payload,
   };
 
+  /**
+   * Đây là phần xử lý interceptor request,response
+   */
   if (!res.ok) {
     if (res.status === ENTITY_ERROR_STATUS) {
       throw new EntityError(
         data as {
-          status: 422;
+          status: typeof ENTITY_ERROR_STATUS;
           payload: EntityErrorPayload;
         }
       );
