@@ -1,4 +1,4 @@
-import { clsx, type ClassValue } from "clsx";
+import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { toast } from "@/hooks/use-toast";
 import { EntityError } from "@/lib/http";
@@ -8,13 +8,13 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-/**
- * Description: Xử lý lỗi trả về từ API
- * Params:
- * error: Lỗi trả về
- * setError: hooks của form để set message lỗi nếu có
- * duration: Thời gian của thông báo lỗi
- */
+// /**
+//  * Description: Xử lý lỗi trả về từ API
+//  * Params:
+//  * error: Lỗi trả về
+//  * setError: hooks của form để set message lỗi nếu có
+//  * duration: Thời gian của thông báo lỗi
+//  */
 export const handleErrorFromApi = ({
   error,
   setError,

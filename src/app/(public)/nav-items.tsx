@@ -15,8 +15,8 @@ const menuItems = [
     authRequired: false,
   },
   {
-    title: "Quản lý",
-    href: "/manage/roles",
+    title: "Dashboard",
+    href: "/dashboard",
     authRequired: true,
   },
 ];
