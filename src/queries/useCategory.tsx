@@ -1,0 +1,70 @@
+import categoryApi from "@/apis/category";
+import { UpdateRoleBodyType } from "@/schemas/role.schema";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+export const useGetCategoryListQuery = () => {
+  return useQuery({
+    queryKey: ["categories"],
+    queryFn: categoryApi.getCategoryList,
+    staleTime: 0,
+    enabled: true,
+  });
+};
+
+export const useGetCategoryQuery = ({
+  id,
+  enabled,
+}: {
+  id: number;
+  enabled: boolean;
+}) => {
+  return useQuery({
+    queryKey: ["roles-detail", id],
+    queryFn: () => roleApi.getRole(id),
+    enabled,
+  });
+};
+
+export const useUpdateRoleMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, ...body }: UpdateRoleBodyType & { id: number }) =>
+      roleApi.updateRole(id, body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["roles"],
+      });
+    },
+  });
+};
+
+export const useGetPermissionListQuery = () => {
+  return useQuery({
+    queryKey: ["permissions"],
+    queryFn: roleApi.getPermissionList,
+  });
+};
+
+export const useAddRoleMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: roleApi.addRole,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["roles"],
+      });
+    },
+  });
+};
+
+export const useDeleteRoleMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: roleApi.deleteRole,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["roles"],
+      });
+    },
+  });
+};
