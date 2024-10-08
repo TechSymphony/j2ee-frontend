@@ -50,6 +50,11 @@ const menuItems = [
     href: "/logout",
     authRequired: true,
   },
+  {
+    title: "Gửi nguyện vọng đóng góp",
+    href: "/beneficiary",
+    authRequired: true,
+  },
 ];
 
 export default function NavItems({ className }: { className?: string }) {
