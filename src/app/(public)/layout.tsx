@@ -1,3 +1,4 @@
+'use client';
 import Link from "next/link";
 import { Menu, Package2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,11 +8,32 @@ import NavItems from "@/app/(public)/nav-items";
 import Footer from "@/components/layout/footer";
 import Image from "next/image";
 
+import envConfig from '@/config';
+import { WebStorageStateStore, UserManager } from 'oidc-client-ts';
+
+const userManagerConfig = {
+  authority: envConfig.OAUTH_AUTH_URL,
+  token_endpoint: envConfig.OAUTH_AUTH_URL + '/oauth2/token',
+  authorization_endpoint: envConfig.OAUTH_AUTH_URL + '/oauth2/authorize',
+
+  client_id:  envConfig.OAUTH_AUTH_ID,
+  redirect_uri: envConfig.NEXT_PUBLIC_URL+"/callback",
+  response_type: "code",
+  scope: "openid profile",
+  post_logout_redirect_uri: envConfig.NEXT_PUBLIC_URL,
+//   silent_redirect_uri: 'https://your-app.com/silent-renew.html', // URL for silent renew
+//   automaticSilentRenew: true,            // Enable silent renewal of tokens
+  userStore: new WebStorageStateStore({ store: global?.window?.localStorage }),
+};
+
+export const userManager = new UserManager(userManagerConfig);
+
 export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <div className="flex min-h-screen w-full flex-col relative">
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 z-20">

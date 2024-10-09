@@ -19,11 +19,6 @@ const menuItems = [
     authRequired: false,
   },
   {
-    title: "Đăng nhập",
-    href: "/login",
-    authRequired: false,
-  },
-  {
     title: "Dashboard",
     href: "/dashboard",
     authRequired: true,
@@ -41,6 +36,11 @@ const menuItems = [
   {
     title: "Tin tức cộng đồng",
     href: "/news",
+    authRequired: false,
+  },
+  {
+    title: "Đăng nhập",
+    href: "/login",
     authRequired: false,
   },
 ];
