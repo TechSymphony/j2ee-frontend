@@ -1,3 +1,4 @@
+"use client";
 import CampaignList from "@/components/campaign/campaign-list";
 import { dataSliders } from "@/components/sliders/data-slider";
 import Slider from "@/components/sliders/slider";

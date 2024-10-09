@@ -77,7 +77,13 @@ const request = async <Response>(
     ? `${baseUrl}${url}`
     : `${baseUrl}/${url}`;
 
-  const res = await fetch(fullUrl, {
+  /**
+   * Add current query parameter if exists
+   */
+
+  const params: URLSearchParams = new URL(window.location.href).searchParams;
+
+  const res = await fetch(fullUrl + "?"+ params.toString(), {
     ...options,
     headers: {
       ...baseHeaders,
