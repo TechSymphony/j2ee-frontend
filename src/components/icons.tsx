@@ -1,4 +1,5 @@
 import {
+  ScrollText,
   AlertTriangle,
   ArrowRight,
   Check,
@@ -61,6 +62,7 @@ export const Icons = {
   sun: SunMedium,
   moon: Moon,
   laptop: Laptop,
+  campaign: ScrollText,
   list: List,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
