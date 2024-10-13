@@ -3,7 +3,8 @@
 import Link from "next/link";
 import classNames from "classnames";
 import { usePathname } from "next/navigation";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { userManager } from "./layout";
 // import { useEffect, useState } from "react";
 
 /**
@@ -16,11 +17,6 @@ const menuItems = [
     title: "Trang chủ",
     href: "/",
     exact: true,
-    authRequired: false,
-  },
-  {
-    title: "Đăng nhập",
-    href: "/login",
     authRequired: false,
   },
   {
@@ -43,21 +39,38 @@ const menuItems = [
     href: "/news",
     authRequired: false,
   },
+  {
+    title: "Đăng nhập",
+    href: "/login",
+    authRequired: false,
+    hideAfterAuth: true,
+  },
+  {
+    title: "Đăng xuất",
+    href: "/logout",
+    authRequired: true,
+  },
 ];
 
 export default function NavItems({ className }: { className?: string }) {
-  // const [isAuth, setIsAuth] = useState(false);
-  // useEffect(() => {
-  //   setIsAuth(true);
-  // }, []);
+  const [isAuth, setIsAuth] = useState(false);
+  useEffect(() => {
+    userManager.getUser().then((user) => 
+      {
+        setIsAuth(user != null);
+        console.log(user);
+      }
+    ) ;
+  }, []);
+
   const pathname = usePathname();
   return useMemo(() => {
     return menuItems.map((item) => {
-      // if (
-      //   (item.authRequired === false && isAuth) ||
-      //   (item.authRequired === true && !isAuth)
-      // )
-      //   return null;
+      if (
+        (item.authRequired === true && !isAuth)
+      || item.hideAfterAuth && isAuth
+      )
+        return null;
 
       const isActive = item.exact
         ? pathname === item.href
@@ -75,5 +88,5 @@ export default function NavItems({ className }: { className?: string }) {
         </Link>
       );
     });
-  }, [pathname, className]);
+  }, [pathname, className, isAuth]);
 }
