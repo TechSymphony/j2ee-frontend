@@ -131,6 +131,12 @@ export const navItems: NavItem[] = [
   },
 
   {
+    title: "Beneficiary",
+    href: "/dashboard/beneficiary",
+    icon: "billing",
+    label: "money",
+  },
+  {
     title: "Profile",
     href: "/dashboard/profile",
     icon: "profile",
