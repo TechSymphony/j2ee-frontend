@@ -34,6 +34,6 @@ export default function Beneficiary() {
     }
 
     return (<>
-        <div>Not found</div>
+        <div>Loading...</div>
     </>);
 }
