@@ -81,11 +81,12 @@ export const CampaignForm = () => {
     const form = useForm<CampaignFormValuesType>({
         resolver: zodResolver(formSchema),
         defaultValues: {
+            beneficiary: {},
+            code: "",
             name: "",
             description: "",
-            beneficiary_id: 0,
-            code: "",
             targetAmount: 0,
+            currentAmount: 0,
             startDate: new Date(),
             endDate: new Date(),
             isApproved: false,
@@ -97,13 +98,14 @@ export const CampaignForm = () => {
      */
     useEffect(() => {
         if (initialData) {
-            const { name, description, beneficiary_id, code, targetAmount, startDate, endDate, isApproved } = initialData.payload;
+            const { beneficiary, code, name, description, targetAmount, currentAmount, startDate, endDate, isApproved } = initialData.payload;
             form.reset({
+                beneficiary,
+                code,
                 name,
                 description,
-                beneficiary_id,
-                code,
                 targetAmount,
+                currentAmount,
                 startDate: new Date(startDate),
                 endDate: new Date(endDate),
                 isApproved,
@@ -111,6 +113,7 @@ export const CampaignForm = () => {
         }
     }, [initialData, form]);
 
+    console.log("Form: ", form.watch());
 
     const onSubmit = async (data: UpdateCampaignBodyType | CreateCampaignBodyType) => {
         console.log("data", data);
@@ -272,32 +275,35 @@ export const CampaignForm = () => {
                         />
                         <FormField
                             control={form.control}
-                            name="beneficiary_id"
+                            name="beneficiary"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Người nhận</FormLabel>
+                                    <FormLabel>Người thụ hưởng</FormLabel>
                                     <Select
-                                        onValueChange={(value) => field.onChange(Number(value))}
-                                        value={String(field.value)}
+                                        onValueChange={(value) => {
+                                            const selectedBeneficiary = items?.find(item => item.id === Number(value));
+                                            field.onChange(selectedBeneficiary); // Cập nhật giá trị object của beneficiary
+                                        }}
+                                        value={field.value?.id?.toString() || ''}
                                     >
                                         <FormControl>
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Vui lòng chọn người hưởng thụ" />
+                                                <SelectValue placeholder="Chọn người thụ hưởng" />
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            {items &&
-                                                items.map((item) => (
-                                                    <SelectItem key={item.id} value={String(item.id)}>
-                                                        {item.situationDetail}
-                                                    </SelectItem>
-                                                ))}
+                                            {items?.map((item) => (
+                                                <SelectItem key={item.id} value={item.id.toString()}>
+                                                    {item.situationDetail} (ID: {item.id})
+                                                </SelectItem>
+                                            ))}
                                         </SelectContent>
                                     </Select>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
+
                     </div>
                     <Button disabled={loading} className="ml-auto" type="submit">
                         {action}
