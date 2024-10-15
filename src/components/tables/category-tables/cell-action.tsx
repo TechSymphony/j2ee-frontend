@@ -10,14 +10,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/hooks/use-toast";
 import { handleErrorFromApi } from "@/lib/utils";
-import { useDeleteRoleMutation } from "@/queries/useRole";
-import { CategoryType } from "@/schemas/category.schema";
+import { useDeleteCategoryMutation } from "@/queries/useCategory";
+import { Category } from "@/schemas/category.schema";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface CellActionProps {
-  data: CategoryType;
+  data: Category;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -25,17 +25,17 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  const deleteRoleMutation = useDeleteRoleMutation();
+  const deleteCategoryMutation = useDeleteCategoryMutation();
   /**
-   * Xử lý sự kiện delete role
+   * Xử lý sự kiện delete category
    */
   const onDelete = async () => {
     try {
       console.log("delete");
       setLoading(true);
-      await deleteRoleMutation.mutateAsync(data.id);
+      await deleteCategoryMutation.mutateAsync(data.id);
       toast({
-        description: "Xóa vai trò thành công",
+        description: "Xóa danh mục thành công",
         duration: 5000,
       });
     } catch (error: any) {
@@ -65,7 +65,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
           <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/categories/${data.id}`)}
+            onClick={() => router.push(`/dashboard/category/${data.id}`)}
           >
             <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>

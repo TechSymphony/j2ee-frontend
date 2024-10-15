@@ -1,57 +1,51 @@
 import z from "zod";
 import { PaginatedResponseSchema } from "./paginate.schema";
 
-export const PermissionSchema = z.object({
+const BaseCategorySchema = z.object({
   id: z.number(),
   name: z.string(),
-  description: z.string().optional(),
 });
-const BaseCategorySchema = z.object({
-    id: z.number(),
-    name: z.string(),
-});
-type Category = z.infer<typeof BaseCategorySchema> & {
-    parent?: Category;
+export type Category = z.infer<typeof BaseCategorySchema> & {
+  parent?: Category;
 };
 
 const CategorySchema: z.ZodType<Category> = BaseCategorySchema.extend({
-    parent: z.lazy(() => CategorySchema.optional()),
+  parent: z.lazy(() => CategorySchema.optional()),
 });
+
+export type CategoryResType = z.TypeOf<typeof CategorySchema>;
 
 const PaginatedCategoryResponseSchema = PaginatedResponseSchema(CategorySchema);
 
-export type CategoryType = z.TypeOf<typeof CategorySchema>;
-
 export const CategoryListRes = z.array(CategorySchema);
 
-export type CategoryListResType = z.TypeOf<typeof PaginatedCategoryResponseSchema>;
+export type CategoryListResType = z.TypeOf<
+  typeof PaginatedCategoryResponseSchema
+>;
 
-export const CategoryRes = z.object({
+// export const CategoryRes = z.object({
+//   id: z.number(),
+//   name: z.string(),
+//   description: z.string().optional(),
+//   permissions: z.array(PermissionSchema),
+// });
 
-  id: z.number(),
-  name: z.string(),
-  description: z.string().optional(),
-  permissions: z.array(PermissionSchema),
+// export type CategoryResType = z.TypeOf<typeof CategoryRes>;
 
-});
-
-export type CategoryResType = z.TypeOf<typeof CategoryRes>;
-
-export const CreateRoleBody = z
+export const CreateCategoryBody = z
   .object({
     name: z.string().trim().min(1).max(256),
-    parent: z.array(CategorySchema),
+    parent: CategorySchema.nullable(),
   })
   .strict();
 
-export type CreateCategoryBodyType = z.TypeOf<typeof CreateRoleBody>;
+export type CreateCategoryBodyType = z.TypeOf<typeof CreateCategoryBody>;
 
 export const UpdateCategoryBody = z
   .object({
-    name: z.string().trim().min(2).max(256),
-    description: z.string().min(2).max(256).optional(),
-    permissions: z.array(PermissionSchema),
+    name: z.string().trim().min(1).max(256),
+    parent: CategorySchema.nullable(),
   })
   .strict();
 
-export type UpdateRoleBodyType = z.TypeOf<typeof UpdateCategoryBody>;
+export type UpdateCategoryBodyType = z.TypeOf<typeof UpdateCategoryBody>;

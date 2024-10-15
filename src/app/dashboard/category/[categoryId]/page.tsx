@@ -1,18 +1,18 @@
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import { RoleForm } from "@/components/forms/role-form";
+import { CategoryForm } from "@/components/forms/category-form";
 import PageContainer from "@/components/layout/page-container";
 import React from "react";
 const breadcrumbItems = [
   { title: "Dashboard", link: "/dashboard" },
-  { title: "Role", link: "/dashboard/role" },
-  { title: "Create", link: "/dashboard/role/create" },
+  { title: "Category", link: "/dashboard/category" },
+  { title: "Create", link: "/dashboard/category/create" },
 ];
 export default function Page() {
   return (
     <PageContainer scrollable={true}>
       <div className="space-y-4">
         <Breadcrumbs items={breadcrumbItems} />
-        <RoleForm />
+        <CategoryForm />
       </div>
     </PageContainer>
   );
