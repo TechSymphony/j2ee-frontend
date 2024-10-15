@@ -1,4 +1,5 @@
 import {
+  ScrollText,
   AlertTriangle,
   ArrowRight,
   Check,
@@ -11,6 +12,7 @@ import {
   FileText,
   HelpCircle,
   Image,
+  BookHeart,
   Laptop,
   LayoutDashboardIcon,
   List,
@@ -61,6 +63,8 @@ export const Icons = {
   sun: SunMedium,
   moon: Moon,
   laptop: Laptop,
+  campaign: ScrollText,
+  donation: BookHeart,
   list: List,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
