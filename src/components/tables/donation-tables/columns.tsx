@@ -39,27 +39,23 @@ export const columns: ColumnDef<DonationType>[] = [
     header: "Name",
   },
   {
-    accessorKey: "description",
-    header: "Description",
+    accessorKey: "campaign.name",
+    header: "Campaign",
   },
   {
-    accessorKey: "targetAmount",
-    header: "Target",
+    accessorKey: "amountBase",
+    header: "Amount Base",
   },
   {
-    accessorKey: "currentAmount",
-    header: "Current",
+    accessorKey: "amountTotal",
+    header: "Amount Total",
   },
   {
-    accessorKey: "startDate",
-    header: "Start Date",
+    accessorKey: "donationDate",
+    header: "Donation Date",
   },
   {
-    accessorKey: "endDate",
-    header: "End Date",
+    accessorKey: "frequency",
+    header: "Frequency ",
   },
-  {
-    accessorKey: "isApproved",
-    header: "Status",
-  }
 ];
