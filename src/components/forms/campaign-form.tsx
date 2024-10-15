@@ -184,10 +184,23 @@ export const CampaignForm = () => {
                         />
                         <FormField
                             control={form.control}
+                            name="code"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel htmlFor="code">Mã chiến dịch</FormLabel>
+                                    <FormControl>
+                                        <Input id="code" disabled={loading} {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
                             name="startDate"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel htmlFor="start_date">Ngày kết thúc</FormLabel>
+                                    <FormLabel htmlFor="start_date">Ngày bắt đầu</FormLabel>
                                     <CalendarDatePicker
                                         id="start_date"
                                         disabled={loading}
