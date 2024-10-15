@@ -1,10 +1,11 @@
 import categoryApi from "@/apis/category";
-import { UpdateRoleBodyType } from "@/schemas/role.schema";
+import { QueryConfig } from "@/hooks/useQueryConfig";
+import { UpdateCategoryBodyType } from "@/schemas/category.schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export const useGetCategoryListQuery = () => {
+export const useGetCategoryListQuery = (queryConfig?: QueryConfig) => {
   return useQuery({
-    queryKey: ["categories"],
+    queryKey: ["categories", queryConfig],
     queryFn: categoryApi.getCategoryList,
     staleTime: 0,
     enabled: true,
@@ -19,51 +20,44 @@ export const useGetCategoryQuery = ({
   enabled: boolean;
 }) => {
   return useQuery({
-    queryKey: ["roles-detail", id],
-    queryFn: () => roleApi.getRole(id),
+    queryKey: ["category-detail", id],
+    queryFn: () => categoryApi.getCategory(id),
     enabled,
   });
 };
 
-export const useUpdateRoleMutation = () => {
+export const useUpdateCategoryMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, ...body }: UpdateRoleBodyType & { id: number }) =>
-      roleApi.updateRole(id, body),
+    mutationFn: ({ id, ...body }: UpdateCategoryBodyType & { id: number }) =>
+      categoryApi.updateCategory(id, body),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["roles"],
+        queryKey: ["categories"],
       });
     },
   });
 };
 
-export const useGetPermissionListQuery = () => {
-  return useQuery({
-    queryKey: ["permissions"],
-    queryFn: roleApi.getPermissionList,
-  });
-};
-
-export const useAddRoleMutation = () => {
+export const useAddCategoryMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: roleApi.addRole,
+    mutationFn: categoryApi.addCategory,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["roles"],
+        queryKey: ["categories"],
       });
     },
   });
 };
 
-export const useDeleteRoleMutation = () => {
+export const useDeleteCategoryMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: roleApi.deleteRole,
+    mutationFn: categoryApi.deleteCategory,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["roles"],
+        queryKey: ["categories"],
       });
     },
   });
