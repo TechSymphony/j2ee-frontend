@@ -12,6 +12,8 @@ const cspHeader = `
     connect-src 'self' http://localhost:8080;
 `
 const nextConfig = {
+    // re-render token two times because mode
+    reactStrictMode: process.env.STRICT != "OFF" ,
     // async headers() {
     //     return [
     //       {

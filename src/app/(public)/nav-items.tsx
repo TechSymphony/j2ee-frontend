@@ -4,7 +4,7 @@ import Link from "next/link";
 import classNames from "classnames";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { userManager } from "./layout";
+import { useUser } from "@/contexts/user-context";
 // import { useEffect, useState } from "react";
 
 /**
@@ -58,15 +58,12 @@ const menuItems = [
 ];
 
 export default function NavItems({ className }: { className?: string }) {
-  const [isAuth, setIsAuth] = useState(false);
+  const userContext = useUser();
+  const [isAuth, setIsAuth] = useState(userContext.state.user != null);
+  // const [isAuth, setIsAuth] = useState(userContext.state.user != null);
   useEffect(() => {
-    userManager.getUser().then((user) => 
-      {
-        setIsAuth(user != null);
-        console.log(user);
-      }
-    ) ;
-  }, []);
+    setIsAuth(userContext.state.user != null);
+  }, [userContext.state.user]);
 
   const pathname = usePathname();
   return useMemo(() => {

@@ -12,6 +12,15 @@ export const useGetCategoryListQuery = (queryConfig?: QueryConfig) => {
   });
 };
 
+export const useGetCategoryMenus = () => {
+  return useQuery({
+    queryKey: ["category-menus"],
+    queryFn: categoryApi.getCategoryMenuList,
+    staleTime: 0,
+    enabled: true,
+  });
+};
+
 export const useGetCategoryQuery = ({
   id,
   enabled,

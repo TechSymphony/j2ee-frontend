@@ -9,6 +9,10 @@ export type Category = z.infer<typeof BaseCategorySchema> & {
   parent?: Category;
 };
 
+export type CategoryMenu= z.infer<typeof BaseCategorySchema> & {
+  children?: CategoryMenu[];
+};
+
 const CategorySchema: z.ZodType<Category> = BaseCategorySchema.extend({
   parent: z.lazy(() => CategorySchema.optional()),
 });
@@ -49,3 +53,4 @@ export const UpdateCategoryBody = z
   .strict();
 
 export type UpdateCategoryBodyType = z.TypeOf<typeof UpdateCategoryBody>;
+

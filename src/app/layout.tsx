@@ -5,6 +5,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import AppProvider from "@/components/app-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { AppContextProvider } from "@/contexts/app-context";
+import UserProvider, { useUser } from "@/contexts/user-context";
+import { userManager } from "@/lib/auth";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,6 +31,7 @@ export default function RootLayout({
       >
         {/* <NextTopLoader showSpinner={false} /> */}
         <AppProvider>
+          <UserProvider>
           <AppContextProvider>
             <ThemeProvider
               attribute="class"
@@ -40,6 +43,7 @@ export default function RootLayout({
               <Toaster />
             </ThemeProvider>
           </AppContextProvider>
+          </UserProvider>
         </AppProvider>
       </body>
     </html>

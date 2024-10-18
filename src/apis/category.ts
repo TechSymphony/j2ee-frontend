@@ -1,6 +1,7 @@
 import http from "@/lib/http";
 import {
   CategoryListResType,
+  CategoryMenu,
   CategoryResType,
   CreateCategoryBodyType,
   UpdateCategoryBodyType,
@@ -10,6 +11,7 @@ const prefix = "/categories";
 
 const categoryApi = {
   getCategoryList: () => http.get<CategoryListResType>(prefix),
+  getCategoryMenuList: () => http.get<CategoryMenu[]>(prefix + "/menus"),
   addCategory: (body: CreateCategoryBodyType) =>
     http.post<CategoryResType>(prefix, body),
   updateCategory: (id: number, body: UpdateCategoryBodyType) =>
