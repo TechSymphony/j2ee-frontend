@@ -12,8 +12,8 @@ import { NavigationMenuComponent } from '@/components/category-menu';
 import { useGetCategoryMenus } from "@/queries/useCategory";
 
 export default function Header() {
-  const { data } = useGetCategoryMenus();
-  const categorieMenuList= data?.payload;
+  // const { data } = useGetCategoryMenus();
+  // const categorieMenuList = data?.payload;
 
   return (
     <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 z-20">
@@ -36,7 +36,7 @@ export default function Header() {
         <span className="sr-only">Acme Inc</span>
       </Link>
       <NavItems className="transition-colors hover:text-foreground flex-shrink-0" />
-      <NavigationMenuComponent categories={categorieMenuList}></NavigationMenuComponent>
+      {/* <NavigationMenuComponent categories={categorieMenuList}></NavigationMenuComponent> */}
 
     </nav>
     <Sheet>
