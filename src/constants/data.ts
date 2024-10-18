@@ -137,6 +137,18 @@ export const navItems: NavItem[] = [
     label: "money",
   },
   {
+    title: "Campaign",
+    href: "/dashboard/campaign",
+    icon: "campaign",
+    label: "campaign",
+  },
+  {
+    title: "Donation",
+    href: "/dashboard/donation",
+    icon: "donation",
+    label: "donation",
+  },
+  {
     title: "Profile",
     href: "/dashboard/profile",
     icon: "profile",
