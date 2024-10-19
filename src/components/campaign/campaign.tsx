@@ -1,7 +1,27 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Campaign() {
+interface CampaignProps {
+  data: {
+    [key: string]: any;
+  };
+}
+
+export default function Campaign({ data }: CampaignProps) {
+
+  // Tính phần trăm tiến độ chiến dịch
+  const percentage = data.targetAmount ? (data.currentAmount / data.targetAmount) * 100 : 0;
+
+  // Tính ngày còn lại của chiến dịch
+  const startDate = new Date(data.startDate);
+  const endDate = new Date(data.endDate);
+  const remainingDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+
+  // Đinh dạng số tiền
+  const formattedTargetAmount = data.targetAmount.toLocaleString('de-DE');
+  const formattedCurrentAmount = data.currentAmount.toLocaleString('de-DE');
+
+  // Hiển thị chiến dịch
   return (
     <div
       className="cursor-pointer group relative flex flex-col flex-nowrap overflow-hidden rounded-xl 
@@ -20,8 +40,7 @@ export default function Campaign() {
       </div>
       <div className="min-h-1 flex-1 px-4 pb-3 pt-4">
         <div className="line-clamp-3 text-lg font-bold leading-snug transition ">
-          Góp Heo Vàng xây 4 nhà hạnh phúc trao tặng gia đình 4 em nhỏ nghèo khó
-          khăn tại Lào Cai, Sơn La và Gia Lai
+          {data.name}
         </div>
       </div>
       <div className="mb-4 px-4 pt-0">
@@ -42,11 +61,11 @@ export default function Campaign() {
             </div>
           </div>
           <div className="flex-1 text-xs leading-4 text-gray-600 md:text-sm">
-            Sức mạnh 2000
+            {data.beneficiary.situationDetail}
           </div>
           <div className="shrink-0">
             <span className="rounded-3xl px-2 py-1 text-xs text-orange-400 bg-[rgba(252,100,45,.15)]">
-              Còn 72 ngày
+              Còn {remainingDays} ngày
             </span>
           </div>
         </div>
@@ -54,7 +73,7 @@ export default function Campaign() {
         <div>
           <div className="dn-money mb-2 flex items-end">
             <strong className="item-end flex leading-5 text-gray-700">
-              130.864
+              {formattedCurrentAmount}đ
               <svg
                 className="icon relative  top-px ml-1 inline-block"
                 xmlns="http://www.w3.org/2000/svg"
@@ -172,14 +191,14 @@ export default function Campaign() {
               </svg>
             </strong>
             <span className="pl-2 text-xs text-gray-500 md:text-sm">
-              / 3.200.000<span className="font-bold"> Heo vàng</span>
+              / {formattedTargetAmount}đ<span className="font-bold"> Heo vàng</span>
             </span>
           </div>
           {/* progress  */}
           <div className=" my-1 flex h-1.5 w-full overflow-hidden rounded-lg bg-gray-200">
             <div
               className="h-1.5 rounded-lg bg-pink-darker"
-              style={{ width: "12%" }}
+              style={{ width: `${percentage}%` }}
             ></div>
           </div>
           {/* Remain  */}
@@ -190,7 +209,7 @@ export default function Campaign() {
             </div>
             <div className="grow">
               <div className=" text-xs text-gray-500">Đạt được</div>
-              <div className=" text-sm font-bold text-gray-600">4%</div>
+              <div className=" text-sm font-bold text-gray-600">{percentage}%</div>
             </div>
             <div className="flex grow items-center justify-end">
               <Link href={"/"} className="overflow-hidden">
