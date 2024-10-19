@@ -36,8 +36,6 @@ export default function Header() {
                     <span className="sr-only">Acme Inc</span>
                 </Link>
                 <NavItems className="transition-colors hover:text-foreground flex-shrink-0" />
-            </nav>
-            <nav>
                 <NavigationMenuComponent
                     categories={categorieMenuList}
                 ></NavigationMenuComponent>
@@ -62,14 +60,17 @@ export default function Header() {
                             <Package2 className="h-6 w-6" />
                             <span className="sr-only">Acme Inc</span>
                         </Link>
-
                         <NavItems className="text-muted-foreground transition-colors hover:text-foreground" />
+                        <NavigationMenuComponent
+                            categories={categorieMenuList}
+                        ></NavigationMenuComponent>
                     </nav>
                 </SheetContent>
+                <div className="ml-auto">
+                    <DarkModeToggle />
+                </div>
             </Sheet>
-            <div className="ml-auto">
-                <DarkModeToggle />
-            </div>
+
         </header>
         // <header className="sticky inset-x-0 top-0 w-full">
         //   <nav className="flex items-center justify-between px-4 py-2 md:justify-end">
