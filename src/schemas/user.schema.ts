@@ -6,7 +6,6 @@ export const UserSchema = z.object({
     fullName: z.string(),
     email: z.string(),
     phone: z.string().optional(),
-    password: z.string(),
     createdAt: z.date(),
     updatedAt: z.date(),
     role: RoleSchema,
@@ -23,7 +22,6 @@ export const UserRes = z.object({
     fullName: z.string(),
     email: z.string(),
     phone: z.string().optional(),
-    password: z.string(),
     createdAt: z.date(),
     updatedAt: z.date(),
     role: RoleSchema,
@@ -34,9 +32,9 @@ export type UserResType = z.TypeOf<typeof UserRes>;
 export const CreateUserBody = z
     .object({
         fullName: z.string().trim().min(2).max(256),
-        email: z.string().trim().min(2).max(256),
+        email: z.string().trim().min(2).max(256).email(),
+        username: z.string().trim().min(2).max(256).optional(),
         phone: z.string().trim().min(2).max(256),
-        password: z.string().trim().min(5).max(256),
         role: RoleSchema,
     })
     .strict();
@@ -46,9 +44,9 @@ export type CreateUserBodyType = z.TypeOf<typeof CreateUserBody>;
 export const UpdateUserBody = z
     .object({
         fullName: z.string().trim().min(2).max(256),
-        email: z.string().trim().min(2).max(256),
+        email: z.string().trim().min(2).max(256).email(),
+        username: z.string().trim().min(2).max(256).optional(),
         phone: z.string().trim().min(2).max(256),
-        password: z.string().trim().min(5).max(256),
         role: RoleSchema,
     })
     .strict();

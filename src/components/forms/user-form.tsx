@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useParams, useRouter } from "next/navigation";
-import { CalendarDatePicker } from '@/components/date-picker';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,7 +27,7 @@ import { Heading } from "@/components/ui/heading";
 import { toast } from "@/hooks/use-toast";
 import {
     useAddUserMutation,
-    useGetBeneficiaryListQuery,
+    useGetRoleListQuery,
     useGetUserQuery,
     useUpdateUserMutation,
 } from "@/queries/useUser";
@@ -61,8 +60,8 @@ export const UserForm = () => {
 
     const updateUserMutation = useUpdateUserMutation();
     const addUserMutation = useAddUserMutation();
-    const getBeneficiaryListQuery = useGetBeneficiaryListQuery();
-    const items = getBeneficiaryListQuery.data?.payload;
+    const getRoleListQuery = useGetRoleListQuery();
+    const items = getRoleListQuery.data?.payload;
 
     const { triggerRefetch } = useRefetch();
 
@@ -85,8 +84,6 @@ export const UserForm = () => {
             fullName: "",
             email: "",
             phone: "",
-            password: "",
-
         },
     });
 
@@ -95,13 +92,12 @@ export const UserForm = () => {
      */
     useEffect(() => {
         if (initialData) {
-            const { role, fullName, email, phone, password } = initialData.payload;
+            const { role, fullName, email, phone } = initialData.payload;
             form.reset({
                 role,
                 fullName,
                 email,
                 phone,
-                password,
             });
         }
     }, [initialData, form]);
@@ -109,9 +105,11 @@ export const UserForm = () => {
     console.log("Form: ", form.watch());
 
     const onSubmit = async (data: UpdateUserBodyType | CreateUserBodyType) => {
-        console.log("data", data);
+        
         try {
             setLoading(true);
+            data.username=data.email;
+            console.log("data", data);
             if (initialData) {
                 const body: UpdateUserBodyType & { id: number } = {
                     id: updateUserId as number,
@@ -170,7 +168,7 @@ export const UserForm = () => {
                             name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel htmlFor="email">Mô tả</FormLabel>
+                                    <FormLabel htmlFor="email">Email</FormLabel>
                                     <FormControl>
                                         <Input id="email" disabled={loading} {...field} />
                                     </FormControl>
@@ -193,101 +191,26 @@ export const UserForm = () => {
                         />
                         <FormField
                             control={form.control}
-                            name="password"
+                            name="role"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel htmlFor="password">Mật khẩu</FormLabel>
-                                    <CalendarDatePicker
-                                        id="password"
-                                        disabled={loading}
-                                        value={new Date(field.value)}
-                                        onChange={(date) => field.onChange(date)}
-                                    />
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="endDate"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="end_date">Ngày kết thúc</FormLabel>
-                                    <CalendarDatePicker
-                                        id="end_date"
-                                        disabled={loading}
-                                        value={new Date(field.value)}
-                                        onChange={(date) => field.onChange(date)}
-                                    />
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="targetAmount"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="target_amount">Mục tiêu</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            id="target_amount"
-                                            disabled={loading}
-                                            {...field}
-                                            onChange={(e) => field.onChange(Number(e.target.value))}
-                                            type="number"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="isApproved"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Trạng thái</FormLabel>
-                                    <Select
-                                        onValueChange={(value) => field.onChange(value === 'true')}
-                                        value={field.value ? 'true' : 'false'}
-                                    >
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            <SelectItem value="false">Đang chờ duyệt</SelectItem>
-                                            <SelectItem value="true">Được duyệt</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="beneficiary"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Người thụ hưởng</FormLabel>
+                                    <FormLabel>Vai trò</FormLabel>
                                     <Select
                                         onValueChange={(value) => {
-                                            const selectedBeneficiary = items?.find(item => item.id === Number(value));
-                                            field.onChange(selectedBeneficiary); // Cập nhật giá trị object của beneficiary
+                                            const selectedRole = items?.find(item => item.id === Number(value));
+                                            field.onChange(selectedRole); // Cập nhật giá trị object của Role
                                         }}
                                         value={field.value?.id?.toString() || ''}
                                     >
                                         <FormControl>
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Chọn người thụ hưởng" />
+                                                <SelectValue placeholder="Chọn vai trò" />
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
                                             {items?.map((item) => (
                                                 <SelectItem key={item.id} value={item.id.toString()}>
-                                                    {item.situationDetail} (ID: {item.id})
+                                                    {item.name} (ID: {item.id})
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>

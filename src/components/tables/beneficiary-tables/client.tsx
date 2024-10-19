@@ -38,7 +38,7 @@ export const BeneficiaryClient = () => {
         </Button>
       </div>
       <Separator />
-      <DataTable searchKey="user.name" columns={columns} data={data} />
+      <DataTable searchKey="user.fullName" columns={columns} data={data} />
     </>
   );
 };

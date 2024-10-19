@@ -1,9 +1,10 @@
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { UserForm } from "@/components/forms/user-form";
 import PageContainer from "@/components/layout/page-container";
 import React from "react";
 const breadcrumbItems = [
     { title: "Dashboard", link: "/dashboard" },
-    { title: "Campaign", link: "/dashboard/user" },
+    { title: "User", link: "/dashboard/user" },
     { title: "Create", link: "/dashboard/user/create" },
 
 ];
@@ -12,7 +13,7 @@ export default function Page() {
         <PageContainer scrollable={true}>
             <div className="space-y-4">
                 <Breadcrumbs items={breadcrumbItems} />
-                {/* Put the form here */}
+                <UserForm />
             </div>
         </PageContainer>
     );

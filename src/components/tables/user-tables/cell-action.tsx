@@ -35,7 +35,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       setLoading(true);
       await deleteUserMutation.mutateAsync(data.id);
       toast({
-        description: "Xóa chiến dịch quyên góp thành công",
+        description: "Xóa nguời dùng thành công",
         duration: 5000,
       });
     } catch (error: any) {

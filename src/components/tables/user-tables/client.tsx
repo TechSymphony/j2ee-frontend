@@ -1,6 +1,5 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { DataTable } from "@/components/ui/data-table";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { Plus } from "lucide-react";
@@ -9,12 +8,15 @@ import { columns } from "./columns";
 import { useGetUserListQuery } from "@/queries/useUser";
 import { useRefetch } from "@/contexts/app-context";
 import { useEffect } from "react";
+import { DataTablePagination } from "@/components/ui/data-table-pagination";
+import { getDefaultPaginatedResponse } from "@/schemas/paginate.schema";
+import useQueryConfig from "@/hooks/useQueryConfig";
 
 export const UserClient = () => {
   const router = useRouter();
-
-  const { data: roleData, refetch } = useGetUserListQuery();
-  const data = roleData?.payload ?? [];
+  const queryConfig = useQueryConfig();
+  const { data: fetchData, refetch } = useGetUserListQuery(queryConfig);
+  const data = fetchData?.payload ?? getDefaultPaginatedResponse;
 
   const { setTriggerRefetch } = useRefetch();
 
@@ -26,7 +28,7 @@ export const UserClient = () => {
     <>
       <div className="flex items-start justify-between">
         <Heading
-          title={`Users (${data.length})`}
+          title={`Users`}
           description="Manage users (Client side table functionalities.)"
         />
 
@@ -38,7 +40,7 @@ export const UserClient = () => {
         </Button>
       </div>
       <Separator />
-      <DataTable searchKey="user.name" columns={columns} data={data} />
+      <DataTablePagination searchKey="fullName" columns={columns} data={data} />
     </>
   );
 };

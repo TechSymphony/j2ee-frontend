@@ -1,11 +1,12 @@
 import userApi from "@/apis/user";
+import { QueryConfig } from "@/hooks/useQueryConfig";
 import { UpdateUserBodyType } from "@/schemas/user.schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export const useGetUserListQuery = () => {
+export const useGetUserListQuery = (queryConfig?: QueryConfig) => {
     return useQuery({
-        queryKey: ["users"],
-        queryFn: userApi.getRoleList,
+        queryKey: ["users", queryConfig],
+        queryFn: userApi.getUserList,
         staleTime: 0,
         enabled: true,
     });
@@ -38,7 +39,7 @@ export const useUpdateUserMutation = () => {
     });
 };
 
-export const useGetBeneficiaryListQuery = () => {
+export const useGetRoleListQuery = () => {
     return useQuery({
         queryKey: ["roles"],
         queryFn: userApi.getRoleList,
