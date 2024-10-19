@@ -13,82 +13,82 @@ import { useUser } from "@/contexts/user-context";
  * authRequired === true => Đăng nhập mới cho hiển thị
  */
 const menuItems = [
-  {
-    title: "Trang chủ",
-    href: "/",
-    exact: true,
-    authRequired: false,
-  },
-  {
-    title: "Dashboard",
-    href: "/dashboard",
-    authRequired: true,
-  },
-  {
-    title: "Chiến dịch gây quỹ",
-    href: "/campaign",
-    authRequired: false,
-  },
-  {
-    title: "Trái tim momo",
-    href: "/heart",
-    authRequired: false,
-  },
-  {
-    title: "Tin tức cộng đồng",
-    href: "/news",
-    authRequired: false,
-  },
-  {
-    title: "Đăng nhập",
-    href: "/login",
-    authRequired: false,
-    hideAfterAuth: true,
-  },
-  {
-    title: "Đăng xuất",
-    href: "/logout",
-    authRequired: true,
-  },
-  {
-    title: "Gửi nguyện vọng đóng góp",
-    href: "/beneficiary",
-    authRequired: true,
-  },
+    {
+        title: "Trang chủ",
+        href: "/",
+        exact: true,
+        authRequired: false,
+    },
+    {
+        title: "Dashboard",
+        href: "/dashboard",
+        authRequired: true,
+    },
+    // {
+    //   title: "Chiến dịch gây quỹ",
+    //   href: "/campaign",
+    //   authRequired: false,
+    // },
+    // {
+    //   title: "Trái tim momo",
+    //   href: "/heart",
+    //   authRequired: false,
+    // },
+    {
+        title: "Tin tức cộng đồng",
+        href: "/news",
+        authRequired: false,
+    },
+    {
+        title: "Đăng nhập",
+        href: "/login",
+        authRequired: false,
+        hideAfterAuth: true,
+    },
+    {
+        title: "Đăng xuất",
+        href: "/logout",
+        authRequired: true,
+    },
+    {
+        title: "Gửi nguyện vọng đóng góp",
+        href: "/beneficiary",
+        authRequired: true,
+    },
 ];
 
 export default function NavItems({ className }: { className?: string }) {
-  const userContext = useUser();
-  const [isAuth, setIsAuth] = useState(userContext.state.user != null);
-  // const [isAuth, setIsAuth] = useState(userContext.state.user != null);
-  useEffect(() => {
-    setIsAuth(userContext.state.user != null);
-  }, [userContext.state.user]);
+    const userContext = useUser();
+    const [isAuth, setIsAuth] = useState(userContext.state.user != null);
+    // const [isAuth, setIsAuth] = useState(userContext.state.user != null);
+    useEffect(() => {
+        setIsAuth(userContext.state.user != null);
+    }, [userContext.state.user]);
 
-  const pathname = usePathname();
-  return useMemo(() => {
-    return menuItems.map((item) => {
-      if (
-        (item.authRequired === true && !isAuth)
-      || item.hideAfterAuth && isAuth
-      )
-        return null;
+    const pathname = usePathname();
+    return useMemo(() => {
+        return menuItems.map((item) => {
+            if (
+                (item.authRequired === true && !isAuth) ||
+                (item.hideAfterAuth && isAuth)
+            )
+                return null;
 
-      const isActive = item.exact
-        ? pathname === item.href
-        : pathname.startsWith(item.href);
-      return (
-        <Link
-          href={item.href}
-          key={item.href}
-          className={classNames(className, {
-            "text-pink hover:text-pink-lighter ": isActive,
-            "text-muted-foreground": !isActive,
-          })}
-        >
-          {item.title}
-        </Link>
-      );
-    });
-  }, [pathname, className, isAuth]);
+            const isActive = item.exact
+                ? pathname === item.href
+                : pathname.startsWith(item.href);
+            return (
+                <Link
+                    href={item.href}
+                    key={item.href}
+                    className={classNames(className, {
+                        "text-pink hover:text-pink-lighter ": isActive,
+                        "text-muted-foreground": !isActive,
+                    })}
+                >
+                    {item.title}
+                </Link>
+            );
+        });
+    }, [pathname, className, isAuth]);
 }
