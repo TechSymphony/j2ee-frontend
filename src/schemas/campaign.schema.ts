@@ -24,7 +24,7 @@ export const CampaignSchema = z.object({
     currentAmount: z.number(),
     startDate: z.date(),
     endDate: z.date(),
-    isApproved: z.boolean(),
+    isApproved: z.string(),
 });
 
 export type CampaignType = z.TypeOf<typeof CampaignSchema>;
@@ -43,7 +43,7 @@ export const CampaignRes = z.object({
     currentAmount: z.number(),
     startDate: z.date(),
     endDate: z.date(),
-    isApproved: z.boolean(),
+    isApproved: z.string(),
 });
 
 export type CampaignResType = z.TypeOf<typeof CampaignRes>;
@@ -58,7 +58,7 @@ export const CreateCampaignBody = z
         currentAmount: z.number().min(0).max(99999999999999),
         startDate: z.date(),
         endDate: z.date(),
-        isApproved: z.boolean(),
+        isApproved: z.string(),
     })
     .strict();
 
@@ -74,7 +74,7 @@ export const UpdateCampaignBody = z
         currentAmount: z.number().min(0).max(99999999999999),
         startDate: z.date(),
         endDate: z.date(),
-        isApproved: z.boolean(),
+        isApproved: z.string(),
     })
     .strict();
 
