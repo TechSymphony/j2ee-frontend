@@ -61,7 +61,6 @@ export const columns: ColumnDef<CampaignType>[] = [
   {
     accessorKey: "isApproved",
     header: "Status",
-    cell: ({ cell }) => (cell.getValue<boolean>() ? "Approved" : "Not approved"),
   },
   {
     id: "actions",
