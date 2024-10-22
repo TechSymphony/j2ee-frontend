@@ -89,7 +89,7 @@ export const CampaignForm = () => {
             currentAmount: 0,
             startDate: new Date(),
             endDate: new Date(),
-            isApproved: false,
+            status: "WAITING",
         },
     });
 
@@ -98,7 +98,7 @@ export const CampaignForm = () => {
      */
     useEffect(() => {
         if (initialData) {
-            const { beneficiary, code, name, description, targetAmount, currentAmount, startDate, endDate, isApproved } = initialData.payload;
+            const { beneficiary, code, name, description, targetAmount, currentAmount, startDate, endDate, status } = initialData.payload;
             form.reset({
                 beneficiary,
                 code,
@@ -108,13 +108,10 @@ export const CampaignForm = () => {
                 currentAmount,
                 startDate: new Date(startDate),
                 endDate: new Date(endDate),
-                isApproved,
+                status,
             });
         }
     }, [initialData, form]);
-
-    console.log("Form: ", form.watch());
-
     const onSubmit = async (data: UpdateCampaignBodyType | CreateCampaignBodyType) => {
         console.log("data", data);
         try {
@@ -251,22 +248,24 @@ export const CampaignForm = () => {
                         />
                         <FormField
                             control={form.control}
-                            name="isApproved"
+                            name="status"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Trạng thái</FormLabel>
+                                    <FormLabel>Trạng thái phê duyệt</FormLabel>
                                     <Select
-                                        onValueChange={(value) => field.onChange(value === 'true')}
-                                        value={field.value ? 'true' : 'false'}
+                                        onValueChange={(value) => field.onChange(value)}
+                                        value={field.value || ''}
+                                        disabled={!initialData}
                                     >
                                         <FormControl>
                                             <SelectTrigger>
-                                                <SelectValue />
+                                                <SelectValue placeholder="Chọn trạng thái" />
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem value="false">Đang chờ duyệt</SelectItem>
-                                            <SelectItem value="true">Được duyệt</SelectItem>
+                                            <SelectItem value="WAITING">Waiting</SelectItem>
+                                            <SelectItem value="APPROVED">Approved</SelectItem>
+                                            <SelectItem value="REJECT">Reject</SelectItem>
                                         </SelectContent>
                                     </Select>
                                     <FormMessage />
