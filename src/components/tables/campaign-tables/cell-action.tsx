@@ -64,11 +64,14 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
-          <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/campaign/${data.id}`)}
-          >
-            <Edit className="mr-2 h-4 w-4" /> Update
-          </DropdownMenuItem>
+          {/* Chỉ hiển thị nút "Update" khi trạng thái không bị "REJECT" */}
+          {data.status !== "REJECT" && (
+            <DropdownMenuItem
+              onClick={() => router.push(`/dashboard/campaign/${data.id}`)}
+            >
+              <Edit className="mr-2 h-4 w-4" /> Update
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem onClick={() => setOpen(true)}>
             <Trash className="mr-2 h-4 w-4" /> Delete
           </DropdownMenuItem>
