@@ -24,11 +24,6 @@ export function UserNav() {
   if (user) {
     const menuItems = [
       {
-        title: "Gửi nguyện vọng",
-        href: "/beneficiary",
-        shortcut: "⇧⌘P",
-      },
-      {
         title: "Trang quản lý",
         href: "/dashboard",
         shortcut: "⌘B",
@@ -36,17 +31,22 @@ export function UserNav() {
         ignore: user?.authorities?.length,
       },
       {
-        title: "Billing",
+        title: "Gửi nguyện vọng",
+        href: "/beneficiary",
+        shortcut: "⇧⌘P",
+      },
+      {
+        title: "Lịch sử thanh toán",
         href: "/billing",
         shortcut: "⌘B",
       },
       {
-        title: "Settings",
+        title: "Cài đặt",
         href: "/settings",
         shortcut: "⌘S",
       },
       {
-        title: "New Team",
+        title: "Hồ sơ cá nhân",
         href: "/new-team",
       },
     ];
@@ -88,9 +88,9 @@ export function UserNav() {
                   onClick={() => router.push(item.href)}
                 >
                   {item.title}
-                  {item.shortcut && (
+                  {/* {item.shortcut && (
                     <DropdownMenuShortcut>{item.shortcut}</DropdownMenuShortcut>
-                  )}
+                  )} */}
                 </DropdownMenuItem>
               )
             )}
@@ -98,7 +98,6 @@ export function UserNav() {
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => router.push("/logout")}>
             Đăng xuất
-            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
