@@ -18,7 +18,38 @@ import { useRouter } from "next/navigation";
 export function UserNav() {
     // const { data: session } = useSession();
     // if (session) {
-    if (true) {
+    const router = useRouter();
+    const user = useUser().state.user;
+
+    if (user) {
+        const menuItems = [
+            {
+                title: "Trang quản lý",
+                href: "/dashboard",
+                shortcut: "⌘B",
+                // option chỉ có nếu user chứa bất kì authorities
+                ignore: user?.authorities?.length,
+            },
+            {
+                title: "Gửi nguyện vọng",
+                href: "/beneficiary",
+                shortcut: "⇧⌘P",
+            },
+            {
+                title: "Lịch sử thanh toán",
+                href: "/billing",
+                shortcut: "⌘B",
+            },
+            {
+                title: "Cài đặt",
+                href: "/settings",
+                shortcut: "⌘S",
+            },
+            {
+                title: "Hồ sơ cá nhân",
+                href: "/new-team",
+            },
+        ];
         return (
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -51,25 +82,26 @@ export function UserNav() {
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
-                        <DropdownMenuItem>
-                            Profile
-                            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            Billing
-                            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            Settings
-                            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>New Team</DropdownMenuItem>
+                        {menuItems.map((item, index) =>
+                            item.ignore ? (
+                                <></>
+                            ) : (
+                                <DropdownMenuItem
+                                    key={index}
+                                    onClick={() => router.push(item.href)}
+                                >
+                                    {item.title}
+                                    {/* {item.shortcut && (
+                    <DropdownMenuShortcut>{item.shortcut}</DropdownMenuShortcut>
+                  )} */}
+                                </DropdownMenuItem>
+                            )
+                        )}
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
-                    {/* <DropdownMenuItem onClick={() => signOut()}>
-            Log out
-            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-          </DropdownMenuItem> */}
+                    <DropdownMenuItem onClick={() => router.push("/logout")}>
+                        Đăng xuất
+                    </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
         );
