@@ -19,7 +19,7 @@ interface NavigationMenuProps {
 }
 
 // Responsive Navigation Menu Component that accepts categories as a prop
-export const NavigationMenuComponent: React.FC<NavigationMenuProps> = ({
+export const CategoryMenuComponent: React.FC<NavigationMenuProps> = ({
     categories,
 }) => {
     if (!categories) return <></>;

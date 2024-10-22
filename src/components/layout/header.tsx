@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import NavItems from "@/app/(public)/nav-items";
 import Image from "next/image";
-import { NavigationMenuComponent } from "@/components/category-menu";
+import { CategoryMenuComponent } from "@/components/category-menu";
 import { useGetCategoryMenus } from "@/queries/useCategory";
 import DarkModeToggle from "../dark-mode-toggle";
 
@@ -36,9 +36,9 @@ export default function Header() {
                     <span className="sr-only">Acme Inc</span>
                 </Link>
                 <NavItems className="transition-colors hover:text-foreground flex-shrink-0" />
-                <NavigationMenuComponent
+                <CategoryMenuComponent
                     categories={categorieMenuList}
-                ></NavigationMenuComponent>
+                ></CategoryMenuComponent>
             </nav>
             <Sheet>
                 <SheetTrigger asChild>
@@ -61,9 +61,9 @@ export default function Header() {
                             <span className="sr-only">Acme Inc</span>
                         </Link>
                         <NavItems className="text-muted-foreground transition-colors hover:text-foreground" />
-                        <NavigationMenuComponent
+                        <CategoryMenuComponent
                             categories={categorieMenuList}
-                        ></NavigationMenuComponent>
+                        ></CategoryMenuComponent>
                     </nav>
                 </SheetContent>
                 <div className="ml-auto">

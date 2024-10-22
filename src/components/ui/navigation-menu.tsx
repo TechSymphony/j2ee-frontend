@@ -78,6 +78,7 @@ const NavigationMenuTrigger = React.forwardRef<
 ))
 NavigationMenuTrigger.displayName = NavigationMenuPrimitive.Trigger.displayName
 
+const mdClassNavigationMenuContent="ring-1 ring-gray-900/5 absolute data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out left-0";
 const NavigationMenuContent = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Content>
@@ -86,9 +87,13 @@ const NavigationMenuContent = React.forwardRef<
     ref={ref}
     className={cn(
       // "right-0  absolute",
-      "md:absolute top-full bg-background mt-[5px] rounded-md",
+      "top-full bg-background rounded-lg mt-3 md:shadow-[0_10px_32px_rgba(34,42,53,0.15),0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.08),0_1px_1px_rgba(34,42,53,0.1),0_24px_68px_rgba(47,48,55,0.1)]",
+      "before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:w-full before:bg-transparent before:opacity-0 before:h-3",
       // "data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52",
-      "left:0 md:right-0 top-full w-full md:data-[motion^=from-]:animate-in md:data-[motion^=to-]:animate-out md:data-[motion^=from-]:fade-in md:data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 md:data-[motion=to-start]:slide-out-to-left-52 md:absolute md:w-auto ",
+      // "left:0 top-full w-full md:data-[motion^=from-]:animate-in md:data-[motion^=to-]:animate-out md:data-[motion^=from-]:fade-in md:data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 md:data-[motion=to-start]:slide-out-to-left-52 md:absolute md:w-auto ",
+      mdClassNavigationMenuContent.split(" ").map(
+        className =>  `md:${className}`
+      ),
       className
     )}
     {...props}
