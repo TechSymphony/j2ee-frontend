@@ -11,11 +11,45 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useUser } from "@/contexts/user-context";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 // import { signOut } from "next-auth/react";
 export function UserNav() {
   // const { data: session } = useSession();
   // if (session) {
-  if (true) {
+  const router = useRouter();
+  const user = useUser().state.user;
+
+  if (user) {
+    const menuItems = [
+      {
+        title: "Gửi nguyện vọng",
+        href: "/beneficiary",
+        shortcut: "⇧⌘P",
+      },
+      {
+        title: "Trang quản lý",
+        href: "/dashboard",
+        shortcut: "⌘B",
+        // option chỉ có nếu user chứa bất kì authorities
+        ignore: user?.authorities?.length,
+      },
+      {
+        title: "Billing",
+        href: "/billing",
+        shortcut: "⌘B",
+      },
+      {
+        title: "Settings",
+        href: "/settings",
+        shortcut: "⌘S",
+      },
+      {
+        title: "New Team",
+        href: "/new-team",
+      },
+    ];
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -25,7 +59,7 @@ export function UserNav() {
                 // src={session.user?.image ?? ''}
                 // alt={session.user?.name ?? ''}
                 src={""}
-                alt={""}
+                alt={"Ảnh đại diện"}
               />
               <AvatarFallback></AvatarFallback>
               {/* <AvatarFallback>{session.user?.name?.[0]}</AvatarFallback> */}
@@ -36,38 +70,54 @@ export function UserNav() {
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
               <p className="text-sm font-medium leading-none">
-                {/* {session.user?.name} */}
-                Hoang
+                {/* {user?.profile.} */}
               </p>
               <p className="text-xs leading-none text-muted-foreground">
-                {/* {session.user?.email} */}
-                huyhoang@gmail.com
+                {user.profile.sub}
               </p>
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>
-              Profile
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              Billing
-              <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              Settings
-              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-            </DropdownMenuItem>
-            <DropdownMenuItem>New Team</DropdownMenuItem>
+            {menuItems.map((item, index) =>
+              item.ignore ? (
+                <></>
+              ) : (
+                <DropdownMenuItem
+                  key={index}
+                  onClick={() => router.push(item.href)}
+                >
+                  {item.title}
+                  {item.shortcut && (
+                    <DropdownMenuShortcut>{item.shortcut}</DropdownMenuShortcut>
+                  )}
+                </DropdownMenuItem>
+              )
+            )}
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          {/* <DropdownMenuItem onClick={() => signOut()}>
-            Log out
+          <DropdownMenuItem onClick={() => router.push("/logout")}>
+            Đăng xuất
             <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-          </DropdownMenuItem> */}
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+    );
+  } else {
+    const menuItems = [
+      {
+        title: "Đăng nhập",
+        href: "/login",
+      },
+    ];
+    return (
+      <>
+        {menuItems.map((item) => (
+          <Link href={item.href} key={item.href}>
+            {item.title}
+          </Link>
+        ))}
+      </>
     );
   }
 }
