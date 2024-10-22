@@ -89,7 +89,7 @@ export const CampaignForm = () => {
             currentAmount: 0,
             startDate: new Date(),
             endDate: new Date(),
-            isApproved: "WAITING",
+            status: "WAITING",
         },
     });
 
@@ -98,7 +98,7 @@ export const CampaignForm = () => {
      */
     useEffect(() => {
         if (initialData) {
-            const { beneficiary, code, name, description, targetAmount, currentAmount, startDate, endDate, isApproved } = initialData.payload;
+            const { beneficiary, code, name, description, targetAmount, currentAmount, startDate, endDate, status } = initialData.payload;
             form.reset({
                 beneficiary,
                 code,
@@ -108,7 +108,7 @@ export const CampaignForm = () => {
                 currentAmount,
                 startDate: new Date(startDate),
                 endDate: new Date(endDate),
-                isApproved,
+                status,
             });
         }
     }, [initialData, form]);
@@ -248,7 +248,7 @@ export const CampaignForm = () => {
                         />
                         <FormField
                             control={form.control}
-                            name="isApproved"
+                            name="status"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Trạng thái phê duyệt</FormLabel>

@@ -59,7 +59,7 @@ export const columns: ColumnDef<CampaignType>[] = [
     header: "End Date",
   },
   {
-    accessorKey: "isApproved",
+    accessorKey: "status",
     header: "Status",
   },
   {
