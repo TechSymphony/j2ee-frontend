@@ -9,11 +9,6 @@ interface CampaignProps {
 
 export default function Campaign({ data }: CampaignProps) {
 
-  // Kiểm tra chiến dịch đã được duyệt chưa
-  if (data.isApproved !== "APPROVED") {
-    return null;
-  }
-
   // Tính phần trăm tiến độ chiến dịch
   const percentage = data.targetAmount ? (data.currentAmount / data.targetAmount) * 100 : 0;
 
