@@ -11,5 +11,5 @@ export default function Logout() {
     handleLogout();
   }, []);
 
-  return <p>Đăng xuất...</p>;
+  return <p>Logging out...</p>;
 }

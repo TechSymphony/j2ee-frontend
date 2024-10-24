@@ -20,7 +20,8 @@ export default function AuthenticationPage() {
 
   return (
     <div>
-      <p>Đang đăng nhập ...</p>
+      <h1>Next.js OIDC Integration</h1>
+      <p>Welcome to the authenticated section of your app!</p>
     </div>
   );
 }
