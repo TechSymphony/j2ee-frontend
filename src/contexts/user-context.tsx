@@ -8,7 +8,7 @@ interface CustomUser extends User {
 }
 // Define the state shape
 interface UserState {
-    user: CustomUser | User | null;
+    user: CustomUser | null;
 }
 
 // Define action types
