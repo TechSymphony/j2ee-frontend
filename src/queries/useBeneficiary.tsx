@@ -1,10 +1,10 @@
 import beneficiaryApi from "@/apis/beneficiary";
-import { UpdateBeneficiaryBodyType } from "@/schemas/beneficiary.schema";
+import { QueryConfig } from "@/hooks/useQueryConfig";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export const useGetBeneficiaryList = () => {
+export const useGetBeneficiaryList = (queryConfig?: QueryConfig) => {
     return useQuery({
-        queryKey: ["beneficiaries"],
+        queryKey: ["beneficiaries", queryConfig],
         queryFn: beneficiaryApi.getBeneficiaryList,
     });
 };

@@ -2,7 +2,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
 import { Checkbox } from "@/components/ui/checkbox";
-import { RoleType } from "@/schemas/role.schema";
+import { BeneficiaryType } from "@/schemas/beneficiary.schema";
 
 /**
  * Description: Khai báo columns cho table
@@ -10,7 +10,7 @@ import { RoleType } from "@/schemas/role.schema";
  * accessorKey có value tương ứng với response data của api (phải ghi đúng để nó lấy được data ra)
  * header: Đơn giản chỉ là việc hiển thị tên column
  */
-export const columns: ColumnDef<RoleType>[] = [
+export const columns: ColumnDef<BeneficiaryType>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -29,10 +29,6 @@ export const columns: ColumnDef<RoleType>[] = [
     ),
     enableSorting: false,
     enableHiding: false,
-  },
-  {
-    accessorKey: "id",
-    header: "ID",
   },
 
   {

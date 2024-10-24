@@ -57,11 +57,11 @@ export function DataTablePagination<TData, TValue>({
   const searchParams = useSearchParams();
 
   // Search params
-  const page = data.pageable?.pageNumber;
+  const page = data.page?.number;
   const pageAsNumber = Number(page);
   const fallbackPage =
     isNaN(pageAsNumber) || pageAsNumber < 1 ? 1 : pageAsNumber;
-  const per_page = data.numberOfElements;
+  const per_page = data.page.size;
   const perPageAsNumber = Number(per_page);
   const fallbackPerPage = isNaN(perPageAsNumber) ? 10 : perPageAsNumber;
 
@@ -110,7 +110,7 @@ export function DataTablePagination<TData, TValue>({
   const table = useReactTable({
     columns,
     data: content,
-    pageCount: data?.totalPages ?? -1,
+    pageCount: data?.page.totalPages ?? -1,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     state: {
@@ -207,7 +207,7 @@ export function DataTablePagination<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  Không tìm thấy kết quả
                 </TableCell>
               </TableRow>
             )}

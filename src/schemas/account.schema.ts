@@ -2,7 +2,7 @@ import z from "zod";
 
 export const AccountSchema = z.object({
   id: z.number(),
-  name: z.string(),
+  fullName: z.string(),
   email: z.string(),
   role: z.string(),
   avatar: z.string().nullable(),
