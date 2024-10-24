@@ -154,4 +154,10 @@ export const navItems: NavItem[] = [
     icon: "profile",
     label: "profile",
   },
+  {
+    title: "Login",
+    href: "/",
+    icon: "login",
+    label: "login",
+  },
 ];

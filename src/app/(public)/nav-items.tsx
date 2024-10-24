@@ -18,7 +18,42 @@ const menuItems = [
         href: "/",
         exact: true,
         authRequired: false,
-        hideAfterAuth: false,
+    },
+    {
+        title: "Dashboard",
+        href: "/dashboard",
+        authRequired: true,
+    },
+    // {
+    //   title: "Chiến dịch gây quỹ",
+    //   href: "/campaign",
+    //   authRequired: false,
+    // },
+    // {
+    //   title: "Trái tim momo",
+    //   href: "/heart",
+    //   authRequired: false,
+    // },
+    {
+        title: "Tin tức cộng đồng",
+        href: "/news",
+        authRequired: false,
+    },
+    {
+        title: "Đăng nhập",
+        href: "/login",
+        authRequired: false,
+        hideAfterAuth: true,
+    },
+    {
+        title: "Đăng xuất",
+        href: "/logout",
+        authRequired: true,
+    },
+    {
+        title: "Gửi nguyện vọng đóng góp",
+        href: "/beneficiary",
+        authRequired: true,
     },
 ];
 
