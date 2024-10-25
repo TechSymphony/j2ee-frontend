@@ -1,13 +1,25 @@
-import React, { useState, lazy, Suspense } from "react";
+import React, { useState, lazy, Suspense, useEffect } from "react";
+import { useRefetch } from "@/contexts/app-context";
 import { useGetCampaignListQuery } from "@/queries/useCampaign";
+import { useRouter } from "next/navigation";
+// import { CampaignType } from "@/schemas/campaign.schema";
+
+
 
 const Campaign = lazy(() => import("@/components/campaign/campaign"));
 
 export default function CampaignList() {
-  const { data: campaignListData, isLoading } = useGetCampaignListQuery(); // Sử dụng isLoading để theo dõi trạng thái tải
+
+  const { data: campaignListData, isLoading, refetch } = useGetCampaignListQuery(); // Sử dụng isLoading để theo dõi trạng thái tải
   const campaigns = campaignListData?.payload ?? [];
   const [visibleCount, setVisibleCount] = useState(6); // Mặc định hiển thị 6 campaign đầu tiên
   const [loading, setLoading] = useState(false); // Quản lý trạng thái tải dữ liệu
+
+  const { setTriggerRefetch } = useRefetch();
+  const router = useRouter();
+  useEffect(() => {
+    setTriggerRefetch(() => refetch);
+  }, [refetch, setTriggerRefetch]);
 
 
   /**
@@ -32,9 +44,10 @@ export default function CampaignList() {
               .filter((campaign) => campaign.status === "APPROVED")
               .slice(0, visibleCount)
               .map((campaign, index) => (
-                console.log(campaign),
                 <Suspense key={index} fallback={<div>Loading...</div>}>
-                  <Campaign data={campaign} />
+                  <div onClick={() => router.push(`/campaign/${campaign.id}`)}>
+                    <Campaign data={campaign} />
+                  </div>
                 </Suspense>
               ))}
           </div>

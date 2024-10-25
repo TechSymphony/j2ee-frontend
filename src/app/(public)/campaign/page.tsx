@@ -97,7 +97,6 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-
             <div className="py-8 md:py-10 lg:py-14  bg-pink-50">
                 <div className="container">
                     <div className="mb-5 text-center md:mb-8" id="section-article">
