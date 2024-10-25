@@ -41,6 +41,10 @@ export const columns: ColumnDef<BeneficiaryType>[] = [
     header: "Người dùng yêu cầu",
   },
   {
+    accessorKey: "verificationStatus",
+    header: "Trạng thái duyệt",
+  },
+  {
     id: "actions",
     cell: ({ row }) => <CellAction data={row.original} />,
   },

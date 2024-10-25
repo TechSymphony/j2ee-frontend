@@ -2,41 +2,35 @@
 
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { Options } from "nuqs";
+import { useQueryState } from "nuqs";
 import { useTransition } from "react";
 
 export interface DataTableSearchProps {
-  searchKey: string;
-  searchQuery: string;
-  setSearchQuery: (
-    value: string | ((old: string) => string | null) | null,
-    options?: Options | undefined
-  ) => Promise<URLSearchParams>;
-  setPage: (
-    value: number | ((old: number) => number | null) | null,
-    options?: Options | undefined
-  ) => Promise<URLSearchParams>;
+    filterKey: string;
+    setPage?: (value: number) => void;
+    title: string;
 }
 
 export function DataTableSearch({
-  searchKey,
-  searchQuery,
-  setSearchQuery,
-  setPage,
+    filterKey,
+    setPage,
+    title,
 }: DataTableSearchProps) {
-  const [isLoading, startTransition] = useTransition();
+    const [isLoading, startTransition] = useTransition();
+    const [filterValue, setFilterValue] = useQueryState(filterKey, {
+        defaultValue: "",
+    });
+    const handleSearch = (value: string) => {
+        setFilterValue(value, { startTransition });
+        if (setPage) setPage(0);
+    };
 
-  const handleSearch = (value: string) => {
-    setSearchQuery(value, { startTransition });
-    setPage(0);
-  };
-
-  return (
-    <Input
-      placeholder={`Search ${searchKey}...`}
-      value={searchQuery ?? ""}
-      onChange={(e) => handleSearch(e.target.value)}
-      className={cn("w-full md:max-w-sm", isLoading && "animate-pulse")}
-    />
-  );
+    return (
+        <Input
+            placeholder={`Tìm kiếm ${title} ...`}
+            value={filterValue ?? ""}
+            onChange={(e) => handleSearch(e.target.value)}
+            className={cn("w-full md:max-w-sm", isLoading && "animate-pulse")}
+        />
+    );
 }
