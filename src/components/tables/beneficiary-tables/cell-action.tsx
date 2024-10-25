@@ -11,7 +11,7 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { handleErrorFromApi } from "@/lib/utils";
 import { BeneficiaryType } from "@/schemas/beneficiary.schema";
-import { Edit, MoreHorizontal, Trash } from "lucide-react";
+import { Edit, Eye, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -24,29 +24,28 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-//   const deleteBeneficiaryMutation = useDeleteBeneficiaryMutation();
-//   /**
-//    * Xử lý sự kiện delete role
-//    */
-//   const onDelete = async () => {
-//     try {
-//       console.log("delete");
-//       setLoading(true);
-//       await deleteBeneficiaryMutation.mutateAsync(data.id);
-//       toast({
-//         description: "Xóa vai trò thành công",
-//         duration: 5000,
-//       });
-//     } catch (error: any) {
-//       handleErrorFromApi({ error });
-//     } finally {
-//       setLoading(false);
-//       setOpen(false);
-//     }
-//   };
+  //   const deleteBeneficiaryMutation = useDeleteBeneficiaryMutation();
+  //   /**
+  //    * Xử lý sự kiện delete role
+  //    */
+  //   const onDelete = async () => {
+  //     try {
+  //       console.log("delete");
+  //       setLoading(true);
+  //       await deleteBeneficiaryMutation.mutateAsync(data.id);
+  //       toast({
+  //         description: "Xóa vai trò thành công",
+  //         duration: 5000,
+  //       });
+  //     } catch (error: any) {
+  //       handleErrorFromApi({ error });
+  //     } finally {
+  //       setLoading(false);
+  //       setOpen(false);
+  //     }
+  //   };
 
-const onDelete = async function () {
-}
+  const onDelete = async function () {};
 
   return (
     <>
@@ -64,15 +63,17 @@ const onDelete = async function () {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuLabel>Hành động</DropdownMenuLabel>
 
           <DropdownMenuItem
             onClick={() => router.push(`/dashboard/beneficiary/${data.id}`)}
           >
-            <Edit className="mr-2 h-4 w-4" /> Update
+            <Eye className="mr-2 h-4 w-4" /> Hiển thị
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setOpen(true)}>
-            <Trash className="mr-2 h-4 w-4" /> Delete
+          <DropdownMenuItem
+            onClick={() => router.push(`/dashboard/beneficiary/${data.id}`)}
+          >
+            <Edit className="mr-2 h-4 w-4" /> Cập nhập
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

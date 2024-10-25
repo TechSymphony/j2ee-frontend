@@ -8,10 +8,16 @@ import { columns } from "./columns";
 import { useGetBeneficiaryList } from "@/queries/useBeneficiary";
 import { useRefetch } from "@/contexts/app-context";
 import { useEffect } from "react";
-import { DataTablePagination } from "@/components/ui/data-table-pagination";
-import useQueryConfig from "@/hooks/useQueryConfig";
 import { getDefaultPaginatedResponse } from "@/schemas/paginate.schema";
-
+import { DataTablePagination } from "@/components/ui/data-table-pagination";
+import { DataTableComponentType } from "@/components/ui/table/data-table-factory-filter";
+import { useEmployeeTableFilters } from "./beneficiary-filter";
+import useQueryConfig from "./beneficiary-query-table";
+import { ReviewStatusOptions } from "@/types/enum";
+export const GENDER_OPTIONS = [
+  { value: "male", label: "Male" },
+  { value: "female", label: "Female" },
+];
 export const BeneficiaryClient = () => {
   const router = useRouter();
   const queryConfig = useQueryConfig();
@@ -26,6 +32,35 @@ export const BeneficiaryClient = () => {
     setTriggerRefetch(() => refetch);
   }, [refetch, setTriggerRefetch]);
 
+  const { isAnyFilterActive, resetFilters, setPage, setSearchQuery } =
+    useEmployeeTableFilters();
+
+  const filters = [
+    // {
+    //   type: DataTableComponentType.Search,
+    //   props: {
+    //     filterKey: "user.fullName",
+    //     searchQuery: "",
+    //     setSearchQuery: setSearchQuery,
+    //     setPage: setPage,
+    //   },
+    // },
+    {
+      type: DataTableComponentType.FilterBox,
+      props: {
+        filterKey: "verificationStatus",
+        title: "Trạng thái duyệt",
+        options: ReviewStatusOptions,
+      },
+    },
+    {
+      type: DataTableComponentType.ResetFilter,
+      props: {
+        isFilterActive: isAnyFilterActive,
+        onReset: resetFilters,
+      },
+    },
+  ];
   return (
     <>
       <div className="flex items-start justify-between">
@@ -36,13 +71,18 @@ export const BeneficiaryClient = () => {
 
         <Button
           className="text-xs md:text-sm"
-          onClick={() => router.push(`/dashboard/role/new`)}
+          onClick={() => router.push(`/dashboard/beneficiary/new`)}
         >
           <Plus className="mr-2 h-4 w-4" /> Thêm mới
         </Button>
       </div>
       <Separator />
-      <DataTablePagination searchKey="" columns={columns} data={data} />
+      <DataTablePagination
+        searchKey="user_name"
+        columns={columns}
+        data={data}
+        filters={filters}
+      />
     </>
   );
 };

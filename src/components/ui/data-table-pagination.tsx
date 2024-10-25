@@ -35,6 +35,22 @@ import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { PaginatedResponse } from "../../schemas/paginate.schema";
+import DataTableComponentFactory, {
+  DataTableComponentProps,
+  DataTableComponentType,
+} from "./table/data-table-factory-filter";
+import {
+  DataTableSearch,
+  DataTableSearchProps,
+} from "./table/data-table-search";
+import {
+  DataTableFilterBox,
+  DataTableFilterBoxProps,
+} from "./table/data-table-filter-box";
+import {
+  DataTableResetFilter,
+  DataTableResetFilterProps,
+} from "./table/data-table-reset-filter";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -44,6 +60,7 @@ interface DataTableProps<TData, TValue> {
   searchParams?: {
     [key: string]: string | string[] | undefined;
   };
+  filters?: DataTableComponentProps[];
 }
 
 export function DataTablePagination<TData, TValue>({
@@ -51,6 +68,7 @@ export function DataTablePagination<TData, TValue>({
   data,
   searchKey,
   pageSizeOptions = [10, 20, 30, 40, 50],
+  filters,
 }: DataTableProps<TData, TValue>) {
   const router = useRouter();
   const pathname = usePathname();
@@ -119,10 +137,11 @@ export function DataTablePagination<TData, TValue>({
     onPaginationChange: setPagination,
     getPaginationRowModel: getPaginationRowModel(),
     manualPagination: true,
-    // manualFiltering: true
+    manualFiltering: true,
   });
 
-  const searchValue = table.getColumn(searchKey)?.getFilterValue() as string;
+  // const searchValue = table.getColumn(searchKey)?.getFilterValue() as string;
+  const searchValue = "";
 
   React.useEffect(() => {
     if (searchValue?.length > 0) {
@@ -156,14 +175,37 @@ export function DataTablePagination<TData, TValue>({
 
   return (
     <>
-      <Input
-        placeholder={`Search ${searchKey}...`}
-        value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
-        onChange={(event) =>
-          table.getColumn(searchKey)?.setFilterValue(event.target.value)
-        }
-        className="w-full md:max-w-sm"
-      />
+      <div className="flex flex-wrap items-center gap-4 mb-4">
+        {filters?.length
+          ? filters.map((filter) => {
+              switch (filter.type) {
+                case DataTableComponentType.Search:
+                  return (
+                    <DataTableSearch
+                      {...(filter.props as DataTableSearchProps)}
+                    />
+                  );
+                case DataTableComponentType.FilterBox:
+                  return (
+                    <DataTableFilterBox
+                      key={filter.props.filterKey}
+                      {...(filter.props as DataTableFilterBoxProps)}
+                    />
+                  );
+                case DataTableComponentType.ResetFilter:
+                  return (
+                    <DataTableResetFilter
+                      key={"reset-filter-data-table"}
+                      {...(filter.props as DataTableResetFilterProps)}
+                    />
+                  );
+                default:
+                  throw new Error(`Unknown component type`);
+              }
+            })
+          : ""}
+      </div>
+
       <ScrollArea className="h-[calc(80vh-220px)] rounded-md border">
         <Table className="relative">
           <TableHeader>
@@ -185,7 +227,8 @@ export function DataTablePagination<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {table?.getRowModel()?.rows?.length ? (
+            {table?.getRowModel()?.rows?.length &&
+            table?.getRowModel()?.rows?.length > 0 ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}

@@ -4,7 +4,7 @@ import useQueryParams from "./useQueryParams";
 export type QueryConfig = {
   page?: number | string;
   limit?: number | string;
-  sort_by?: "createdAt" | "view" | "sold" | "price";
+  sort_by?: string;
   order?: "asc" | "desc";
   search?: string;
 };

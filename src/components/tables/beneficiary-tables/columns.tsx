@@ -36,6 +36,7 @@ export const columns: ColumnDef<BeneficiaryType>[] = [
     header: "Số tiền dự kiến",
   },
   {
+    id: "user_name",
     accessorKey: "user.fullName",
     header: "Người dùng yêu cầu",
   },
