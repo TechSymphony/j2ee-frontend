@@ -4,10 +4,51 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Heart, Home } from 'lucide-react'
 import CampaignList from '@/components/campaign/campaign-list'
+import { useParams } from "next/navigation";
+import { useGetCampaignQuery } from '@/queries/useCampaign';
+
 // import Link from 'next/link'
 
 
 export default function CampaignDetail() {
+    const params = useParams();
+    const dataCampaignId = Number(params.campaignId as string);
+
+    const { data: initialData } = useGetCampaignQuery({
+        id: dataCampaignId,
+        enabled: Boolean(dataCampaignId),
+    });
+
+    const campaign = initialData?.payload ?? {
+        id: 0,
+        code: '',
+        name: '',
+        description: '',
+        targetAmount: 0,
+        currentAmount: 0,
+        startDate: new Date(),
+        endDate: new Date(),
+        status: '',
+        beneficiary: {
+            id: 0,
+            situationDetail: '',
+            supportReceived: 0,
+            verificationStatus: false,
+        },
+    };
+
+    // Tính phần trăm tiến độ chiến dịch
+    const percentage = campaign.targetAmount ? (campaign.currentAmount / campaign.targetAmount) * 100 : 0;
+
+    // Tính ngày còn lại của chiến dịch
+    const startDate = new Date(campaign.startDate);
+    const endDate = new Date(campaign.endDate);
+    const remainingDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+
+    // Đinh dạng số tiền
+    const formatTargetAmount = campaign.targetAmount.toLocaleString('de-DE');
+    const formatCurrentAmount = campaign.currentAmount.toLocaleString('de-DE');
+
     return (
         <div>
             <div className="min-h-screen bg-gray-100">
@@ -23,11 +64,14 @@ export default function CampaignDetail() {
                         {/* Left content */}
                         <div className="md:col-span-2 space-y-6">
                             <h1 className="text-2xl font-bold">
-                                Chung tay gây quỹ hỗ trợ học bổng đến trường cho 100 em học sinh có hoàn cảnh khó khăn tại Thành phố Hồ Chí Minh (Đợt 1)
+                                {campaign.name}
                             </h1>
                             <div className="flex items-center space-x-2 text-pink-600">
                                 <Heart className="w-5 h-5 fill-current" />
-                                <span className="text-sm">Trồng khoảng khổ để ấm Trăng mới cuộc đời, sáng đến cùng em đến trường để cùng các những gói hỗ trợ giúp học và hoàn cảnh của từng trẻ em khó khăn, đặc biệt đảm bảo các em có thể duy trì được việc học tập.</span>
+                                <span className="text-sm">
+                                    Trồng khoảng khổ để ấm Trăng mới cuộc đời, sáng đến cùng em đến trường để cùng các những gói hỗ trợ
+                                    giúp học và hoàn cảnh của từng trẻ em khó khăn, đặc biệt đảm bảo các em có thể duy trì được việc học tập.
+                                </span>
                             </div>
                             <Image
                                 src="/static/images/campaign.jpg"
@@ -39,7 +83,9 @@ export default function CampaignDetail() {
                             <div className="bg-white p-6 rounded-lg shadow">
                                 <h2 className="text-xl font-semibold mb-4">Câu chuyện</h2>
                                 <p className="text-gray-600 mb-4">
-                                    Gia Bảo, Gia Hân, Trường Vy và Gia Huy - bốn anh chị em nhỏ với những nụ cười rạng rỡ và áo đồng phục trắng tinh là hình ảnh đẹp mà chúng tôi đã gặp. Ấy vậy mà đằng sau những nụ cười ấy là một hoàn cảnh gia đình vô cùng khó khăn khiến các em có nguy cơ không được đến trường.
+                                    Gia Bảo, Gia Hân, Trường Vy và Gia Huy - bốn anh chị em nhỏ với những nụ cười rạng rỡ và áo đồng phục trắng tinh
+                                    là hình ảnh đẹp mà chúng tôi đã gặp. Ấy vậy mà đằng sau những nụ cười ấy là một hoàn cảnh gia đình vô cùng khó khăn
+                                    khiến các em có nguy cơ không được đến trường.
                                 </p>
                                 <Image
                                     src="/static/images/campaign.jpg"
@@ -53,12 +99,13 @@ export default function CampaignDetail() {
                                 </p>
                             </div>
                             <div className="bg-white p-6 rounded-lg shadow">
-                                <h2 className="text-xl font-semibold mb-4">Về MSD United Way Vietnam:</h2>
+                                <h2 className="text-xl font-semibold mb-4">Về {campaign.beneficiary.situationDetail}:</h2>
                                 <p className="text-gray-600 mb-4">
-                                    MSD United Way Vietnam là tổ chức phi lợi nhuận Việt Nam và là thành viên của United Way Worldwide - mạng lưới phi lợi nhuận toàn cầu hoạt động hơn 135 năm tại hơn 40 quốc gia và vùng lãnh thổ. MSD United Way Việt Nam hoạt động với mục tiêu nâng cao chất lượng giáo dục, cải thiện thu nhập và đảm bảo cuộc sống khỏe mạnh cho những người yếu thế trong xã hội như trẻ em, thanh niên, phụ nữ, người dân tộc thiểu số, người khuyết tật... bằng cách huy động sự quan tâm và giải quyết các vấn đề xã hội một cách có hệ thống.
-                                </p>
-                                <p className="text-gray-600">
-                                    Dự án Trăng mới cuộc đời là dự án được MSD thực hiện từ năm 2014 với mục tiêu nâng cao và cải thiện chất lượng cuộc sống toàn diện cho trẻ em có hoàn cảnh khó khăn và đặc biệt thông qua tiếp cận và đảm bảo quyền trẻ em, gồm: (1) quyền được khỏe mạnh, (2) quyền được học tập và phát triển và (3) quyền được sống khỏe mạnh.
+                                    {campaign.beneficiary.situationDetail} là tổ chức phi lợi nhuận Việt Nam và là thành viên của United Way Worldwide
+                                    - mạng lưới phi lợi nhuận toàn cầu hoạt động hơn 135 năm tại hơn 40 quốc gia và vùng lãnh thổ.
+                                    MSD United Way Việt Nam hoạt động với mục tiêu nâng cao chất lượng giáo dục, cải thiện thu nhập và đảm bảo cuộc
+                                    sống khỏe mạnh cho những người yếu thế trong xã hội như trẻ em, thanh niên, phụ nữ, người dân tộc thiểu số, người khuyết tật...
+                                    bằng cách huy động sự quan tâm và giải quyết các vấn đề xã hội một cách có hệ thống.
                                 </p>
                             </div>
                             {/* Nhà hảo tâm hàng đầu */}
@@ -115,11 +162,10 @@ export default function CampaignDetail() {
                                 <Button variant="outline" className="w-full mt-4">Xem tất cả</Button>
                             </div>
                         </div>
-
                         {/* Right content */}
-                        <div className="space-y-6  ">
+                        <div className="space-y-6 rounded-lg  ">
                             {/* Thông tin quyên góp */}
-                            <div className="w-full max-w-sm border border-gray-200 bg-white rounded-xl shadow-sm hover:shadow-xl sticky top-20">
+                            <div className="w-full border border-gray-200 bg-white rounded-xl shadow-sm hover:shadow-xl sticky top-20">
                                 <div className="text-pink-500 font-semibold px-4 pt-4">THÔNG TIN QUYÊN GÓP</div>
                                 <div className="space-y-4 px-4 pb-3 pt-4">
                                     <div className="space-y-2">
@@ -132,17 +178,17 @@ export default function CampaignDetail() {
                                         <div className="flex items-center space-x-2">
                                             <span className="text-sm">Đối tác đồng hành</span>
                                         </div>
-                                        <p className="text-xs text-muted-foreground">Hands-On</p>
+                                        <p className="text-xs text-muted-foreground">{campaign.beneficiary.situationDetail}</p>
                                     </div>
                                     <div className="space-y-2">
                                         <div className="flex justify-between">
-                                            <span className="text-2xl font-bold">54.000đ<span className="text-sm text-muted-foreground"> / 75.000.000đ</span></span>
+                                            <span className="text-2xl font-bold">{formatCurrentAmount}đ<span className="text-sm text-muted-foreground"> / {formatTargetAmount}đ</span></span>
 
                                         </div>
                                         <div className=" my-1 flex h-1.5 w-full overflow-hidden rounded-lg bg-gray-200">
                                             <div
                                                 className="h-1.5 rounded-lg bg-pink-darker"
-                                                style={{ width: 20 }}
+                                                style={{ width: `${percentage}` }}
                                             ></div>
                                         </div>
                                         <div className=" mt-3 flex flex-nowrap items-center  justify-between space-x-2 md:space-x-3 ">
@@ -152,11 +198,11 @@ export default function CampaignDetail() {
                                             </div>
                                             <div className="grow">
                                                 <div className=" text-sm text-gray-500">Đạt được</div>
-                                                <div className=" text-sm font-bold text-gray-600">{20}%</div>
+                                                <div className=" text-sm font-bold text-gray-600">{percentage}%</div>
                                             </div>
                                             <div className="grow">
                                                 <div className=" text-sm text-gray-500">Thời hạn còn</div>
-                                                <div className=" text-sm font-bold text-gray-600">{75} Ngày</div>
+                                                <div className=" text-sm font-bold text-gray-600">{remainingDays} Ngày</div>
                                             </div>
                                         </div>
                                     </div>
@@ -166,7 +212,7 @@ export default function CampaignDetail() {
                         </div>
                     </div>
                 </main>
-            </div>
+            </div >
             <div className="py-8 md:py-10 lg:py-14  border border-gray-200 bg-white rounded-xl">
                 <div className="container">
                     <div className="mb-5 text-center md:mb-8" id="section-article">
@@ -181,7 +227,7 @@ export default function CampaignDetail() {
                     <CampaignList />
                 </div>
             </div>
-        </div>
+        </div >
 
     )
 }
