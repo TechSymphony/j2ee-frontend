@@ -15,13 +15,12 @@ export default function AuthenticationPage() {
     }
 
     handleLogin();
-    return ()=>{}
+    return () => { }
   }, []);
 
   return (
     <div>
-      <h1>Next.js OIDC Integration</h1>
-      <p>Welcome to the authenticated section of your app!</p>
+      <p>Đang đăng nhập ...</p>
     </div>
   );
 }

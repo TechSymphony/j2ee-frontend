@@ -10,7 +10,7 @@ import NavItems from "@/app/(public)/nav-items";
 import Image from "next/image";
 import { CategoryMenuComponent } from "@/components/category-menu";
 import { useGetCategoryMenus } from "@/queries/useCategory";
-import DarkModeToggle from "../dark-mode-toggle";
+import HeaderCommon from "./header-common";
 
 export default function Header() {
     const { data } = useGetCategoryMenus();
@@ -66,9 +66,7 @@ export default function Header() {
                         ></CategoryMenuComponent>
                     </nav>
                 </SheetContent>
-                <div className="ml-auto">
-                    <DarkModeToggle />
-                </div>
+                <HeaderCommon />
             </Sheet>
 
         </header>
