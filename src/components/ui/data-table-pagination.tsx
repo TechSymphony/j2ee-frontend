@@ -66,7 +66,6 @@ interface DataTableProps<TData, TValue> {
 export function DataTablePagination<TData, TValue>({
     columns,
     data,
-    searchKey,
     pageSizeOptions = [10, 20, 30, 40, 50],
     filters,
 }: DataTableProps<TData, TValue>) {
@@ -78,9 +77,6 @@ export function DataTablePagination<TData, TValue>({
     const per_page = data.page.size;
     const perPageAsNumber = Number(per_page);
     const fallbackPerPage = isNaN(perPageAsNumber) ? 10 : perPageAsNumber;
-
-    /* this can be used to get the selectedrows
-  console.log("value", table.getFilteredSelectedRowModel()); */
 
     // Handle server-side pagination
     const [{ pageIndex, pageSize }, setPagination] =
