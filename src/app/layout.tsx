@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { AppContextProvider } from "@/contexts/app-context";
 import UserProvider, { useUser } from "@/contexts/user-context";
 import { userManager } from "@/lib/auth";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,21 +31,23 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {/* <NextTopLoader showSpinner={false} /> */}
-        <AppProvider>
-          <UserProvider>
-          <AppContextProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              {children}
-              <Toaster />
-            </ThemeProvider>
-          </AppContextProvider>
-          </UserProvider>
-        </AppProvider>
+        <NuqsAdapter>
+          <AppProvider>
+            <UserProvider>
+              <AppContextProvider>
+                <ThemeProvider
+                  attribute="class"
+                  defaultTheme="system"
+                  enableSystem
+                  disableTransitionOnChange
+                >
+                  {children}
+                  <Toaster />
+                </ThemeProvider>
+              </AppContextProvider>
+            </UserProvider>
+          </AppProvider>
+        </NuqsAdapter>
       </body>
     </html>
   );

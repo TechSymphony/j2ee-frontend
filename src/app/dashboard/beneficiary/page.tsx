@@ -9,7 +9,7 @@ const breadcrumbItems = [
 export default function page() {
   return (
     <PageContainer>
-      <div className="space-y-2">
+      <div className="space-y-5">
         <Breadcrumbs items={breadcrumbItems} />
         <BeneficiaryClient />
       </div>
