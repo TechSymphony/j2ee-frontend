@@ -36,15 +36,15 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     const [state, dispatch] = useReducer(userReducer, { user: null });
     useEffect(
-        ()=>{
-          const loadData=  async () =>   {
-            const data= await userManager.getUser().then(user => user);
-            if(data) dispatch({type: 'SET_USER', payload:data});
-            console.log(data?.profile?.authorities);
-          }
-          loadData();
+        () => {
+            const loadData = async () => {
+                const data = await userManager.getUser().then(user => user);
+                if (data) dispatch({ type: 'SET_USER', payload: data });
+                console.log(data?.profile?.authorities);
+            }
+            loadData();
         }
-    ,[]);
+        , []);
     return (
         <UserContext.Provider value={{ state, dispatch }}>
             {children}

@@ -15,7 +15,7 @@ export default function AuthenticationPage() {
     }
 
     handleLogin();
-    return ()=>{}
+    return () => { }
   }, []);
 
   return (
