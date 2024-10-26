@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { AppContextProvider } from "@/contexts/app-context";
 import UserProvider, { useUser } from "@/contexts/user-context";
 import { userManager } from "@/lib/auth";
+import { RouteAuthorize } from "@/components/authorization/route-authorize";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,17 +33,18 @@ export default function RootLayout({
         {/* <NextTopLoader showSpinner={false} /> */}
         <AppProvider>
           <UserProvider>
-          <AppContextProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              {children}
-              <Toaster />
-            </ThemeProvider>
-          </AppContextProvider>
+            <AppContextProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <RouteAuthorize>{children}</RouteAuthorize>
+
+                <Toaster />
+              </ThemeProvider>
+            </AppContextProvider>
           </UserProvider>
         </AppProvider>
       </body>
