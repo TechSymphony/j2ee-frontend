@@ -5,9 +5,9 @@ import { ThemeProvider } from "@/components/theme-provider";
 import AppProvider from "@/components/app-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { AppContextProvider } from "@/contexts/app-context";
-import UserProvider, { useUser } from "@/contexts/user-context";
-import { userManager } from "@/lib/auth";
+import UserProvider from "@/contexts/user-context";
 import { RouteAuthorize } from "@/components/authorization/route-authorize";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -31,22 +31,24 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {/* <NextTopLoader showSpinner={false} /> */}
-        <AppProvider>
-          <UserProvider>
-            <AppContextProvider>
-              <ThemeProvider
-                attribute="class"
-                defaultTheme="system"
-                enableSystem
-                disableTransitionOnChange
-              >
-                <RouteAuthorize>{children}</RouteAuthorize>
+        <NuqsAdapter>
+          <AppProvider>
+            <UserProvider>
+              <AppContextProvider>
+                <ThemeProvider
+                  attribute="class"
+                  defaultTheme="system"
+                  enableSystem
+                  disableTransitionOnChange
+                >
+                  <RouteAuthorize>{children}</RouteAuthorize>
 
-                <Toaster />
-              </ThemeProvider>
-            </AppContextProvider>
-          </UserProvider>
-        </AppProvider>
+                  <Toaster />
+                </ThemeProvider>
+              </AppContextProvider>
+            </UserProvider>
+          </AppProvider>
+        </NuqsAdapter>
       </body>
     </html>
   );

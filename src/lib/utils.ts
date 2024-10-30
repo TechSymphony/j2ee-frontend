@@ -43,15 +43,3 @@ export const handleErrorFromApi = ({
     });
   }
 };
-
-const isBrowser = typeof window !== "undefined";
-
-export const getAccessTokenFromLocalStorage = () => {
-  let accessToken = null;
-  if (isBrowser) {
-    const object = localStorage.getItem("accessToken");
-    accessToken = (object as any).access_token as string;
-  }
-  console.log(accessToken);
-  return accessToken;
-};
