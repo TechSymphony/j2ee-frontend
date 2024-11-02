@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import envConfig from "@/config";
+import { userManager } from "@/lib/auth";
 
 type CustomOptions = Omit<RequestInit, "method"> & {
   baseUrl?: string | undefined;
@@ -55,9 +56,12 @@ const request = async <Response>(
   options?: CustomOptions | undefined
 ) => {
   const body = options?.body ? JSON.stringify(options.body) : undefined;
+  const user = await userManager.getUser().then((user) => user);
+  const accessToken = user?.access_token;
+
   const baseHeaders = {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${envConfig.NEXT_PUBLIC_ACCESS_TOKEN}`,
+    Authorization: `Bearer ${accessToken}`,
   };
 
   /**
@@ -82,8 +86,8 @@ const request = async <Response>(
    */
 
   const params: URLSearchParams = new URL(window.location.href).searchParams;
-
-  const res = await fetch(fullUrl + "?"+ params.toString(), {
+  // console.log(fullUrl + "?" + params.toString());
+  const res = await fetch(fullUrl + "?" + params.toString(), {
     ...options,
     headers: {
       ...baseHeaders,
