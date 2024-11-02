@@ -51,6 +51,7 @@ import {
     DataTableResetFilter,
     DataTableResetFilterProps,
 } from "./table/data-table-reset-filter";
+import { DataTableFilterDateRange } from "./table/data-table-filter-date";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -121,6 +122,15 @@ export function DataTablePagination<TData, TValue>({
                     listNameFilters.push(filter.props.filterKey);
                     return (
                         <DataTableFilterBox
+                            key={filter.props.filterKey}
+                            {...(filter.props as DataTableFilterBoxProps)}
+                        />
+                    );
+                case DataTableComponentType.FilterDate:
+                    filter.props.setPage = resetPage;
+                    listNameFilters.push(filter.props.filterKey);
+                    return (
+                        <DataTableFilterDateRange
                             key={filter.props.filterKey}
                             {...(filter.props as DataTableFilterBoxProps)}
                         />

@@ -44,6 +44,13 @@ export const BeneficiaryClient = () => {
                 options: ReviewStatusOptions,
             },
         },
+        {
+            type: DataTableComponentType.FilterDate,
+            props: {
+                filterKey: "date",
+                title: "Trạng thái duyệt",
+            },
+        },
     ];
     return (
         <>
