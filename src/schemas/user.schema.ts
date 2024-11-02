@@ -2,13 +2,13 @@ import z from "zod";
 import { RoleSchema } from "./role.schema";
 
 export const UserSchema = z.object({
-    id: z.number(),
-    fullName: z.string(),
-    email: z.string(),
-    phone: z.string().optional(),
-    createdAt: z.date(),
-    updatedAt: z.date(),
-    role: RoleSchema,
+  id: z.number(),
+  fullName: z.string(),
+  email: z.string(),
+  phone: z.string().optional(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  role: RoleSchema,
 });
 
 export type UserType = z.TypeOf<typeof UserSchema>;
@@ -17,38 +17,47 @@ export const UserListRes = z.array(UserSchema);
 
 export type UserListResType = z.TypeOf<typeof UserListRes>;
 
-export const UserRes = z.object({
-    id: z.number(),
-    fullName: z.string(),
-    email: z.string(),
-    phone: z.string().optional(),
-    createdAt: z.date(),
-    updatedAt: z.date(),
-    role: RoleSchema,
+export const BasicUserRes = z.object({
+  id: z.number(),
+  fullName: z.string(),
+  email: z.string(),
+  phone: z.string().optional(),
+});
+export type BasicUserResType = z.TypeOf<typeof BasicUserRes>;
+
+export const UserRes = BasicUserRes.extend({
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  role: RoleSchema,
 });
 
 export type UserResType = z.TypeOf<typeof UserRes>;
 
 export const CreateUserBody = z
-    .object({
-        fullName: z.string().trim().min(2).max(256),
-        email: z.string().trim().min(2).max(256).email(),
-        username: z.string().trim().min(2).max(256).optional(),
-        phone: z.string().trim().min(2).max(256),
-        role: RoleSchema,
-    })
-    .strict();
+  .object({
+    fullName: z.string().trim().min(2).max(256),
+    email: z.string().trim().min(2).max(256).email(),
+    username: z.string().trim().min(2).max(256).optional(),
+    phone: z.string().trim().min(2).max(256),
+    role: RoleSchema,
+  })
+  .strict();
 
 export type CreateUserBodyType = z.TypeOf<typeof CreateUserBody>;
 
-export const UpdateUserBody = z
-    .object({
-        fullName: z.string().trim().min(2).max(256),
-        email: z.string().trim().min(2).max(256).email(),
-        username: z.string().trim().min(2).max(256).optional(),
-        phone: z.string().trim().min(2).max(256),
-        role: RoleSchema,
-    })
-    .strict();
+export const UpdateBasicUserBody = z
+  .object({
+    fullName: z.string().trim().min(2).max(256),
+    email: z.string().trim().min(2).max(256).email(),
+    phone: z.string().trim().min(2).max(256).optional(),
+  })
+  .strict();
+
+export type UpdateBasicUserBodyType = z.TypeOf<typeof UpdateBasicUserBody>;
+
+export const UpdateUserBody = UpdateBasicUserBody.extend({
+  username: z.string().trim().min(2).max(256).optional(),
+  role: RoleSchema,
+}).strict();
 
 export type UpdateUserBodyType = z.TypeOf<typeof UpdateUserBody>;

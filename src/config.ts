@@ -4,7 +4,7 @@ const configSchema = z.object({
   NEXT_PUBLIC_API_ENDPOINT: z.string(),
   NEXT_PUBLIC_URL: z.string(),
   NEXT_PUBLIC_ACCESS_TOKEN: z.string(),
-  OAUTH_AUTH_URL: z.string().default("http://localhost:8080"),
+  OAUTH_AUTH_URL: z.string().default("https://localhost:8080"),
   OAUTH_AUTH_ID: z.string().default("public-client"),
 });
 

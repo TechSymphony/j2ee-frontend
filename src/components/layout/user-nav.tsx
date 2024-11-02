@@ -1,4 +1,5 @@
 "use client";
+import ProfileForm from "@/components/forms/profile-form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,10 +15,12 @@ import {
 import { useUser } from "@/contexts/user-context";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 // import { signOut } from "next-auth/react";
 export function UserNav() {
   // const { data: session } = useSession();
   // if (session) {
+  const [isOpenProfileForm, setIsOpenProfileForm] = useState(false);
   const router = useRouter();
   const user = useUser().state.user;
 
@@ -51,59 +54,66 @@ export function UserNav() {
       },
     ];
     return (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            className="relative h-8 w-8 rounded-full"
-          >
-            <Avatar className="h-8 w-8">
-              <AvatarImage
-                // src={session.user?.image ?? ''}
-                // alt={session.user?.name ?? ''}
-                src={""}
-                alt={"Ảnh đại diện"}
-              />
-              <AvatarFallback></AvatarFallback>
-              {/* <AvatarFallback>{session.user?.name?.[0]}</AvatarFallback> */}
-            </Avatar>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56" align="end" forceMount>
-          <DropdownMenuLabel className="font-normal">
-            <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium leading-none">
-                {/* {user?.profile.} */}
-              </p>
-              <p className="text-xs leading-none text-muted-foreground">
-                {user.profile.sub}
-              </p>
-            </div>
-          </DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuGroup>
-            {menuItems.map((item, index) =>
-              item.ignore ? (
-                <></>
-              ) : (
-                <DropdownMenuItem
-                  key={index}
-                  onClick={() => router.push(item.href)}
-                >
-                  {item.title}
-                  {/* {item.shortcut && (
+      <>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+              <Avatar className="h-8 w-8">
+                <AvatarImage
+                  // src={session.user?.image ?? ''}
+                  // alt={session.user?.name ?? ''}
+                  src={""}
+                  alt={"Ảnh đại diện"}
+                />
+                <AvatarFallback></AvatarFallback>
+                {/* <AvatarFallback>{session.user?.name?.[0]}</AvatarFallback> */}
+              </Avatar>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56" align="end" forceMount>
+            <DropdownMenuLabel className="font-normal">
+              <div className="flex flex-col space-y-1">
+                <p className="text-sm font-medium leading-none">
+                  {/* {user?.profile.} */}
+                </p>
+                <p className="text-xs leading-none text-muted-foreground">
+                  {user.profile.sub}
+                </p>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              {menuItems.map((item, index) =>
+                item.ignore ? (
+                  <></>
+                ) : (
+                  <DropdownMenuItem
+                    key={index}
+                    onClick={() =>
+                      item.title === "Hồ sơ cá nhân"
+                        ? setIsOpenProfileForm(true)
+                        : router.push(item.href)
+                    }
+                  >
+                    {item.title}
+                    {/* {item.shortcut && (
                     <DropdownMenuShortcut>{item.shortcut}</DropdownMenuShortcut>
                   )} */}
-                </DropdownMenuItem>
-              )
-            )}
-          </DropdownMenuGroup>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => router.push("/logout")}>
-            Đăng xuất
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+                  </DropdownMenuItem>
+                )
+              )}
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => router.push("/logout")}>
+              Đăng xuất
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <ProfileForm
+          isOpenProfileForm={isOpenProfileForm}
+          setIsOpenProfileForm={setIsOpenProfileForm}
+        />
+      </>
     );
   } else {
     const menuItems = [
