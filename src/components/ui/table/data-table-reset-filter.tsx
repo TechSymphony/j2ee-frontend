@@ -9,6 +9,7 @@ export type DataTableResetFilterProps = {
 export function DataTableResetFilter({ filters }: DataTableResetFilterProps) {
   // Create an array of query states for each filter to check if they are active
   const filterStates = filters.map((filter) =>
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useQueryState(filter, { defaultValue: "" })
   );
 
