@@ -39,8 +39,8 @@ export function UserNav() {
         shortcut: "⇧⌘P",
       },
       {
-        title: "Lịch sử thanh toán",
-        href: "/billing",
+        title: "Lịch sử quyên góp",
+        href: "/history-donation",
         shortcut: "⌘B",
       },
       {

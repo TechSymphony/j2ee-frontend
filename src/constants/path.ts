@@ -50,6 +50,11 @@ export const routes: RouteGroups = {
       name: "Chiến dịch",
       roles: ["ADMIN", "DONOR", "USER"],
     },
+    {
+      path: "/history-donation",
+      name: "Lịch sử quyên góp",
+      roles: ["ADMIN", "DONOR", "USER"],
+    },
   ],
 };
 
