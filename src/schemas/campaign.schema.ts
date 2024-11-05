@@ -1,9 +1,12 @@
 
 
 import z from "zod";
+import { PaginatedResponseSchema } from "./paginate.schema";
+import { UserSchema } from "./user.schema";
 
 export const BeneficiarySchema = z.object({
     id: z.number(),
+    user: UserSchema,
     situationDetail: z.string(),
     supportReceived: z.number(), // Assuming support_received is a string
     verificationStatus: z.boolean(),
@@ -16,6 +19,7 @@ export const BeneficiaryListRes = z.array(BeneficiarySchema);
 export type BeneficiaryListResType = z.TypeOf<typeof BeneficiaryListRes>;
 
 export const CampaignSchema = z.object({
+    beneficiary: BeneficiarySchema.nullable(),
     id: z.number(),
     code: z.string(),
     name: z.string(),
@@ -31,10 +35,15 @@ export type CampaignType = z.TypeOf<typeof CampaignSchema>;
 
 export const CampaignListRes = z.array(CampaignSchema);
 
-export type CampaignListResType = z.TypeOf<typeof CampaignListRes>;
+const PaginatedCampaignResponseSchema =
+    PaginatedResponseSchema(CampaignSchema);
+
+export type CampaignListResType = z.TypeOf<
+    typeof PaginatedCampaignResponseSchema
+>;
 
 export const CampaignRes = z.object({
-    beneficiary: BeneficiarySchema,
+    beneficiary: BeneficiarySchema.nullable(),
     id: z.number(),
     code: z.string(),
     name: z.string(),
@@ -48,9 +57,11 @@ export const CampaignRes = z.object({
 
 export type CampaignResType = z.TypeOf<typeof CampaignRes>;
 
+
+
 export const CreateCampaignBody = z
     .object({
-        beneficiary: BeneficiarySchema,
+        beneficiary: BeneficiarySchema.nullable(),
         code: z.string().trim().min(5).max(256),
         name: z.string().trim().min(2).max(256),
         description: z.string().min(2).max(256),
@@ -66,7 +77,7 @@ export type CreateCampaignBodyType = z.TypeOf<typeof CreateCampaignBody>;
 
 export const UpdateCampaignBody = z
     .object({
-        beneficiary: BeneficiarySchema,
+        beneficiary: BeneficiarySchema.nullable(),
         code: z.string().trim().min(5).max(256),
         name: z.string().trim().min(2).max(256),
         description: z.string().min(2).max(256),
