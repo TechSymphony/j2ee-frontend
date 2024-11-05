@@ -11,7 +11,7 @@ const prefix = "/categories";
 
 const categoryApi = {
   getCategoryList: () => http.get<CategoryListResType>(prefix),
-  getCategoryMenuList: () => http.get<CategoryMenu[]>(prefix + "/menus"),
+  getCategoryMenuList: () => http.get<CategoryMenu[]>("/public/menus"),
   addCategory: (body: CreateCategoryBodyType) =>
     http.post<CategoryResType>(prefix, body),
   updateCategory: (id: number, body: UpdateCategoryBodyType) =>

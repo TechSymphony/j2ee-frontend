@@ -61,8 +61,12 @@ const request = async <Response>(
 
   const baseHeaders = {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${accessToken}`,
+    Authorization: "",
   };
+  if (accessToken) {
+    // fix bug vì nếu không đăng nhập Bearer rỗng sẽ khiến hệ thống tưởng đang bị hack
+    baseHeaders.Authorization = `Bearer ${accessToken}`;
+  }
 
   /**
    * Nếu không truyền baseUrl (hoặc baseUrl = undefined) thì lấy từ envConfig.NEXT_PUBLIC_API_ENDPOINT

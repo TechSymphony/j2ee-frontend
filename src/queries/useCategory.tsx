@@ -7,7 +7,6 @@ export const useGetCategoryListQuery = (queryConfig?: QueryConfig) => {
   return useQuery({
     queryKey: ["categories", queryConfig],
     queryFn: categoryApi.getCategoryList,
-    staleTime: 0,
     enabled: true,
   });
 };
@@ -16,7 +15,6 @@ export const useGetCategoryMenus = () => {
   return useQuery({
     queryKey: ["category-menus"],
     queryFn: categoryApi.getCategoryMenuList,
-    staleTime: 0,
     enabled: true,
   });
 };
