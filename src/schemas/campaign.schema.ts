@@ -19,7 +19,6 @@ export const BeneficiaryListRes = z.array(BeneficiarySchema);
 export type BeneficiaryListResType = z.TypeOf<typeof BeneficiaryListRes>;
 
 export const CampaignSchema = z.object({
-    beneficiary: BeneficiarySchema.nullable(),
     id: z.number(),
     code: z.string(),
     name: z.string(),

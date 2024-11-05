@@ -1,4 +1,5 @@
 import campaignApi from "@/apis/campaign";
+import { campaignQueryConfig } from "@/components/tables/campaign-tables/campaign-query-table";
 import { UpdateCampaignBodyType } from "@/schemas/campaign.schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -8,6 +9,13 @@ export const useGetCampaignListQuery = () => {
         queryFn: campaignApi.getCampaignList,
         staleTime: 0,
         enabled: true,
+    });
+};
+
+export const useGetCampaignList = (queryConfig?: campaignQueryConfig) => {
+    return useQuery({
+        queryKey: ["campaigns", queryConfig],
+        queryFn: campaignApi.getCampaignList,
     });
 };
 
