@@ -39,14 +39,14 @@ export function CalendarDatePicker({
   };
 
   return (
-    <div className={cn('grid gap-2', className)} {...props}>
+    <div className={cn('grid-gap-2', className)} {...props}>
       <Popover>
         <PopoverTrigger asChild>
           <Button
             id="date"
             variant={'outline'}
             className={cn(
-              'w-[260px] justify-start text-left font-normal',
+              'w-full justify-start text-left font-normal',
               !date && 'text-muted-foreground'
             )}
             disabled={disabled} // Use the disabled prop here

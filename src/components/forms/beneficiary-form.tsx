@@ -1,5 +1,5 @@
 'use client';
-import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -13,15 +13,15 @@ const formSchema = z.object({
     situationDetail: z.string(),
     supportReceived: z.string().refine((val) => !Number.isNaN(parseInt(val, 10)), {
         message: "Expected number, received a string"
-      })
+    })
 })
 
 type BeneficiaryFormValues = z.infer<typeof formSchema>
 
-const InitTextarea = function ({form}) {
+const InitTextarea = function ({ form }) {
     const { quill, quillRef } = useQuill();
 
-    const {setValue} = form;
+    const { setValue } = form;
 
     React.useEffect(() => {
         if (quill) {
@@ -33,10 +33,10 @@ const InitTextarea = function ({form}) {
 
     return (
         <>
-        <b id="editor-label"></b>
-        <div id="editor">
-            <div ref={quillRef} />
-        </div>
+            <b id="editor-label"></b>
+            <div id="editor">
+                <div ref={quillRef} />
+            </div>
         </>
     )
 }
@@ -57,9 +57,9 @@ export default function BeneficiaryForm() {
         let situationDetail;
         if (input?.length < 10) {
             const label = document.querySelector("#editor-label");
-            if (label) 
+            if (label)
                 label.value = "Vui lòng nhập tối thiểu 10 ký tự";
-            
+
             return false;
         } else situationDetail = input;
 
@@ -74,19 +74,19 @@ export default function BeneficiaryForm() {
                 supportReceived: data.supportReceived
             })
         }).then(res => res.json())
-        .then(res => {
-            alert("Gửi thành công!");
-            console.log(res)
-        })
+            .then(res => {
+                alert("Gửi thành công!");
+                console.log(res)
+            })
     }
 
     return <>
         <Form {...form}>
             <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
             <form onSubmit={form.handleSubmit(onSubmit)}>
-                <FormField control={form.control} 
-                name="situationDetail"
-                render={({ field }) => (
+                <FormField control={form.control}
+                    name="situationDetail"
+                    render={({ field }) => (
                         <FormItem>
                             <FormLabel>Mô tả tình trạng cần hỗ trợ:</FormLabel>
                             <FormControl>
@@ -94,11 +94,11 @@ export default function BeneficiaryForm() {
                             </FormControl>
                             <FormMessage />
                         </FormItem>
-                )} />
-                <InitTextarea form={form}/>
-                <FormField control={form.control} 
-                name="supportReceived"
-                render={({ field }) => (
+                    )} />
+                <InitTextarea form={form} />
+                <FormField control={form.control}
+                    name="supportReceived"
+                    render={({ field }) => (
                         <FormItem>
                             <FormLabel>Số tiền dự kiến</FormLabel>
                             <FormControl>
@@ -106,7 +106,7 @@ export default function BeneficiaryForm() {
                             </FormControl>
                             <FormMessage />
                         </FormItem>
-                )} />
+                    )} />
                 <Button disabled={loading} className="ml-auto w-full" type="submit">
                     Gửi
                 </Button>

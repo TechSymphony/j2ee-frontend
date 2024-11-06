@@ -35,6 +35,11 @@ export const routes: RouteGroups = {
       name: "Quản lý danh mục",
       roles: ["ADMIN"],
     },
+    {
+      path: "/dashboard/campaign",
+      name: "Quản lý chiến dịch",
+      roles: ["ADMIN"],
+    }
   ],
   public: [
     {

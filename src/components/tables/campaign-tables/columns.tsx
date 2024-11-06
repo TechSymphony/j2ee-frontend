@@ -1,7 +1,6 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
-import { Checkbox } from "@/components/ui/checkbox";
 import { CampaignType } from "@/schemas/campaign.schema";
 
 /**
@@ -12,55 +11,32 @@ import { CampaignType } from "@/schemas/campaign.schema";
  */
 export const columns: ColumnDef<CampaignType>[] = [
   {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
     accessorKey: "id",
     header: "ID",
   },
   {
     accessorKey: "name",
-    header: "Name",
-  },
-  {
-    accessorKey: "description",
-    header: "Description",
+    header: "Tên chiến dịch",
   },
   {
     accessorKey: "targetAmount",
-    header: "Target",
+    header: "Số tiền dự kiến",
   },
   {
     accessorKey: "currentAmount",
-    header: "Current",
+    header: "Sô tiền hiện tại",
   },
   {
     accessorKey: "startDate",
-    header: "Start Date",
+    header: "Ngày bắt đầu",
   },
   {
     accessorKey: "endDate",
-    header: "End Date",
+    header: "Ngày kết thúc",
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: "Trạng thái",
   },
   {
     id: "actions",
