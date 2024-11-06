@@ -7,7 +7,7 @@ const BeneficiarySchema = z.object({
   user: AccountSchema,
   situationDetail: z.string(),
   supportReceived: z.number(),
-  verificationStatus: z.boolean(),
+  verificationStatus: z.number(),
 });
 
 export type BeneficiaryType = z.TypeOf<typeof BeneficiarySchema>;
@@ -24,14 +24,14 @@ export const BeneficiaryRes = z.object({
   user: AccountSchema,
   situationDetail: z.string(),
   supportReceived: z.number(),
-  verificationStatus: z.boolean(),
+  verificationStatus: z.number(),
 });
 
 export type BeneficiaryResType = z.TypeOf<typeof BeneficiaryRes>;
 
 export const UpdateBeneficiaryBody = z
   .object({
-    verificationStatus: z.boolean(),
+    verificationStatus: z.number(),
   })
   .strict();
 
