@@ -50,7 +50,7 @@ export const CampaignClient = () => {
       type: DataTableComponentType.FilterDate,
       props: {
         filterKey: "createAt",
-        title: "Trạng thái duyệt",
+        title: "Ngày tạo chiến dịch",
       },
     },
   ];

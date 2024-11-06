@@ -47,8 +47,8 @@ export const BeneficiaryClient = () => {
         {
             type: DataTableComponentType.FilterDate,
             props: {
-                filterKey: "date",
-                title: "Trạng thái duyệt",
+                filterKey: "createAt",
+                title: "Ngày tạo người thụ hưởng",
             },
         },
     ];
