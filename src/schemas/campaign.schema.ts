@@ -2,24 +2,12 @@
 
 import z from "zod";
 import { PaginatedResponseSchema } from "./paginate.schema";
-import { UserSchema } from "./user.schema";
-
-export const BeneficiarySchema = z.object({
-    id: z.number(),
-    user: UserSchema,
-    situationDetail: z.string(),
-    supportReceived: z.number(), // Assuming support_received is a string
-    verificationStatus: z.boolean(),
-});
-
-export type BeneficiaryType = z.TypeOf<typeof BeneficiarySchema>;
-
-export const BeneficiaryListRes = z.array(BeneficiarySchema);
-
-export type BeneficiaryListResType = z.TypeOf<typeof BeneficiaryListRes>;
+// import { AccountSchema } from "./account.schema";
+import { BeneficiarySchema } from "./beneficiary.schema";
 
 export const CampaignSchema = z.object({
     id: z.number(),
+    beneficiary: BeneficiarySchema,
     code: z.string(),
     name: z.string(),
     description: z.string().optional(),
@@ -42,8 +30,8 @@ export type CampaignListResType = z.TypeOf<
 >;
 
 export const CampaignRes = z.object({
-    beneficiary: BeneficiarySchema.nullable(),
     id: z.number(),
+    beneficiary: BeneficiarySchema,
     code: z.string(),
     name: z.string(),
     description: z.string().optional(),
@@ -64,8 +52,8 @@ export const CreateCampaignBody = z
         code: z.string().trim().min(5).max(256),
         name: z.string().trim().min(2).max(256),
         description: z.string().min(2).max(256),
-        targetAmount: z.number().min(10000).max(99999999999999),
-        currentAmount: z.number().min(0).max(99999999999999),
+        targetAmount: z.number().min(10000),
+        currentAmount: z.number().min(0),
         startDate: z.date(),
         endDate: z.date(),
         status: z.string(),
@@ -80,8 +68,8 @@ export const UpdateCampaignBody = z
         code: z.string().trim().min(5).max(256),
         name: z.string().trim().min(2).max(256),
         description: z.string().min(2).max(256),
-        targetAmount: z.number().min(10000).max(99999999999999),
-        currentAmount: z.number().min(0).max(99999999999999),
+        targetAmount: z.number().min(10000),
+        currentAmount: z.number().min(0),
         startDate: z.date(),
         endDate: z.date(),
         status: z.string(),

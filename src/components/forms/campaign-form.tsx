@@ -28,7 +28,6 @@ import { Heading } from "@/components/ui/heading";
 import { toast } from "@/hooks/use-toast";
 import {
     useAddCampaignMutation,
-    useGetBeneficiaryListQuery,
     useGetCampaignQuery,
     useUpdateCampaignMutation,
 } from "@/queries/useCampaign";
@@ -62,10 +61,7 @@ export const CampaignForm = () => {
 
     const updateCampaignMutation = useUpdateCampaignMutation();
     const addCampaignMutation = useAddCampaignMutation();
-    const getBeneficiaryListQuery = useGetBeneficiaryListQuery();
-    const items = getBeneficiaryListQuery.data?.payload;
 
-    console.log("items", items);
 
     const { triggerRefetch } = useRefetch();
 
@@ -83,7 +79,7 @@ export const CampaignForm = () => {
 
     const form = useForm<CampaignFormValuesType>({
         resolver: zodResolver(formSchema),
-        defaultValues: {
+        defaultValues: { // Set an empty object as the default value
             beneficiary: null,
             code: "",
             name: "",
@@ -95,9 +91,7 @@ export const CampaignForm = () => {
             status: "WAITING",
         },
     });
-
     console.log("form", form.watch());
-    console.log("beneficiary", form.watch("beneficiary"))
     /**
      * Description: Sử dụng useEffect để set giá trị tương ứng với update Campaign đã chọn vào form
      */
@@ -124,7 +118,6 @@ export const CampaignForm = () => {
                 const body: UpdateCampaignBodyType & { id: number } = {
                     id: updateCampaignId as number,
                     ...data,
-                    beneficiary: data.beneficiary || null,
                 };
                 await updateCampaignMutation.mutateAsync(body);
                 toast({
@@ -277,7 +270,7 @@ export const CampaignForm = () => {
                                 </FormItem>
                             )}
                         />
-                        {form.getValues("beneficiary") !== null && (
+                        {/* {form.getValues("beneficiary") !== null && (
                             <FormField
                                 control={form.control}
                                 name="beneficiary"
@@ -287,6 +280,7 @@ export const CampaignForm = () => {
                                         <Select
                                             onValueChange={(value) => {
                                                 const selectedBeneficiary = items?.content?.find(item => item.id === Number(value));
+                                                console.log("selectedBeneficiary", selectedBeneficiary);
                                                 field.onChange(selectedBeneficiary);
                                             }}
                                             value={field.value?.id?.toString() || ''}
@@ -308,7 +302,7 @@ export const CampaignForm = () => {
                                     </FormItem>
                                 )}
                             />
-                        )}
+                        )} */}
 
                     </div>
                     <Button disabled={loading} className="ml-auto" type="submit">

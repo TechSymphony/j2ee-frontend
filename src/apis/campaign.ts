@@ -1,7 +1,6 @@
 import http from "@/lib/http";
 import {
   CreateCampaignBodyType,
-  BeneficiaryListResType,
   CampaignListResType,
   CampaignResType,
   UpdateCampaignBodyType,
@@ -11,7 +10,6 @@ const prefix = "/campaigns";
 
 const campaignApi = {
   getCampaignList: () => http.get<CampaignListResType>(prefix),
-  getBeneficiaryList: () => http.get<BeneficiaryListResType>("/beneficiaries"),
   addCampaign: (body: CreateCampaignBodyType) => http.post<CampaignResType>(prefix, body),
   updateCampaign: (id: number, body: UpdateCampaignBodyType) =>
     http.put<CampaignResType>(`${prefix}/${id}`, body),

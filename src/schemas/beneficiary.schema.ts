@@ -2,7 +2,7 @@ import z from "zod";
 import { AccountSchema } from "./account.schema";
 import { PaginatedResponseSchema } from "./paginate.schema";
 
-const BeneficiarySchema = z.object({
+export const BeneficiarySchema = z.object({
   id: z.number(),
   user: AccountSchema,
   situationDetail: z.string(),
