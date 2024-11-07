@@ -3,9 +3,9 @@ import { CategoryForm } from "@/components/forms/category-form";
 import PageContainer from "@/components/layout/page-container";
 import React from "react";
 const breadcrumbItems = [
-  { title: "Dashboard", link: "/dashboard" },
-  { title: "Category", link: "/dashboard/category" },
-  { title: "Create", link: "/dashboard/category/create" },
+  { title: "Thống kê", link: "/dashboard" },
+  { title: "Danh mục", link: "/dashboard/category" },
+  { title: "Tạo mới", link: "/dashboard/category/create" },
 ];
 export default function Page() {
   return (

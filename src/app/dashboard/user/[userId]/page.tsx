@@ -3,9 +3,9 @@ import { UserForm } from "@/components/forms/user-form";
 import PageContainer from "@/components/layout/page-container";
 import React from "react";
 const breadcrumbItems = [
-    { title: "Dashboard", link: "/dashboard" },
-    { title: "User", link: "/dashboard/user" },
-    { title: "Create", link: "/dashboard/user/create" },
+    { title: "Thống kê", link: "/dashboard" },
+    { title: "Người dùng", link: "/dashboard/user" },
+    { title: "Thêm mới", link: "/dashboard/user/create" },
 
 ];
 export default function Page() {

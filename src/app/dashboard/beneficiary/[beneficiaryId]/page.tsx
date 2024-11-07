@@ -3,9 +3,9 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import PageContainer from "@/components/layout/page-container";
 import React from "react";
 const breadcrumbItems = [
-  { title: "Dashboard", link: "/dashboard" },
-  { title: "Beneficiary", link: "/dashboard/beneficiary" },
-  { title: "View", link: "/dashboard/beneficiary/view" },
+  { title: "Thống kê", link: "/dashboard" },
+  { title: "Người thụ hưởng", link: "/dashboard/beneficiary" },
+  { title: "Xem thông tin", link: "/dashboard/beneficiary/view" },
 ];
 
 export default function Page() {

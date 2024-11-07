@@ -22,8 +22,9 @@ export const CampaignClient = () => {
 
   const { data: fetchData, refetch } = useGetCampaignList(queryConfig);
   const data = fetchData?.payload ?? getDefaultPaginatedResponse;
-  // const data = getDefaultPaginatedResponse;
 
+  console.log("check data campaign", data);
+  // const data = getDefaultPaginatedResponse;
   const { setTriggerRefetch } = useRefetch();
 
   useEffect(() => {

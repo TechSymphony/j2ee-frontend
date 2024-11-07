@@ -30,7 +30,6 @@ export const DonationClient = ({ type }: Props) => {
     type === "admin" ? adminQuery : userQuery;
 
   const data = donationData?.payload ?? getDefaultPaginatedResponse;
-  console.log("check data donation", data);
 
   const { setTriggerRefetch } = useRefetch();
 
@@ -59,7 +58,7 @@ export const DonationClient = ({ type }: Props) => {
     <>
       <div className="flex items-start justify-between mb-4">
         <Heading
-          title={`Donations (${data.page.totalElements})`}
+          title={`Quản lý quyên góp`}
           description={""}
         />
         {/* <Button

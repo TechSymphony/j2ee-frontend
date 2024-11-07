@@ -3,8 +3,8 @@ import PageContainer from "@/components/layout/page-container";
 import { DonationClient } from "@/components/tables/donation-tables/client";
 
 const breadcrumbItems = [
-  { title: "Dashboard", link: "/dashboard" },
-  { title: "Donation", link: "/dashboard/donation" },
+  { title: "Thống kê", link: "/dashboard" },
+  { title: "Danh sách ủng hộ", link: "/dashboard/donation" },
 ];
 export default function page() {
   return (

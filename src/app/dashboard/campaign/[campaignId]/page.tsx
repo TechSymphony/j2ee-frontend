@@ -3,9 +3,9 @@ import { CampaignForm } from "@/components/forms/campaign-form";
 import PageContainer from "@/components/layout/page-container";
 import React from "react";
 const breadcrumbItems = [
-    { title: "Dashboard", link: "/dashboard" },
-    { title: "Campaign", link: "/dashboard/campaign" },
-    { title: "Create", link: "/dashboard/campaign/create" },
+    { title: "Thống kê", link: "/dashboard" },
+    { title: "Chiến dịch", link: "/dashboard/campaign" },
+    { title: "Tạo mới", link: "/dashboard/campaign/create" },
 
 ];
 export default function Page() {

@@ -36,7 +36,10 @@ export const columns: ColumnDef<BeneficiaryType>[] = [
   //   enableSorting: false,
   //   enableHiding: false,
   // },
-
+  {
+    accessorKey: "id",
+    header: "ID",
+  },
   {
     accessorKey: "supportReceived",
     header: "Số tiền dự kiến",

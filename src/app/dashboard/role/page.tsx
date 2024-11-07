@@ -3,8 +3,8 @@ import PageContainer from "@/components/layout/page-container";
 import { RoleClient } from "@/components/tables/role-tables/client";
 
 const breadcrumbItems = [
-  { title: "Dashboard", link: "/dashboard" },
-  { title: "Role", link: "/dashboard/role" },
+  { title: "Thống kê", link: "/dashboard" },
+  { title: "Chức vụ", link: "/dashboard/role" },
 ];
 export default function page() {
   return (

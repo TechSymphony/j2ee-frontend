@@ -22,6 +22,7 @@ export const DonationSchema = z.object({
   amountBase: z.number(),
   amountTotlal: z.number(),
   donationDate: z.date(),
+  frequency: z.number(),
 });
 
 export type DonationType = z.TypeOf<typeof DonationSchema>;

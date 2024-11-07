@@ -26,7 +26,7 @@ export const RoleClient = () => {
     <>
       <div className="flex items-start justify-between">
         <Heading
-          title={`Roles (${data.length})`}
+          title={`Quản lý chức vụ (${data.length})`}
           description="Manage roles (Client side table functionalities.)"
         />
 
@@ -34,7 +34,7 @@ export const RoleClient = () => {
           className="text-xs md:text-sm"
           onClick={() => router.push(`/dashboard/role/new`)}
         >
-          <Plus className="mr-2 h-4 w-4" /> Add New
+          <Plus className="mr-2 h-4 w-4" /> Thêm mới
         </Button>
       </div>
       <Separator />

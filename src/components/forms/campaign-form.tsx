@@ -88,7 +88,7 @@ export const CampaignForm = () => {
             currentAmount: 0,
             startDate: new Date(),
             endDate: new Date(),
-            status: "WAITING",
+            status: 0,
         },
     });
     console.log("form", form.watch());
@@ -252,7 +252,7 @@ export const CampaignForm = () => {
                                     <FormLabel>Trạng thái phê duyệt</FormLabel>
                                     <Select
                                         onValueChange={(value) => field.onChange(value)}
-                                        value={field.value || ''}
+                                        value={field.value.toString() || ''}
                                         disabled={!initialData}
                                     >
                                         <FormControl>
@@ -261,9 +261,9 @@ export const CampaignForm = () => {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem value="WAITING">Waiting</SelectItem>
-                                            <SelectItem value="APPROVED">Approved</SelectItem>
-                                            <SelectItem value="REJECT">Reject</SelectItem>
+                                            <SelectItem value="0">Waiting</SelectItem>
+                                            <SelectItem value="1">Approved</SelectItem>
+                                            <SelectItem value="2">Reject</SelectItem>
                                         </SelectContent>
                                     </Select>
                                     <FormMessage />
