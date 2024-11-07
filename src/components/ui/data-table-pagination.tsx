@@ -71,11 +71,11 @@ export function DataTablePagination<TData, TValue>({
   const pageAsNumber = Number(page);
   const fallbackPage =
     isNaN(pageAsNumber) || pageAsNumber < 0 ? 0 : pageAsNumber;
-  const per_page = data.page.size;
+  const per_page = data.page?.size;
   const perPageAsNumber = Number(per_page);
   const fallbackPerPage = isNaN(perPageAsNumber) ? 10 : perPageAsNumber;
 
-  const totalItems = data.page.totalElements;
+  const totalItems = data.page?.totalElements;
   // Handle server-side pagination
   const [{ pageIndex, pageSize }, setPagination] =
     React.useState<PaginationState>({
@@ -87,7 +87,7 @@ export function DataTablePagination<TData, TValue>({
   const table = useReactTable({
     columns,
     data: content,
-    pageCount: data?.page.totalPages ?? -1,
+    pageCount: data?.page?.totalPages ?? -1,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     state: {
@@ -169,9 +169,9 @@ export function DataTablePagination<TData, TValue>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   );
                 })}
@@ -180,11 +180,11 @@ export function DataTablePagination<TData, TValue>({
           </TableHeader>
           <TableBody>
             {table?.getRowModel()?.rows?.length &&
-            table?.getRowModel()?.rows?.length > 0 ? (
+              table?.getRowModel()?.rows?.length > 0 ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  //   data-state={row.getIsSelected() && "selected"}
+                //   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

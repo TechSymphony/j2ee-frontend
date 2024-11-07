@@ -3,8 +3,8 @@ import PageContainer from "@/components/layout/page-container";
 import { BeneficiaryClient } from "@/components/tables/beneficiary-tables/client";
 
 const breadcrumbItems = [
-  { title: "Dashboard", link: "/dashboard" },
-  { title: "Beneficiary", link: "/dashboard/beneficiary" },
+  { title: "Thống kê", link: "/dashboard" },
+  { title: "Người thụ hưởng", link: "/dashboard/beneficiary" },
 ];
 export default function page() {
   return (

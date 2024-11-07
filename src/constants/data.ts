@@ -112,44 +112,44 @@ export type Employee = {
 
 export const navItems: NavItem[] = [
   {
-    title: "Dashboard",
+    title: "Thống kê",
     href: "/dashboard",
     icon: "dashboard",
     label: "Dashboard",
   },
   {
-    title: "Role",
+    title: "Chức vụ",
     href: "/dashboard/role",
     icon: "user",
     label: "user",
   },
   {
-    title: "Category",
+    title: "Danh mục",
     href: "/dashboard/category",
     icon: "list",
     label: "user",
   },
 
   {
-    title: "Beneficiary",
+    title: "Người thụ hưởng",
     href: "/dashboard/beneficiary",
     icon: "billing",
     label: "money",
   },
   {
-    title: "Campaign",
+    title: "Chiến dịch",
     href: "/dashboard/campaign",
     icon: "campaign",
     label: "campaign",
   },
   {
-    title: "Donation",
+    title: "Quyên góp",
     href: "/dashboard/donation",
     icon: "donation",
     label: "donation",
   },
   {
-    title: "Profile",
+    title: "Cá nhân",
     href: "/dashboard/profile",
     icon: "profile",
     label: "profile",

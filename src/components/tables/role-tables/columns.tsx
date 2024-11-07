@@ -37,7 +37,7 @@ export const columns: ColumnDef<RoleType>[] = [
 
   {
     accessorKey: "name",
-    header: "Name",
+    header: "Tên ",
   },
   {
     accessorKey: "description",

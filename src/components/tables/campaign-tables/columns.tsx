@@ -2,6 +2,8 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
 import { CampaignType } from "@/schemas/campaign.schema";
+import { ReviewStatusEnum, ReviewStatusOptions } from "@/types/enum";// Import Select components
+import { useState } from "react";
 
 /**
  * Description: Khai báo columns cho table
@@ -37,6 +39,19 @@ export const columns: ColumnDef<CampaignType>[] = [
   {
     accessorKey: "status",
     header: "Trạng thái",
+    cell: ({ row }) => {
+      const status = useState<ReviewStatusEnum>(
+        ReviewStatusEnum[row.original.status as keyof typeof ReviewStatusEnum]
+      );
+      const statusOption = ReviewStatusOptions.find(option => option.value === status[0]);
+      if (status[0] === 1) {
+        return <span className="text-green-500">{statusOption ? statusOption.label : "Không tìm thấy"}</span>;
+      }
+      if (status[0] === 2) {
+        return <span className="text-red-500">{statusOption ? statusOption.label : "Không tìm thấy"}</span>;
+      }
+      return statusOption ? statusOption.label : "Không tìm thấy";
+    },
   },
   {
     id: "actions",

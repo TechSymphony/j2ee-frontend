@@ -56,7 +56,7 @@ export const BeneficiaryClient = () => {
         <>
             <div className="flex items-start justify-between">
                 <Heading
-                    title={`Beneficiaries (${data.page.totalElements})`}
+                    title={`Quản lý người thụ hưởng (${data.page.totalElements})`}
                     description=""
                 />
 

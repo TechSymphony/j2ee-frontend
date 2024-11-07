@@ -3,9 +3,9 @@ import { RoleForm } from "@/components/forms/role-form";
 import PageContainer from "@/components/layout/page-container";
 import React from "react";
 const breadcrumbItems = [
-  { title: "Dashboard", link: "/dashboard" },
-  { title: "Role", link: "/dashboard/role" },
-  { title: "Create", link: "/dashboard/role/create" },
+  { title: "Thống kê", link: "/dashboard" },
+  { title: "Chúc vụ", link: "/dashboard/role" },
+  { title: "Thêm mới", link: "/dashboard/role/create" },
 ];
 export default function Page() {
   return (

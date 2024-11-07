@@ -27,13 +27,13 @@ export const CategoryClient = () => {
   return (
     <React.Fragment>
       <div className="flex items-start justify-between">
-        <Heading title={`Categories`} description="" />
+        <Heading title={`Quản lý danh mục`} description="" />
 
         <Button
           className="text-xs md:text-sm"
           onClick={() => router.push(`/dashboard/category/new`)}
         >
-          <Plus className="mr-2 h-4 w-4" /> Add New
+          <Plus className="mr-2 h-4 w-4" /> Thêm mới
         </Button>
       </div>
       <Separator />

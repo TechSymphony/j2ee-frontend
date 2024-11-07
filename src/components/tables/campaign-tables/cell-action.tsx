@@ -57,23 +57,23 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
+            <span className="sr-only">Open menus</span>
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuLabel>Hành động</DropdownMenuLabel>
 
           {/* Chỉ hiển thị nút "Update" khi trạng thái không bị "REJECT" */}
           {data.status !== "REJECT" && (
             <DropdownMenuItem
               onClick={() => router.push(`/dashboard/campaign/${data.id}`)}
             >
-              <Edit className="mr-2 h-4 w-4" /> Update
+              <Edit className="mr-2 h-4 w-4" /> Cập nhật
             </DropdownMenuItem>
           )}
           <DropdownMenuItem onClick={() => setOpen(true)}>
-            <Trash className="mr-2 h-4 w-4" /> Delete
+            <Trash className="mr-2 h-4 w-4" /> Xóa
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

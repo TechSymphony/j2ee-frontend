@@ -3,8 +3,8 @@ import PageContainer from "@/components/layout/page-container";
 import { CampaignClient } from "@/components/tables/campaign-tables/client";
 
 const breadcrumbItems = [
-    { title: "Dashboard", link: "/dashboard" },
-    { title: "Campaign", link: "/dashboard/campaign" },
+    { title: "Thống kê", link: "/dashboard" },
+    { title: "Quản lý chiến dịch", link: "/dashboard/campaign" },
 ];
 export default function page() {
     return (
