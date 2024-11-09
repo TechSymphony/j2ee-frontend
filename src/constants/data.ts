@@ -124,6 +124,12 @@ export const navItems: NavItem[] = [
     label: "user",
   },
   {
+    title: "Người dùng",
+    href: "/dashboard/user",
+    icon: "user",
+    label: "user",
+  },
+  {
     title: "Danh mục",
     href: "/dashboard/category",
     icon: "list",

@@ -6,6 +6,7 @@ import {
   UpdateUserBodyType,
   BasicUserResType,
   UpdateBasicUserBodyType,
+  ResetUserPasswordBodyType,
 } from "@/schemas/user.schema";
 import { RoleListResType } from "@/schemas/role.schema";
 
@@ -21,5 +22,7 @@ const userApi = {
   getUser: (id: number) => http.get<UserResType>(`${prefix}/${id}`),
   getMe: () => http.get<BasicUserResType>(`/me`),
   updateMe: (body: UpdateBasicUserBodyType) => http.put("/me", body),
+  resetPassword: (id: number, body: ResetUserPasswordBodyType) => 
+    http.put<null>(`${prefix}/${id}/reset-password`, body),
 };
 export default userApi;
