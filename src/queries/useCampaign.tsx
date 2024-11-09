@@ -12,6 +12,17 @@ export const useGetCampaignListQuery = () => {
     });
 };
 
+export const useGetCampaignClientListQuery = (
+    queryConfig?: campaignQueryConfig
+) => {
+    return useQuery({
+        queryKey: ["client-campaigns", queryConfig],
+        queryFn: campaignApi.getCampaignClientList,
+        staleTime: 0,
+        enabled: true,
+    });
+};
+
 export const useGetCampaignList = (queryConfig?: campaignQueryConfig) => {
     return useQuery({
         queryKey: ["campaigns", queryConfig],
@@ -36,7 +47,10 @@ export const useGetCampaignQuery = ({
 export const useUpdateCampaignMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ id, ...body }: UpdateCampaignBodyType & { id: number }) =>
+        mutationFn: ({
+            id,
+            ...body
+        }: UpdateCampaignBodyType & { id: number }) =>
             campaignApi.updateCampaign(id, body),
         onSuccess: () => {
             queryClient.invalidateQueries({

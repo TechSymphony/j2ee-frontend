@@ -25,39 +25,54 @@ export const CategoryMenuComponent: React.FC<NavigationMenuProps> = ({
     if (!categories) return <></>;
     return (
         <NavigationMenu>
-            <NavigationMenuList className="
+            <NavigationMenuList
+                className="
             flex-col justify-start gap-6 text-lg font-medium items-start 
-            md:flex md:flex-row md:items-center md:grow md:justify-center md:gap-5 md:text-sm lg:gap-6">
+            md:flex md:flex-row md:items-center md:grow md:justify-center md:gap-5 md:text-sm lg:gap-6"
+            >
                 {categories.map((category) => (
                     <NavigationMenuItem key={category.id} className="relative">
-                            {category.children &&
-                            category.children.length > 0 ? (
-                                <>
-                                <NavigationMenuTrigger className="space-y-1 rounded-md leading-none no-underline outline-none transition-colors">
-                                    <NavigationMenuLink
-                                        className={navigationMenuTriggerStyle()}
-                                    >
-                                        {category.name}
-                                    </NavigationMenuLink>
-                                </NavigationMenuTrigger>
+                        {category.children && category.children.length > 0 ? (
+                            <>
                                 <NavigationMenuContent>
-                                <ul className="min-w-4 md:whitespace-nowrap">
-                                    {category.children.map((child) => (
-                                        <ListItem key={child.id} item={child} />
-                                    ))}
-                                </ul>
-
+                                    <ul className="min-w-4 md:whitespace-nowrap">
+                                        {category.children.map((child) => (
+                                            <ListItem
+                                                key={child.id}
+                                                item={child}
+                                            />
+                                        ))}
+                                    </ul>
                                 </NavigationMenuContent>
-                                </>
-                            ) : (
-                                <Link
-                                href={""}
+                                <NavigationMenuTrigger className="space-y-1 rounded-md leading-none no-underline outline-none transition-colors">
+                                    <Link
+                                        href={`/campaign?category.id=${
+                                            category.id
+                                        },${category.children
+                                            .map((child) => child.id)
+                                            .join(",")}`}
+                                        legacyBehavior
+                                        passHref
+                                    >
+                                        <NavigationMenuLink
+                                            className={navigationMenuTriggerStyle()}
+                                        >
+                                            {category.name}
+                                        </NavigationMenuLink>
+                                    </Link>
+                                </NavigationMenuTrigger>
+                            </>
+                        ) : (
+                            <Link
+                                legacyBehavior
+                                passHref
+                                href={`/campaign?category.id=${category.id}`}
                                 key={category.id}
                                 className="text-muted-foreground"
                             >
                                 {category.name}
                             </Link>
-                            )}
+                        )}
                     </NavigationMenuItem>
                 ))}
             </NavigationMenuList>
@@ -75,21 +90,14 @@ const ListItem: React.FC<{ item: CategoryMenu }> = ({ item }) => (
                         "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-pink-50  focus:bg-pink-50"
                     )}
                 >
-                    {/* <div className="text-sm font-medium leading-none">
-                    {item.name}
-                    </div> */}
                     <NavigationMenuLink asChild>
-                            <Link href="/vi-nhan-ai/tu-thien/giup-do-tre-em?fromType=nav_menu" className="text-muted-foreground block p-2 ">
+                        <Link
+                            href={`/campaign?category.id=${item.id}`}
+                            className="text-muted-foreground block p-2 "
+                        >
                             {item.name}
-                            </Link>
-                          </NavigationMenuLink>
-                    {/* {item.children && item.children.length > 0 && (
-                        <ul className="ml-4">
-                            {item.children.map((subitem) => (
-                                <ListItem key={subitem.id} item={subitem} />
-                            ))}
-                        </ul>
-                    )} */}
+                        </Link>
+                    </NavigationMenuLink>
                 </li>
             </Link>
         </NavigationMenuLink>
