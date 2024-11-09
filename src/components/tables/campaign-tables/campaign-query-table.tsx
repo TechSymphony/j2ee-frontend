@@ -3,10 +3,10 @@ import { QueryConfig } from "@/hooks/useQueryConfig";
 import useQueryParams from "@/hooks/useQueryParams";
 
 export type campaignQueryConfig = QueryConfig & {
-  gender?: string;
+    "category.id"?: string;
 };
 
 export default function useQueryConfig() {
-  const queryParams: QueryConfig = useQueryParams();
-  return queryParams;
+    const queryParams: QueryConfig = useQueryParams();
+    return queryParams;
 }

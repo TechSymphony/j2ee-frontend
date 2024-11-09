@@ -169,9 +169,9 @@ export function DataTablePagination<TData, TValue>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                     </TableHead>
                   );
                 })}
@@ -180,11 +180,11 @@ export function DataTablePagination<TData, TValue>({
           </TableHeader>
           <TableBody>
             {table?.getRowModel()?.rows?.length &&
-              table?.getRowModel()?.rows?.length > 0 ? (
+            table?.getRowModel()?.rows?.length > 0 ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                //   data-state={row.getIsSelected() && "selected"}
+                  //   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -297,22 +297,6 @@ export function DataTablePagination<TData, TValue>({
             >
               <DoubleArrowRightIcon className="h-4 w-4" aria-hidden="true" />
             </Button>
-            {/* <PaginationItem>
-              <PaginationNext
-                href={{
-                  pathname,
-                  query: {
-                    page: pageIndex + 1,
-                    limit: 10,
-                  },
-                }}
-                onClick={(e) => {
-                  if (page === pageSize) {
-                    e.preventDefault();
-                  }
-                }}
-              />
-            </PaginationItem> */}
           </div>
         </div>
       </div>
