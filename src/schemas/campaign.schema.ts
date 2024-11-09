@@ -37,6 +37,7 @@ export const CampaignRes = z.object({
   startDate: z.date(),
   endDate: z.date(),
   status: z.number(),
+  numberOfDonations: z.number().default(0),
 });
 
 export type CampaignResType = z.TypeOf<typeof CampaignRes>;
