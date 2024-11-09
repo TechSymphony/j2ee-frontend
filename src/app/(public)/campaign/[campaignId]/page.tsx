@@ -35,7 +35,6 @@ export default function CampaignDetail() {
       supportReceived: 0,
       verificationStatus: false,
     },
-    numberOfDonations: 0,
   };
 
   // Tính phần trăm tiến độ chiến dịch
@@ -68,14 +67,17 @@ export default function CampaignDetail() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Left content */}
             <div className="md:col-span-2 space-y-6">
-              <h1 className="text-2xl font-bold">{campaign.name}</h1>
+              <h1 className="text-2xl font-bold">
+                {campaign.name}
+              </h1>
               <div className="flex items-center space-x-2 text-pink-600">
                 <Heart className="w-5 h-5 fill-current" />
                 <span className="text-sm">
-                  Trồng khoảng khổ để ấm Trăng mới cuộc đời, sáng đến cùng em
-                  đến trường để cùng các những gói hỗ trợ giúp học và hoàn cảnh
-                  của từng trẻ em khó khăn, đặc biệt đảm bảo các em có thể duy
-                  trì được việc học tập.
+                  Trồng khoảng khổ để ấm Trăng mới cuộc đời,
+                  sáng đến cùng em đến trường để cùng các
+                  những gói hỗ trợ giúp học và hoàn cảnh của
+                  từng trẻ em khó khăn, đặc biệt đảm bảo các
+                  em có thể duy trì được việc học tập.
                 </span>
               </div>
               <Image
@@ -86,13 +88,17 @@ export default function CampaignDetail() {
                 className="w-full rounded-lg"
               />
               <div className="bg-white p-6 rounded-lg shadow">
-                <h2 className="text-xl font-semibold mb-4">Câu chuyện</h2>
+                <h2 className="text-xl font-semibold mb-4">
+                  Câu chuyện
+                </h2>
                 <p className="text-gray-600 mb-4">
-                  Gia Bảo, Gia Hân, Trường Vy và Gia Huy - bốn anh chị em nhỏ
-                  với những nụ cười rạng rỡ và áo đồng phục trắng tinh là hình
-                  ảnh đẹp mà chúng tôi đã gặp. Ấy vậy mà đằng sau những nụ cười
-                  ấy là một hoàn cảnh gia đình vô cùng khó khăn khiến các em có
-                  nguy cơ không được đến trường.
+                  Gia Bảo, Gia Hân, Trường Vy và Gia Huy - bốn
+                  anh chị em nhỏ với những nụ cười rạng rỡ và
+                  áo đồng phục trắng tinh là hình ảnh đẹp mà
+                  chúng tôi đã gặp. Ấy vậy mà đằng sau những
+                  nụ cười ấy là một hoàn cảnh gia đình vô cùng
+                  khó khăn khiến các em có nguy cơ không được
+                  đến trường.
                 </p>
                 <Image
                   src="/static/images/campaign.jpg"
@@ -102,8 +108,9 @@ export default function CampaignDetail() {
                   className="w-full rounded-lg mb-4"
                 />
                 <p className="text-gray-600 text-sm italic">
-                  Sau những nụ cười hạnh phúc là hoàn cảnh gia đình khó khăn
-                  khiến các em có nguy cơ không được đến trường
+                  Sau những nụ cười hạnh phúc là hoàn cảnh gia
+                  đình khó khăn khiến các em có nguy cơ không
+                  được đến trường
                 </p>
               </div>
               <div className="bg-white p-6 rounded-lg shadow">
@@ -111,15 +118,19 @@ export default function CampaignDetail() {
                   Về {campaign.beneficiary.situationDetail}:
                 </h2>
                 <p className="text-gray-600 mb-4">
-                  {campaign.beneficiary.situationDetail} là tổ chức phi lợi
-                  nhuận Việt Nam và là thành viên của United Way Worldwide -
-                  mạng lưới phi lợi nhuận toàn cầu hoạt động hơn 135 năm tại hơn
-                  40 quốc gia và vùng lãnh thổ. MSD United Way Việt Nam hoạt
-                  động với mục tiêu nâng cao chất lượng giáo dục, cải thiện thu
-                  nhập và đảm bảo cuộc sống khỏe mạnh cho những người yếu thế
-                  trong xã hội như trẻ em, thanh niên, phụ nữ, người dân tộc
-                  thiểu số, người khuyết tật... bằng cách huy động sự quan tâm
-                  và giải quyết các vấn đề xã hội một cách có hệ thống.
+                  {campaign.beneficiary.situationDetail} là tổ
+                  chức phi lợi nhuận Việt Nam và là thành viên
+                  của United Way Worldwide - mạng lưới phi lợi
+                  nhuận toàn cầu hoạt động hơn 135 năm tại hơn
+                  40 quốc gia và vùng lãnh thổ. MSD United Way
+                  Việt Nam hoạt động với mục tiêu nâng cao
+                  chất lượng giáo dục, cải thiện thu nhập và
+                  đảm bảo cuộc sống khỏe mạnh cho những người
+                  yếu thế trong xã hội như trẻ em, thanh niên,
+                  phụ nữ, người dân tộc thiểu số, người khuyết
+                  tật... bằng cách huy động sự quan tâm và
+                  giải quyết các vấn đề xã hội một cách có hệ
+                  thống.
                 </p>
               </div>
               {/* Nhà hảo tâm hàng đầu */}
@@ -175,11 +186,16 @@ export default function CampaignDetail() {
                       className="flex justify-between items-center"
                     >
                       <span>{donor.name}</span>
-                      <span className="font-semibold">{donor.amount}</span>
+                      <span className="font-semibold">
+                        {donor.amount}
+                      </span>
                     </li>
                   ))}
                 </ul>
-                <Button variant="outline" className="w-full mt-4">
+                <Button
+                  variant="outline"
+                  className="w-full mt-4"
+                >
                   Xem tất cả
                 </Button>
               </div>
@@ -247,15 +263,22 @@ export default function CampaignDetail() {
                     >
                       <div className="flex items-center">
                         <Avatar className="w-8 h-8 mr-2">
-                          <AvatarFallback>{donor.initials}</AvatarFallback>
+                          <AvatarFallback>
+                            {donor.initials}
+                          </AvatarFallback>
                         </Avatar>
                         <span>{donor.name}</span>
                       </div>
-                      <span className="font-semibold">{donor.amount}</span>
+                      <span className="font-semibold">
+                        {donor.amount}
+                      </span>
                     </li>
                   ))}
                 </ul>
-                <Button variant="outline" className="w-full mt-4">
+                <Button
+                  variant="outline"
+                  className="w-full mt-4"
+                >
                   Xem tất cả
                 </Button>
               </div>
@@ -270,7 +293,9 @@ export default function CampaignDetail() {
                 <div className="space-y-4 px-4 pb-3 pt-4">
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2">
-                      <span className="text-sm">Đồng hành cùng dự án</span>
+                      <span className="text-sm">
+                        Đồng hành cùng dự án
+                      </span>
                     </div>
                     <p className="text-xs text-muted-foreground">
                       Siêu ứng dụng số 1 Việt Nam
@@ -278,10 +303,15 @@ export default function CampaignDetail() {
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2">
-                      <span className="text-sm">Đối tác đồng hành</span>
+                      <span className="text-sm">
+                        Đối tác đồng hành
+                      </span>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      {campaign.beneficiary.situationDetail}
+                      {
+                        campaign.beneficiary
+                          .situationDetail
+                      }
                     </p>
                   </div>
                   <div className="space-y-2">
@@ -308,11 +338,13 @@ export default function CampaignDetail() {
                           Lượt quyên góp
                         </div>
                         <div className=" text-sm font-bold text-gray-600">
-                          {`${campaign.numberOfDonations}`}
+                          7.297
                         </div>
                       </div>
                       <div className="grow">
-                        <div className=" text-sm text-gray-500">Đạt được</div>
+                        <div className=" text-sm text-gray-500">
+                          Đạt được
+                        </div>
                         <div className=" text-sm font-bold text-gray-600">
                           {percentage}%
                         </div>
@@ -336,13 +368,16 @@ export default function CampaignDetail() {
       </div>
       <div className="py-8 md:py-10 lg:py-14  border border-gray-200 bg-white rounded-xl">
         <div className="container">
-          <div className="mb-5 text-center md:mb-8" id="section-article">
+          <div
+            className="mb-5 text-center md:mb-8"
+            id="section-article"
+          >
             <h2 className="text-2xl font-bold lg:text-3xl text-pink-darker">
               Các hoàn cảnh quyên góp khác
             </h2>
             <h3 className="mx-auto mt-2 max-w-3xl text-md text-gray-500 lg:text-lg">
-              Chung tay quyên góp giúp đỡ các hoàn cảnh khó khăn trên khắp cả
-              nước.
+              Chung tay quyên góp giúp đỡ các hoàn cảnh khó khăn
+              trên khắp cả nước.
             </h3>
           </div>
           <CampaignList />
