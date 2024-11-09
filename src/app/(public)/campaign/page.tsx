@@ -1,32 +1,9 @@
 "use client";
 import CampaignList from "@/components/campaign/campaign-list";
-import {
-  DataTableFilterBoxHiarachy,
-  FilterOptionHiarachy,
-} from "@/components/ui/table/data-table-filter-box-hiarachy";
-import { DataTableSearch } from "@/components/ui/table/data-table-search";
-import { useGetCategoryMenus } from "@/queries/useCategory";
-import { CategoryMenu } from "@/schemas/category.schema";
 import Image from "next/image";
 import Link from "next/link";
 
-function convertCategoryToFilterOption(
-  category: CategoryMenu
-): FilterOptionHiarachy {
-  // Convert each category to FilterOption
-  const filterOption: FilterOptionHiarachy = {
-    value: category.id.toString(), // Use `id` as the value (string type)
-    label: category.name, // Use `name` as the label
-    children: category.children?.map(convertCategoryToFilterOption), // Recursively map children
-  };
-
-  return filterOption;
-}
-
 export default function Home() {
-  const { data } = useGetCategoryMenus();
-  const categoryMenuList = data?.payload;
-
   return (
     <div className="py-8 md:py-10 lg:py-14  bg-pink-50 min-h-screen">
       <div className="container">
@@ -39,14 +16,7 @@ export default function Home() {
             nước.
           </h3>
         </div>
-        <div className="my-2 py-4 flex gap-4 ">
-          <DataTableSearch filterKey={"name"} title={"tên"}></DataTableSearch>
-          <DataTableFilterBoxHiarachy
-            filterKey={"category.id"}
-            title={"Danh mục"}
-            options={categoryMenuList?.map(convertCategoryToFilterOption) ?? []}
-          ></DataTableFilterBoxHiarachy>
-        </div>
+
         <CampaignList />
       </div>
     </div>
