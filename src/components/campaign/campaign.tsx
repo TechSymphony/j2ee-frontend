@@ -8,18 +8,21 @@ interface CampaignProps {
 }
 
 export default function Campaign({ data }: CampaignProps) {
-
   // Tính phần trăm tiến độ chiến dịch
-  const percentage = data.targetAmount ? (data.currentAmount / data.targetAmount) * 100 : 0;
+  const percentage = data.targetAmount
+    ? (data.currentAmount / data.targetAmount) * 100
+    : 0;
 
   // Tính ngày còn lại của chiến dịch
   const startDate = new Date(data.startDate);
   const endDate = new Date(data.endDate);
-  const remainingDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+  const remainingDays = Math.ceil(
+    (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+  );
 
   // Đinh dạng số tiền
-  const formattedTargetAmount = data.targetAmount.toLocaleString('de-DE');
-  const formattedCurrentAmount = data.currentAmount.toLocaleString('de-DE');
+  const formattedTargetAmount = data.targetAmount.toLocaleString("de-DE");
+  const formattedCurrentAmount = data.currentAmount.toLocaleString("de-DE");
 
   // Hiển thị chiến dịch
   return (
@@ -191,7 +194,8 @@ export default function Campaign({ data }: CampaignProps) {
               </svg>
             </strong>
             <span className="pl-2 text-xs text-gray-500 md:text-sm">
-              / {formattedTargetAmount}đ<span className="font-bold"> Heo vàng</span>
+              / {formattedTargetAmount}đ
+              <span className="font-bold"> Heo vàng</span>
             </span>
           </div>
           {/* progress  */}
@@ -205,11 +209,15 @@ export default function Campaign({ data }: CampaignProps) {
           <div className=" mt-3 flex flex-nowrap items-center  justify-between space-x-2 md:space-x-3 ">
             <div className="grow ">
               <div className=" text-xs text-gray-500">Lượt quyên góp</div>
-              <div className=" text-sm font-bold text-gray-600">7.297</div>
+              <div className=" text-sm font-bold text-gray-600">
+                {data?.numberOfDonations}
+              </div>
             </div>
             <div className="grow">
               <div className=" text-xs text-gray-500">Đạt được</div>
-              <div className=" text-sm font-bold text-gray-600">{percentage}%</div>
+              <div className=" text-sm font-bold text-gray-600">
+                {percentage}%
+              </div>
             </div>
             <div className="flex grow items-center justify-end">
               <Link href={"/"} className="overflow-hidden">
