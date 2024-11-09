@@ -28,15 +28,15 @@ export const UserClient = () => {
     <>
       <div className="flex items-start justify-between">
         <Heading
-          title={`Users`}
-          description="Manage users (Client side table functionalities.)"
+          title={`Người dùng`}
+          description=""
         />
 
         <Button
           className="text-xs md:text-sm"
           onClick={() => router.push(`/dashboard/user/new`)}
         >
-          <Plus className="mr-2 h-4 w-4" /> Add New
+          <Plus className="mr-2 h-4 w-4" /> Thêm mới
         </Button>
       </div>
       <Separator />

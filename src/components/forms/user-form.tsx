@@ -65,9 +65,9 @@ export const UserForm = () => {
 
     const { triggerRefetch } = useRefetch();
 
-    const title = initialData ? "Edit User" : "Create User";
-    const description = initialData ? "Edit a User." : "Add a new User";
-    const action = initialData ? "Save changes" : "Create";
+    const title = initialData ? "Chỉnh sửa thông tin người dùng" : "Thêm mới người dùng";
+    const description = initialData ? "Chỉnh sửa thông tin người dùng" : "Thêm mới một người dùng";
+    const action = initialData ? "Cập nhật" : "Xóa";
 
     /**
      * Description: Khai báo type với schema validation cho form
