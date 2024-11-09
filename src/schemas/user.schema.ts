@@ -53,11 +53,14 @@ export const UpdateBasicUserBody = z
   })
   .strict();
 
-export type UpdateBasicUserBodyType = z.TypeOf<typeof UpdateBasicUserBody>;
+  export type UpdateBasicUserBodyType = z.TypeOf<typeof UpdateBasicUserBody>;
 
-export const UpdateUserBody = UpdateBasicUserBody.extend({
-  username: z.string().trim().min(2).max(256).optional(),
-  role: RoleSchema,
-}).strict();
+  export const UpdateUserBody = UpdateBasicUserBody.extend({
+    username: z.string().trim().min(2).max(256).optional(),
+    role: RoleSchema,
+  }).strict();
+
+  export const ResetUserPasswordBody = z.object({}).strict();
+  export type ResetUserPasswordBodyType = z.TypeOf<typeof ResetUserPasswordBody>;
 
 export type UpdateUserBodyType = z.TypeOf<typeof UpdateUserBody>;

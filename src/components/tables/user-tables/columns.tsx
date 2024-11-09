@@ -36,7 +36,7 @@ export const columns: ColumnDef<UserType>[] = [
   },
   {
     accessorKey: "fullName",
-    header: "Full Name",
+    header: "Họ và tên",
   },
   {
     accessorKey: "email",
@@ -44,7 +44,7 @@ export const columns: ColumnDef<UserType>[] = [
   },
   {
     accessorKey: "phone",
-    header: "Phone",
+    header: "Số điện thoại",
   },
   {
     id: "actions",

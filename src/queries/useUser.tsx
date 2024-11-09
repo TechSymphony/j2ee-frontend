@@ -88,3 +88,15 @@ export const useUpdateMeMutation = () => {
     },
   });
 };
+
+export const useResetUserPasswordMutation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (id: number) => userApi.resetPassword(id, {}),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["users"],
+            });
+        },
+    });
+}
