@@ -10,9 +10,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/hooks/use-toast";
 import { handleErrorFromApi } from "@/lib/utils";
-import { useDeleteUserMutation } from "@/queries/useUser";
+import { useDeleteUserMutation, useResetUserPasswordMutation } from "@/queries/useUser";
 import { UserType } from "@/schemas/user.schema";
-import { Edit, MoreHorizontal, Trash } from "lucide-react";
+import { Edit, Key, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -22,7 +22,8 @@ interface CellActionProps {
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
   const router = useRouter();
 
   const deleteUserMutation = useDeleteUserMutation();
@@ -42,16 +43,40 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       handleErrorFromApi({ error });
     } finally {
       setLoading(false);
-      setOpen(false);
+      setDeleteOpen(false);
+    }
+  };
+  
+  const resetPasswordMutation = useResetUserPasswordMutation();
+
+  const onResetPassword = async () => {
+    try {
+      setLoading(true);
+      await resetPasswordMutation.mutateAsync(data.id);
+      toast({
+        description: "Thay đổi mật khẩu người dùng thành công!",
+        duration: 5000,
+      });
+    } catch (error: any) {
+      handleErrorFromApi({ error });
+    } finally {
+      setLoading(false);
+      setResetPasswordOpen(false);
     }
   };
 
   return (
     <>
       <AlertModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
+        isOpen={deleteOpen}
+        onClose={() => setDeleteOpen(false)}
         onConfirm={onDelete}
+        loading={loading}
+      />
+      <AlertModal
+        isOpen={resetPasswordOpen}
+        onClose={() => setResetPasswordOpen(false)}
+        onConfirm={onResetPassword}
         loading={loading}
       />
       <DropdownMenu modal={false}>
@@ -69,8 +94,11 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           >
             <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setOpen(true)}>
+          <DropdownMenuItem onClick={() => setDeleteOpen(true)}>
             <Trash className="mr-2 h-4 w-4" /> Delete
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setResetPasswordOpen(true)}>
+            <Key className="mr-2 h-4 w-4" /> Reset Password
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

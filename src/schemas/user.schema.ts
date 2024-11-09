@@ -41,6 +41,9 @@ export const CreateUserBody = z
 
 export type CreateUserBodyType = z.TypeOf<typeof CreateUserBody>;
 
+export const ResetUserPasswordBody = z.object({}).strict();
+export type ResetUserPasswordBodyType = z.TypeOf<typeof ResetUserPasswordBody>;
+
 export const UpdateUserBody = z
     .object({
         fullName: z.string().trim().min(2).max(256),
