@@ -47,15 +47,10 @@ export default function CampaignList() {
     data: campaignListData,
     isLoading,
     refetch,
-  } = useGetCampaignClientListQuery(queryConfig);
-  const campaigns = campaignListData?.payload.content ?? [];
-
-  const [pageIndex, setPageIndex] = useQueryState(
-    "page",
-    parseAsInteger.withDefault(0)
-  );
-
-  const totalPages = campaignListData?.payload.page.totalPages;
+  } = useGetCampaignListQuery(); // Sử dụng isLoading để theo dõi trạng thái tải
+  const campaigns = campaignListData?.payload ?? [];
+  const [visibleCount, setVisibleCount] = useState(6); // Mặc định hiển thị 6 campaign đầu tiên
+  const [loading, setLoading] = useState(false); // Quản lý trạng thái tải dữ liệu
 
   const { setTriggerRefetch } = useRefetch();
   const router = useRouter();

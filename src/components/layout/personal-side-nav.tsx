@@ -15,10 +15,10 @@ export const navItems: NavItem[] = [
     label: "Lịch sử quyên góp",
   },
   {
-    title: "Gửi nguyện vọng",
-    href: "/beneficiary",
+    title: "Lịch sử gửi nguyện vọng",
+    href: "/history-beneficiary",
     icon: "billing",
-    label: "Gửi nguyện vọng",
+    label: "Lịch sử gửi nguyện vọng",
   },
   {
     title: "Hồ sơ cá nhân",
