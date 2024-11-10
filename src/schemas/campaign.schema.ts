@@ -13,7 +13,7 @@ export const CampaignSchema = z.object({
   currentAmount: z.number(),
   startDate: z.date(),
   endDate: z.date(),
-  status: z.string(),
+  status: z.number(),
 });
 
 export type CampaignType = z.TypeOf<typeof CampaignSchema>;

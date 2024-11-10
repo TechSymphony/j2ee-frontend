@@ -12,7 +12,7 @@ export default function CampaignList() {
     isLoading,
     refetch,
   } = useGetCampaignListQuery(); // Sử dụng isLoading để theo dõi trạng thái tải
-  const campaigns = campaignListData?.payload.content ?? [];
+  const campaigns = campaignListData?.payload ?? [];
   const [visibleCount, setVisibleCount] = useState(6); // Mặc định hiển thị 6 campaign đầu tiên
   const [loading, setLoading] = useState(false); // Quản lý trạng thái tải dữ liệu
 

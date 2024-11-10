@@ -36,3 +36,15 @@ export const UpdateBeneficiaryBody = z
   .strict();
 
 export type UpdateBeneficiaryBodyType = z.TypeOf<typeof UpdateBeneficiaryBody>;
+
+export const UpdateMyBeneficiaryBody = z
+  .object({
+    situationDetail: z.string().optional(),
+    supportReceived: z.number().optional(),
+    verificationStatus: z.string().optional(),
+  })
+  .strict();
+
+export type UpdateMyBeneficiaryBodyType = z.TypeOf<
+  typeof UpdateMyBeneficiaryBody
+>;

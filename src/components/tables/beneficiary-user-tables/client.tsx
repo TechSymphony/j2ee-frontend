@@ -5,29 +5,20 @@ import { Separator } from "@/components/ui/separator";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { columns } from "./columns";
-import { useGetBeneficiaryList } from "@/queries/useBeneficiary";
-import { useRefetch } from "@/contexts/app-context";
-import { useEffect } from "react";
+import { useGetMyBeneficiaryListQuery } from "@/queries/useBeneficiary";
 import { getDefaultPaginatedResponse } from "@/schemas/paginate.schema";
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
 import { DataTableComponentType } from "@/components/ui/table/data-table-factory-filter";
 import useQueryConfig from "./beneficiary-query-table";
 import { ReviewStatusOptions } from "@/types/enum";
 
-export const BeneficiaryClient = () => {
+export const BeneficiaryUserTable = () => {
   const router = useRouter();
   const queryConfig = useQueryConfig();
 
-  const { data: beneficiaryData, refetch } = useGetBeneficiaryList(queryConfig);
+  const { data: beneficiaryData } = useGetMyBeneficiaryListQuery(queryConfig);
 
   const data = beneficiaryData?.payload ?? getDefaultPaginatedResponse;
-
-  const { setTriggerRefetch } = useRefetch();
-
-  useEffect(() => {
-    console.log("fetch lai");
-    setTriggerRefetch(() => refetch);
-  }, [refetch, setTriggerRefetch]);
 
   const filters = [
     {
@@ -57,13 +48,13 @@ export const BeneficiaryClient = () => {
     <>
       <div className="flex items-start justify-between">
         <Heading
-          title={`Quản lý người thụ hưởng (${beneficiaryData?.payload?.page?.totalElements})`}
+          title={`Quản lý người thụ hưởng (${data.page.totalElements})`}
           description=""
         />
 
         <Button
           className="text-xs md:text-sm"
-          onClick={() => router.push(`/dashboard/beneficiary/new`)}
+          onClick={() => router.push(`/beneficiary`)}
         >
           <Plus className="mr-2 h-4 w-4" /> Thêm mới
         </Button>
