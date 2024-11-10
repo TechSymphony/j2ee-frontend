@@ -1,4 +1,5 @@
 "use client";
+import EditBeneficiary from "@/app/(public)/(personal)/history-beneficiary/edit-beneficiary";
 import { AlertModal } from "@/components/modal/alert-modal";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,7 +11,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/hooks/use-toast";
 import { handleErrorFromApi } from "@/lib/utils";
+import { useDeleteMyBeneficiaryMutation } from "@/queries/useBeneficiary";
 import { BeneficiaryType } from "@/schemas/beneficiary.schema";
+import { ReviewStatusEnum } from "@/types/enum";
 import { Edit, Eye, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -22,30 +25,28 @@ interface CellActionProps {
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [id, setId] = useState<number | undefined>(undefined);
+
   const router = useRouter();
 
-  //   const deleteBeneficiaryMutation = useDeleteBeneficiaryMutation();
-  //   /**
-  //    * Xử lý sự kiện delete role
-  //    */
-  //   const onDelete = async () => {
-  //     try {
-  //       console.log("delete");
-  //       setLoading(true);
-  //       await deleteBeneficiaryMutation.mutateAsync(data.id);
-  //       toast({
-  //         description: "Xóa vai trò thành công",
-  //         duration: 5000,
-  //       });
-  //     } catch (error: any) {
-  //       handleErrorFromApi({ error });
-  //     } finally {
-  //       setLoading(false);
-  //       setOpen(false);
-  //     }
-  //   };
-
-  const onDelete = async function () {};
+  const deleteMyBeneficiaryMutation = useDeleteMyBeneficiaryMutation();
+  /**
+   * Xử lý sự kiện delete role
+   */
+  const onDelete = async () => {
+    try {
+      setLoading(true);
+      await deleteMyBeneficiaryMutation.mutateAsync(data.id);
+      toast({
+        description: "Xóa nguyện vọng thành công",
+      });
+    } catch (error: any) {
+      handleErrorFromApi({ error });
+    } finally {
+      setLoading(false);
+      setOpen(false);
+    }
+  };
 
   return (
     <>
@@ -70,13 +71,25 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           >
             <Eye className="mr-2 h-4 w-4" /> Hiển thị
           </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/beneficiary/${data.id}`)}
-          >
-            <Edit className="mr-2 h-4 w-4" /> Cập nhật
+          {/* Chỉ hiển thị nút "Update" khi trạng thái không phải "WAITING" */}
+          {ReviewStatusEnum[
+            data.verificationStatus as unknown as keyof typeof ReviewStatusEnum
+          ] === ReviewStatusEnum.WAITING && (
+            <DropdownMenuItem
+              // onClick={() => router.push(`/dashboard/campaign/${data.id}`)}
+              onClick={() => {
+                setId(data.id);
+              }}
+            >
+              <Edit className="mr-2 h-4 w-4" /> Cập nhật
+            </DropdownMenuItem>
+          )}
+          <DropdownMenuItem onClick={() => setOpen(true)}>
+            <Trash className="mr-2 h-4 w-4" /> Xóa
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      <EditBeneficiary id={id} setId={setId} />
     </>
   );
 };
