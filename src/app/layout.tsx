@@ -6,6 +6,7 @@ import AppProvider from "@/components/app-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { AppContextProvider } from "@/contexts/app-context";
 import UserProvider from "@/contexts/user-context";
+import { BeneficiaryProvider } from "@/contexts/beneficiary-context";
 import { RouteAuthorize } from "@/components/authorization/route-authorize";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
@@ -34,18 +35,20 @@ export default function RootLayout({
         <NuqsAdapter>
           <AppProvider>
             <UserProvider>
-              <AppContextProvider>
-                <ThemeProvider
-                  attribute="class"
-                  defaultTheme="system"
-                  enableSystem
-                  disableTransitionOnChange
-                >
-                  <RouteAuthorize>{children}</RouteAuthorize>
+              <BeneficiaryProvider>
+                <AppContextProvider>
+                  <ThemeProvider
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem
+                    disableTransitionOnChange
+                  >
+                    <RouteAuthorize>{children}</RouteAuthorize>
 
-                  <Toaster />
-                </ThemeProvider>
-              </AppContextProvider>
+                    <Toaster />
+                  </ThemeProvider>
+                </AppContextProvider>
+              </BeneficiaryProvider>
             </UserProvider>
           </AppProvider>
         </NuqsAdapter>

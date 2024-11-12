@@ -64,7 +64,7 @@ export default function Campaign({ data }: CampaignProps) {
             </div>
           </div>
           <div className="flex-1 text-xs leading-4 text-gray-600 md:text-sm">
-            {data.beneficiary.situationDetail}
+            {data.beneficiary?.situationDetail}
           </div>
           <div className="shrink-0">
             <span className="rounded-3xl px-2 py-1 text-xs text-orange-400 bg-[rgba(252,100,45,.15)]">
