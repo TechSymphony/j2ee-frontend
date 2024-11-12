@@ -53,14 +53,32 @@ export const UpdateBasicUserBody = z
   })
   .strict();
 
-  export type UpdateBasicUserBodyType = z.TypeOf<typeof UpdateBasicUserBody>;
+export type UpdateBasicUserBodyType = z.TypeOf<typeof UpdateBasicUserBody>;
 
-  export const UpdateUserBody = UpdateBasicUserBody.extend({
-    username: z.string().trim().min(2).max(256).optional(),
-    role: RoleSchema,
-  }).strict();
-
-  export const ResetUserPasswordBody = z.object({}).strict();
-  export type ResetUserPasswordBodyType = z.TypeOf<typeof ResetUserPasswordBody>;
-
+export const UpdateUserBody = UpdateBasicUserBody.extend({
+  username: z.string().trim().min(2).max(256).optional(),
+  role: RoleSchema,
+}).strict();
 export type UpdateUserBodyType = z.TypeOf<typeof UpdateUserBody>;
+
+export const ResetUserPasswordBody = z.object({}).strict();
+export type ResetUserPasswordBodyType = z.TypeOf<typeof ResetUserPasswordBody>;
+
+export const ChangePasswordBody = z
+  .object({
+    currentPassword: z.string().min(6).max(100),
+    newPassword: z.string().min(6).max(100),
+    confirmPassword: z.string().min(6).max(100),
+  })
+  .strict()
+  .superRefine(({ confirmPassword, newPassword }, ctx) => {
+    if (confirmPassword !== newPassword) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Mật khẩu không khớp",
+        path: ["confirmPassword"],
+      });
+    }
+  });
+
+export type ChangePasswordBodyType = z.TypeOf<typeof ChangePasswordBody>;

@@ -31,8 +31,9 @@ import {
   User,
   User2Icon,
   UserX2Icon,
-  X
-} from 'lucide-react';
+  X,
+  KeyRound,
+} from "lucide-react";
 
 export type Icon = LucideIcon;
 
@@ -66,6 +67,7 @@ export const Icons = {
   campaign: ScrollText,
   donation: BookHeart,
   list: List,
+  changePassword: KeyRound,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"
@@ -84,5 +86,5 @@ export const Icons = {
     </svg>
   ),
   twitter: Twitter,
-  check: Check
+  check: Check,
 };
