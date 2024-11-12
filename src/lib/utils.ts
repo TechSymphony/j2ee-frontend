@@ -36,8 +36,8 @@ export const handleErrorFromApi = ({
     });
   } else {
     toast({
-      title: "Lỗi",
-      description: error?.payload?.message ?? "Lỗi không xác định",
+      title: error?.payload?.title ?? "Lỗi",
+      description: error?.payload?.detail ?? "Lỗi không xác định",
       variant: "destructive",
       duration: duration ?? 5000,
     });

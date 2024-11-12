@@ -21,10 +21,10 @@ export const navItems: NavItem[] = [
     label: "Lịch sử gửi nguyện vọng",
   },
   {
-    title: "Hồ sơ cá nhân",
-    href: "/me",
-    icon: "profile",
-    label: "Hồ sơ cá nhân",
+    title: "Đổi mật khẩu",
+    href: "/change-password",
+    icon: "changePassword",
+    label: "Đổi mật khẩu",
   },
 ];
 export default function PersonalSideNav() {

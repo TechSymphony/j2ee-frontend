@@ -1,6 +1,9 @@
 import userApi from "@/apis/user";
 import { QueryConfig } from "@/hooks/useQueryConfig";
-import { UpdateUserBodyType } from "@/schemas/user.schema";
+import {
+  ChangePasswordBodyType,
+  UpdateUserBodyType,
+} from "@/schemas/user.schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useGetUserListQuery = (queryConfig?: QueryConfig) => {
@@ -90,13 +93,18 @@ export const useUpdateMeMutation = () => {
 };
 
 export const useResetUserPasswordMutation = () => {
-    const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: (id: number) => userApi.resetPassword(id, {}),
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["users"],
-            });
-        },
-    });
-}
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => userApi.resetPassword(id, {}),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["users"],
+      });
+    },
+  });
+};
+export const useChangePasswordMutation = () => {
+  return useMutation({
+    mutationFn: (body: ChangePasswordBodyType) => userApi.changePassword(body),
+  });
+};
