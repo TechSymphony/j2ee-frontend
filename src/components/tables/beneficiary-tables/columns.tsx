@@ -1,4 +1,3 @@
-"use client";
 import React, { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
@@ -7,8 +6,7 @@ import { ReviewStatusEnum, ReviewStatusOptions } from "@/types/enum";
 import SelectBoxEnum from "@/components/ui/select-box-enum";
 import { toast } from "@/hooks/use-toast";
 import { useRefetch } from "@/contexts/app-context";
-import Popup from "@/components/modal/popup";
-import { useBeneficiary } from "@/contexts/beneficiary-context";
+import PopupBeneficiary from "@/components/modal/popup-beneficiary";
 
 export const columns: ColumnDef<BeneficiaryType>[] = [
   {
@@ -36,11 +34,18 @@ export const columns: ColumnDef<BeneficiaryType>[] = [
 
       const { triggerRefetch } = useRefetch();
       const [isOpenPopup, setIsOpenPopup] = useState(false);
-      const { setBeneficiary } = useBeneficiary();
 
-      const handleValueChange = async (value: ReviewStatusEnum) => {
+      const handleValueChange = (value: ReviewStatusEnum) => {
+        if (value === ReviewStatusEnum.APPROVED) {
+          setIsOpenPopup(true);
+        } else {
+          updateBeneficiaryStatus(value);
+        }
+      };
+
+      const updateBeneficiaryStatus = async (value: ReviewStatusEnum) => {
         const apiURL = process.env.NEXT_PUBLIC_API_ENDPOINT;
-        fetch(`${apiURL}/beneficiaries/${row.original.id}`, {
+        await fetch(`${apiURL}/beneficiaries/${row.original.id}`, {
           method: "PUT",
           headers: {
             Authorization: "Bearer " + process.env.NEXT_PUBLIC_ACCESS_TOKEN,
@@ -56,14 +61,15 @@ export const columns: ColumnDef<BeneficiaryType>[] = [
         setVerificationStatus(value);
         toast({
           description: "Cập nhật trạng thái thành công",
-        })
-        // Trigger refetch
+        });
         triggerRefetch();
+      };
 
-        if (value === ReviewStatusEnum.APPROVED) {
-          setBeneficiary(row.original);
-          setIsOpenPopup(true);
+      const handleCampaignCreation = async (isSuccess: boolean) => {
+        if (isSuccess) {
+          await updateBeneficiaryStatus(ReviewStatusEnum.APPROVED);
         }
+        setIsOpenPopup(false);
       };
 
       return (
@@ -74,9 +80,11 @@ export const columns: ColumnDef<BeneficiaryType>[] = [
             onValueChange={handleValueChange}
           />
           {isOpenPopup && (
-            <Popup
+            <PopupBeneficiary
               isOpenPopup={isOpenPopup}
               setIsOpenPopup={setIsOpenPopup}
+              beneficiary={row.original}
+              onCampaignCreation={handleCampaignCreation}
             />
           )}
         </>

@@ -44,6 +44,22 @@ export const useUpdateBeneficiary = () => {
   });
 };
 
+export const useGetUserBeneficiaryQuery = ({
+  id,
+  enabled,
+}: {
+  id: number;
+  enabled: boolean;
+}) => {
+  return useQuery({
+    queryKey: ["user-beneficiary", id],
+    queryFn: () => beneficiaryApi.getUserBeneficiary(id),
+    staleTime: 3600 * 3600,
+    enabled,
+  });
+};
+
+
 export const useGetMyBeneficiaryListQuery = (
   queryConfig?: beneficiaryQueryConfig
 ) => {
