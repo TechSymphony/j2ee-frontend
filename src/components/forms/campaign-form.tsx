@@ -28,8 +28,8 @@ import {
     useAddCampaignMutation,
     useGetCampaignQuery,
     useUpdateCampaignMutation,
-    useGetCampaignListQuery,
 } from "@/queries/useCampaign";
+import { useGetCategoryMenus } from "@/queries/useCategory";
 import {
     CreateCampaignBody,
     UpdateCampaignBody,
@@ -39,12 +39,15 @@ import {
 import { handleErrorFromApi } from "@/lib/utils";
 import { useRefetch } from "@/contexts/app-context";
 import { ReviewStatusEnum, ReviewStatusOptions } from "@/types/enum";
-import { useBeneficiary } from "@/contexts/beneficiary-context";
 
 export const CampaignForm = () => {
     const params = useParams();
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+
+    // Get category list
+    const { data: fetchCategoryList } = useGetCategoryMenus();
+    const categories = fetchCategoryList?.payload;
 
     const updateCampaignId = Number(params.campaignId as string);
 
@@ -52,9 +55,6 @@ export const CampaignForm = () => {
         id: updateCampaignId as number,
         enabled: Boolean(updateCampaignId),
     });
-
-    const { data: campaignListData } = useGetCampaignListQuery();
-    const campaigns = Array.isArray(campaignListData?.payload?.content) ? campaignListData?.payload?.content : [];
 
     const updateCampaignMutation = useUpdateCampaignMutation();
     const addCampaignMutation = useAddCampaignMutation();
@@ -70,12 +70,12 @@ export const CampaignForm = () => {
         : CreateCampaignBodyType;
     const formSchema = initialData ? UpdateCampaignBody : CreateCampaignBody;
 
-    const { beneficiary } = useBeneficiary();
 
     const form = useForm<CampaignFormValuesType>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             beneficiary: null,
+            category: {},
             code: "",
             name: "",
             description: "",
@@ -87,16 +87,13 @@ export const CampaignForm = () => {
         },
     });
 
-    const beneficiaryCampaignCount = beneficiary
-        ? campaigns.filter(campaign => campaign?.beneficiary?.id === beneficiary?.id).length
-        : 0;
-
     console.log("check form", form.getValues());
     useEffect(() => {
         if (initialData) {
-            const { beneficiary, code, name, description, targetAmount, currentAmount, startDate, endDate, status } = initialData.payload;
+            const { beneficiary, category, code, name, description, targetAmount, currentAmount, startDate, endDate, status } = initialData.payload;
             form.reset({
                 beneficiary,
+                category,
                 code,
                 name,
                 description,
@@ -112,7 +109,6 @@ export const CampaignForm = () => {
     const onSubmit = async (data: UpdateCampaignBodyType | CreateCampaignBodyType) => {
         try {
             setLoading(true);
-            data.beneficiary = beneficiary; // Assign beneficiary to data before submitting
             if (initialData) {
                 const body: UpdateCampaignBodyType & { id: number } = {
                     id: updateCampaignId as number,
@@ -147,11 +143,6 @@ export const CampaignForm = () => {
                 <Heading title={title} description={description} />
             </div>
             <Separator />
-            {beneficiary && (
-                <div className="mb-4 text-sm text-red-600 font-semibold">
-                    Người thụ hưởng này đã tạo {beneficiaryCampaignCount} chiến dịch
-                </div>
-            )}
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
@@ -270,6 +261,38 @@ export const CampaignForm = () => {
                                             {ReviewStatusOptions.map(option => (
                                                 <SelectItem key={option.value} value={option.value.toString()}>
                                                     {option.label}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="category"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Loại chiến dịch</FormLabel>
+                                    <Select
+                                        onValueChange={(value) => {
+                                            const selectedBeneficiary = categories?.find(category => category.id === Number(value));
+                                            field.onChange(selectedBeneficiary); // Cập nhật giá trị object của beneficiary
+                                        }}
+                                        value={field.value?.id?.toString() || ''}
+                                    >
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Chọn loại chiến dịch" >
+                                                    {field.value?.name || "Chọn loại chiến dịch"}
+                                                </SelectValue>
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {categories?.map((category) => (
+                                                <SelectItem key={category.id} value={category.id.toString()}>
+                                                    {category.name}
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>

@@ -18,6 +18,8 @@ const beneficiaryApi = {
   updateMyBeneficiary: (id: number, body: UpdateMyBeneficiaryBodyType) =>
     http.put<BeneficiaryResType>(`/me${prefix}/${id}`, body),
   deleteMyBeneficiary: (id: number) => http.delete(`/me${prefix}/${id}`),
+  getUserBeneficiary: (id: number) =>
+    http.get<BeneficiaryResType>(`/users/${id}${prefix}`),
 };
 
 export default beneficiaryApi;

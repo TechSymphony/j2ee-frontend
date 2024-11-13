@@ -9,11 +9,11 @@ export type Category = z.infer<typeof BaseCategorySchema> & {
   parent?: Category;
 };
 
-export type CategoryMenu= z.infer<typeof BaseCategorySchema> & {
+export type CategoryMenu = z.infer<typeof BaseCategorySchema> & {
   children?: CategoryMenu[];
 };
 
-const CategorySchema: z.ZodType<Category> = BaseCategorySchema.extend({
+export const CategorySchema: z.ZodType<Category> = BaseCategorySchema.extend({
   parent: z.lazy(() => CategorySchema.optional()),
 });
 

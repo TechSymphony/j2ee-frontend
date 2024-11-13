@@ -60,13 +60,6 @@ export const useUpdateCampaignMutation = () => {
     });
 };
 
-export const useGetBeneficiaryListQuery = () => {
-    return useQuery({
-        queryKey: ["beneficiaries"],
-        queryFn: campaignApi.getBeneficiaryList,
-    });
-};
-
 export const useAddCampaignMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({

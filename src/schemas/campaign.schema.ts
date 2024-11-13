@@ -2,10 +2,12 @@ import z from "zod";
 import { PaginatedResponseSchema } from "./paginate.schema";
 // import { AccountSchema } from "./account.schema";
 import { BeneficiarySchema } from "./beneficiary.schema";
+import { CategorySchema } from "./category.schema";
 
 export const CampaignSchema = z.object({
   id: z.number(),
   beneficiary: BeneficiarySchema,
+  category: CategorySchema,
   code: z.string(),
   name: z.string(),
   description: z.string().optional(),
@@ -29,6 +31,7 @@ export type CampaignListResType = z.TypeOf<
 export const CampaignRes = z.object({
   id: z.number(),
   beneficiary: BeneficiarySchema,
+  category: CategorySchema,
   code: z.string(),
   name: z.string(),
   description: z.string().optional(),
@@ -45,6 +48,7 @@ export type CampaignResType = z.TypeOf<typeof CampaignRes>;
 export const CreateCampaignBody = z
   .object({
     beneficiary: BeneficiarySchema.nullable().default(null),
+    category: CategorySchema,
     code: z.string().trim().min(5).max(256),
     name: z.string().trim().min(2).max(256),
     description: z.string().min(2).max(256),
@@ -61,6 +65,7 @@ export type CreateCampaignBodyType = z.TypeOf<typeof CreateCampaignBody>;
 export const UpdateCampaignBody = z
   .object({
     beneficiary: BeneficiarySchema.nullable(),
+    category: CategorySchema,
     code: z.string().trim().min(5).max(256),
     name: z.string().trim().min(2).max(256),
     description: z.string().min(2).max(256),
