@@ -44,8 +44,6 @@ const InitTextarea = function ({ form }) {
 };
 
 export default function BeneficiaryForm() {
-  const apiURL = process.env.NEXT_PUBLIC_API_ENDPOINT;
-
   const [loading, setLoading] = useState(false);
 
   const form = useForm<CreateBeneficiaryBodyType>({

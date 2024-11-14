@@ -56,6 +56,7 @@ export const CreateBeneficiaryBody = z.object({
     .refine((val) => !Number.isNaN(parseInt(val, 10)), {
       message: "Vui lòng nhập số tiền mong muốn kêu gọi.",
     }),
+  verificationStatus: z.string().default("WAITING"),
 });
 
 export type CreateBeneficiaryBodyType = z.TypeOf<typeof CreateBeneficiaryBody>;
