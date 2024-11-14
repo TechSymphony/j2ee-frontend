@@ -100,3 +100,8 @@ export const useDeleteMyBeneficiaryMutation = () => {
     },
   });
 };
+export const useCreateBeneficiary = () => {
+  return useMutation({
+    mutationFn: beneficiaryApi.createUserBeneficiary,
+  });
+};
