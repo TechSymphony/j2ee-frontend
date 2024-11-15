@@ -1,65 +1,132 @@
 import { Button } from "@/components/ui/button";
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useAddDonationMutation } from "@/queries/useDonation";
 
-export default function DonationDialog() {
-    return (
-        <Dialog>
-            <DialogTrigger asChild>
-                <Button className="w-full bg-pink-500 text-gray-100 text-base hover:bg-pink-600">
-                    Quyên góp
-                </Button>
-            </DialogTrigger>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Quyên góp</DialogTitle>
-                    <DialogDescription>
-                        Điền thông tin bên dưới để hoàn thành quyên góp của bạn.
-                    </DialogDescription>
-                </DialogHeader>
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Form, FormControl, FormField, FormMessage } from "../ui/form";
+import { FormItem } from "@/components/ui/form";
+import {
+  CreateDonationBody,
+  CreateDonationBodyType,
+} from "@/schemas/donation.schema";
 
-                <form className="space-y-4">
-                    <div>
+interface DonationDialogProps {
+  campaignId: number;
+}
+export default function DonationDialog({ campaignId }: DonationDialogProps) {
+  const addDonationMutation = useAddDonationMutation();
+  const form = useForm<CreateDonationBodyType>({
+    resolver: zodResolver(CreateDonationBody),
+    defaultValues: {
+      campaign: { id: campaignId },
+      amountTotal: 0,
+      message: "",
+    },
+  });
+
+  const onSubmit = async (data: CreateDonationBodyType) => {};
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button className="w-full bg-pink-500 text-gray-100 text-base hover:bg-pink-600">
+          Quyên góp
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Quyên góp</DialogTitle>
+          <DialogDescription>
+            Điền thông tin bên dưới để hoàn thành quyên góp.
+          </DialogDescription>
+        </DialogHeader>
+        <>
+          <Form {...form}>
+            <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+              <div>
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="campaign"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            type="hidden"
+                            id="campaign"
+                            value={field?.value?.id?.toString() || ""}
+                          ></Input>
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="amountTotal"
+                    render={({ field }) => (
+                      <FormItem>
                         <Label htmlFor="amountTotal">Tổng số tiền</Label>
-                        <Input
+                        <FormControl>
+                          <Input
                             id="amountTotal"
                             type="number"
-                            min="0.01"
-                            placeholder="Nhập số tiền của bạn"
-                            required
-                        />
-                    </div>
+                            {...field}
+                            placeholder="Nhập số tiền"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
-                    <div>
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="message"
+                    render={({ field }) => (
+                      <FormItem>
                         <Label htmlFor="message">Lời nhắn</Label>
-                        <Textarea
+                        <FormControl>
+                          <Textarea
+                            {...field}
                             id="message"
-                            maxLength={255}
-                            placeholder="Nhập lời nhắn của bạn (tối đa 255 ký tự)"
-                            required
-                        />
-                    </div>
-                </form>
+                            placeholder="Nhập lời nhắn (tối đa 255 ký tự)"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
 
-                <DialogFooter>
-                    <Button
-                        type="submit"
-                        className="bg-pink-500 text-gray-100 hover:bg-pink-600"
-                    >
-                        Gửi quyên góp
-                    </Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
-    );
+              <DialogFooter>
+                <Button
+                  disabled={addDonationMutation.isPending}
+                  type="submit"
+                  className="bg-pink-500 text-gray-100 hover:bg-pink-600"
+                >
+                  Gửi quyên góp
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </>
+      </DialogContent>
+    </Dialog>
+  );
 }

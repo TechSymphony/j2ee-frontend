@@ -16,6 +16,7 @@ export const CampaignSchema = z.object({
   startDate: z.date(),
   endDate: z.date(),
   status: z.number(),
+  numberOfDonations: z.number().optional(),
 });
 
 export type CampaignType = z.TypeOf<typeof CampaignSchema>;

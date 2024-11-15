@@ -1,5 +1,6 @@
 import { PaginatedResponseSchema } from "@/schemas/paginate.schema";
 import z from "zod";
+import { CampaignSchema } from "./campaign.schema";
 
 export const BeneficiarySchema = z.object({
   id: z.number(),
@@ -58,10 +59,9 @@ export type CreatedDonationResType = z.TypeOf<typeof CreatedDonationRes>;
 
 export const CreateDonationBody = z
   .object({
-    campaign_id: z.number(),
-    amountTotal: z.number().positive(),
-    message: z.string(),
-    user_id: z.number().nullish(),
+    campaign: z.object({ id: z.number() }),
+    amountTotal: z.coerce.number().positive(),
+    message: z.string().trim().min(0).max(256),
   })
   .strict();
 

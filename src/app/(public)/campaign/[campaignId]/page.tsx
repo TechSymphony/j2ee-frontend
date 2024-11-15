@@ -327,7 +327,7 @@ export default function CampaignDetail() {
                       </div>
                     </div>
                   </div>
-                  <DonationDialog></DonationDialog>
+                  <DonationDialog campaignId={dataCampaignId}></DonationDialog>
                 </div>
               </div>
             </div>
