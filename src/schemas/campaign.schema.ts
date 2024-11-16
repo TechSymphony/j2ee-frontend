@@ -48,7 +48,7 @@ export type CampaignResType = z.TypeOf<typeof CampaignRes>;
 
 export const CreateCampaignBody = z
   .object({
-    beneficiary: BeneficiarySchema.nullable().default(null),
+    beneficiary: BeneficiarySchema.nullish(),
     category: CategorySchema,
     code: z.string().trim().min(5).max(256),
     name: z.string().trim().min(2).max(256),
@@ -65,7 +65,7 @@ export type CreateCampaignBodyType = z.TypeOf<typeof CreateCampaignBody>;
 
 export const UpdateCampaignBody = z
   .object({
-    beneficiary: BeneficiarySchema.nullable(),
+    beneficiary: BeneficiarySchema.nullish(),
     category: CategorySchema,
     code: z.string().trim().min(5).max(256),
     name: z.string().trim().min(2).max(256),

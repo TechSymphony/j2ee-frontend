@@ -15,6 +15,7 @@ import { DataTablePagination } from "@/components/ui/data-table-pagination";
 import { DataTableComponentType } from "@/components/ui/table/data-table-factory-filter";
 import { getDefaultPaginatedResponse } from "@/schemas/paginate.schema";
 import useQueryConfig from "@/components/tables/donation-tables/donation-query-table";
+import { ReviewDonationOptions } from "../../../types/enum";
 
 interface Props {
   type: "admin" | "user";
@@ -46,10 +47,18 @@ export const DonationClient = ({ type }: Props) => {
       },
     },
     {
+      type: DataTableComponentType.FilterBox,
+      props: {
+        filterKey: "status",
+        title: "Trạng thái duyệt",
+        options: ReviewDonationOptions,
+      },
+    },
+    {
       type: DataTableComponentType.FilterDate,
       props: {
         filterKey: "donationDate",
-        title: "Trạng thái duyệt",
+        title: "Ngày duyệt",
       },
     },
   ];
@@ -57,10 +66,7 @@ export const DonationClient = ({ type }: Props) => {
   return (
     <>
       <div className="flex items-start justify-between mb-4">
-        <Heading
-          title={`Quản lý quyên góp`}
-          description={""}
-        />
+        <Heading title={`Quản lý quyên góp`} description={""} />
         {/* <Button
           className="text-xs md:text-sm"
           onClick={() => router.push(`/dashboard/campaign/new`)}

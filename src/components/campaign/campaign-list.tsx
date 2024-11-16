@@ -103,7 +103,10 @@ export default function CampaignList() {
                       onClick={() => router.push(`/campaign/${campaign.id}`)}
                     />
                     <div className="flex grow items-center justify-end">
-                      <DonationDialog campaignId={campaign.id}></DonationDialog>
+                      <DonationDialog
+                        campaignId={campaign.id}
+                        campaignName={campaign.name}
+                      ></DonationDialog>
                     </div>
                   </div>
                 </Suspense>
