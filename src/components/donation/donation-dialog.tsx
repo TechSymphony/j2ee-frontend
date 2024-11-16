@@ -32,7 +32,7 @@ export default function DonationDialog({ campaignId }: DonationDialogProps) {
         resolver: zodResolver(CreateDonationBody),
         defaultValues: {
             campaign: { id: campaignId },
-            amountTotal: 0,
+            amountTotal: 10000,
             message: "",
         },
     });
