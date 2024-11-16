@@ -2,6 +2,7 @@ import http from "@/lib/http";
 import {
   BeneficiaryListResType,
   BeneficiaryResType,
+  CreateBeneficiaryBodyType,
   UpdateBeneficiaryBodyType,
   UpdateMyBeneficiaryBodyType,
 } from "@/schemas/beneficiary.schema";
@@ -20,6 +21,8 @@ const beneficiaryApi = {
   deleteMyBeneficiary: (id: number) => http.delete(`/me${prefix}/${id}`),
   getUserBeneficiary: (id: number) =>
     http.get<BeneficiaryResType>(`/users/${id}${prefix}`),
+  createUserBeneficiary: (body: CreateBeneficiaryBodyType) =>
+    http.post<BeneficiaryResType>(`${prefix}`, body),
 };
 
 export default beneficiaryApi;

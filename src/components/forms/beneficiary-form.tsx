@@ -15,17 +15,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useQuill } from "react-quilljs";
 import "quill/dist/quill.snow.css";
-
-const formSchema = z.object({
-  situationDetail: z.string(),
-  supportReceived: z
-    .string()
-    .refine((val) => !Number.isNaN(parseInt(val, 10)), {
-      message: "Expected number, received a string",
-    }),
-});
-
-type BeneficiaryFormValues = z.infer<typeof formSchema>;
+import { CreateBeneficiaryBody, CreateBeneficiaryBodyType } from "@/schemas/beneficiary.schema";
+import { useCreateBeneficiary } from "@/queries/useBeneficiary";
+import { toast } from "@/hooks/use-toast";
+import { handleErrorFromApi } from "@/lib/utils";
 
 const InitTextarea = function ({ form }) {
   const { quill, quillRef } = useQuill();
@@ -51,43 +44,31 @@ const InitTextarea = function ({ form }) {
 };
 
 export default function BeneficiaryForm() {
-  const apiURL = process.env.NEXT_PUBLIC_API_ENDPOINT;
-
   const [loading, setLoading] = useState(false);
 
-  const form = useForm<BeneficiaryFormValues>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<CreateBeneficiaryBodyType>({
+    resolver: zodResolver(CreateBeneficiaryBody),
   });
 
-  const onSubmit = async (data: BeneficiaryFormValues) => {
-    const input = document.querySelector(
-      'input[name="situationDetail"]'
-    )?.value;
+  const createBeneficiary = useCreateBeneficiary();
 
-    let situationDetail;
-    if (input?.length < 10) {
-      const label = document.querySelector("#editor-label");
-      if (label) label.value = "Vui lòng nhập tối thiểu 10 ký tự";
+  const onSubmit = async (data: CreateBeneficiaryBodyType) => {
+  
+    try {
+      setLoading(true);
+      await createBeneficiary.mutateAsync(data);
 
-      return false;
-    } else situationDetail = input;
-
-    fetch(`${apiURL}/beneficiaries`, {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer " + process.env.NEXT_PUBLIC_ACCESS_TOKEN,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        situationDetail: situationDetail,
-        supportReceived: data.supportReceived,
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        alert("Gửi thành công!");
-        console.log(res);
-      });
+      toast({
+        title: "Thành công",
+        description: "Tạo mới nguyện vọng thành công!",
+        variant: "default",
+      })
+    } catch (error: any) {
+      console.error("API Error:", error);
+      handleErrorFromApi({ error, setError: form.setError });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
