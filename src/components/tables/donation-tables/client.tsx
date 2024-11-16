@@ -15,7 +15,10 @@ import { DataTablePagination } from "@/components/ui/data-table-pagination";
 import { DataTableComponentType } from "@/components/ui/table/data-table-factory-filter";
 import { getDefaultPaginatedResponse } from "@/schemas/paginate.schema";
 import useQueryConfig from "@/components/tables/donation-tables/donation-query-table";
-import { ReviewDonationOptions } from "../../../types/enum";
+import {
+  AnonymousDonationOptions,
+  ReviewDonationOptions,
+} from "../../../types/enum";
 
 interface Props {
   type: "admin" | "user";
@@ -59,6 +62,14 @@ export const DonationClient = ({ type }: Props) => {
       props: {
         filterKey: "donationDate",
         title: "Ngày duyệt",
+      },
+    },
+    {
+      type: DataTableComponentType.FilterBox,
+      props: {
+        filterKey: "isAnonymous",
+        title: "Tiết lộ",
+        options: AnonymousDonationOptions,
       },
     },
   ];
