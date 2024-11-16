@@ -4,6 +4,12 @@ import { PaginatedResponseSchema } from "./paginate.schema";
 import { BeneficiarySchema } from "./beneficiary.schema";
 import { CategorySchema } from "./category.schema";
 
+export const BasicCampaignSchema = z.object({
+  id: z.number(),
+  code: z.string(),
+  name: z.string(),
+});
+
 export const CampaignSchema = z.object({
   id: z.number(),
   beneficiary: BeneficiarySchema,

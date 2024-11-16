@@ -1,7 +1,8 @@
 import { PaginatedResponseSchema } from "@/schemas/paginate.schema";
 import z from "zod";
-import { CampaignSchema } from "./campaign.schema";
+import { BasicCampaignSchema, CampaignSchema } from "./campaign.schema";
 import { ReviewDonationEnum } from "@/types/enum";
+import { BasicUserSchema } from "./user.schema";
 
 export const BeneficiarySchema = z.object({
   id: z.number(),
@@ -47,7 +48,11 @@ export const DonationRes = z.object({
   campaign_id: z.string(),
   amountBase: z.number(),
   amountTotal: z.number(),
-  donationDate: z.date(),
+  donationDate: z.string(),
+  donor: BasicUserSchema.nullish(),
+  campaign: BasicCampaignSchema,
+  status: z.nativeEnum(ReviewDonationEnum),
+  message: z.string(),
 });
 
 export type DonationResType = z.TypeOf<typeof DonationRes>;
