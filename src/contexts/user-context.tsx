@@ -11,7 +11,7 @@ import React, {
 } from "react";
 
 // Define the shape of the user object
-interface CustomUser extends User {
+export interface CustomUser extends User {
   authorities?: Array<string>;
 }
 // Define the state shape
@@ -26,7 +26,13 @@ type UserAction =
 
 // Create a context for user data
 const UserContext = createContext<
-  { state: UserState; dispatch: React.Dispatch<UserAction> } | undefined
+  | {
+      state: UserState;
+      dispatch: React.Dispatch<UserAction>;
+      isSuperAdmin: boolean;
+      setIsSuperAdmin: React.Dispatch<React.SetStateAction<boolean>>;
+    }
+  | undefined
 >(undefined);
 
 // Create a reducer function to manage user state
@@ -46,10 +52,17 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [state, dispatch] = useReducer(userReducer, { user: null });
+  const [isSuperAdmin, setIsSuperAdmin] = useState<boolean>(false);
   useEffect(() => {
     const loadData = async () => {
       const data = await userManager.getUser().then((user) => user);
       if (data) {
+        const authorities = (data?.profile?.authorities as string[]) || [];
+        authorities.some((permission) => {
+          if (permission === "SUPER_ADMIN") {
+            setIsSuperAdmin(true);
+          }
+        });
         dispatch({ type: "SET_USER", payload: data });
       }
 
@@ -58,7 +71,9 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
     loadData();
   }, []);
   return (
-    <UserContext.Provider value={{ state, dispatch }}>
+    <UserContext.Provider
+      value={{ state, dispatch, isSuperAdmin, setIsSuperAdmin }}
+    >
       {children}
     </UserContext.Provider>
   );
@@ -68,6 +83,8 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
 export const useUser = (): {
   state: UserState;
   dispatch: React.Dispatch<UserAction>;
+  isSuperAdmin: boolean;
+  setIsSuperAdmin: React.Dispatch<React.SetStateAction<boolean>>;
 } => {
   const context = useContext(UserContext);
   if (!context) {

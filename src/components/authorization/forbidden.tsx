@@ -4,7 +4,7 @@ const Forbidden = () => {
   const router = useRouter();
 
   const handleGoHome = () => {
-    router.push("/");
+    router.back();
   };
 
   return (
@@ -21,7 +21,7 @@ const Forbidden = () => {
         onClick={handleGoHome}
         className="mt-6 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300"
       >
-        Quay về trang chủ
+        Quay về trang trước
       </button>
     </div>
   );
