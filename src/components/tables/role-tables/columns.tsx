@@ -3,6 +3,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RoleType } from "@/schemas/role.schema";
+import { CheckIcon, X } from "lucide-react";
 
 /**
  * Description: Khai báo columns cho table
@@ -42,6 +43,15 @@ export const columns: ColumnDef<RoleType>[] = [
   {
     accessorKey: "description",
     header: "Mô tả",
+  },
+  {
+    header: "Không thể xóa",
+    cell: ({ row }) =>
+      row.original.name !== "admin" ? (
+        <CheckIcon className="text-green-500" />
+      ) : (
+        <X className="text-red-500" />
+      ),
   },
   {
     id: "actions",

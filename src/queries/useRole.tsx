@@ -1,10 +1,11 @@
 import roleApi from "@/apis/role";
+import { QueryConfig } from "@/hooks/useQueryConfig";
 import { UpdateRoleBodyType } from "@/schemas/role.schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export const useGetRoleListQuery = () => {
+export const useGetRoleListQuery = (queryConfig?: QueryConfig) => {
   return useQuery({
-    queryKey: ["roles"],
+    queryKey: ["roles", queryConfig],
     queryFn: roleApi.getRoleList,
     staleTime: 0,
     enabled: true,
