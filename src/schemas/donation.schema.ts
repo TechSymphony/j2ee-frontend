@@ -23,7 +23,7 @@ export const DonationSchema = z.object({
   donor_id: z.number(),
   campaign_id: z.string(),
   amountBase: z.number(),
-  amountTotlal: z.number(),
+  amountTotal: z.number(),
   donationDate: z.date(),
   frequency: z.number(),
   status: z.number(),
@@ -43,7 +43,6 @@ export type DonationListResType = z.TypeOf<
 // export type DonationListResType = z.TypeOf<typeof DonationListRes>;
 
 export const DonationRes = z.object({
-  id: z.number(),
   donor_id: z.number(),
   campaign_id: z.string(),
   amountBase: z.number(),

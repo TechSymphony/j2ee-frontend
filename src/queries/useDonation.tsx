@@ -28,6 +28,37 @@ export const useGetMyDonationListQuery = (queryConfig?: QueryConfig) => {
     staleTime: 0,
     enabled: true,
   });
+
+};
+
+export const useGetTopListDonationQuery = ({
+  id,
+  enabled,
+}: {
+  id: number;
+  enabled: boolean;
+}) => {
+  return useQuery({
+    queryKey: ["top-donations", id],
+    queryFn: () => donationApi.getTopListDonation(id),
+    staleTime: 3600 * 3600,
+    enabled,
+  });
+};
+
+export const useGetNewListDonationQuery = ({
+  id,
+  enabled,
+}: {
+  id: number;
+  enabled: boolean;
+}) => {
+  return useQuery({
+    queryKey: ["new-donations", id],
+    queryFn: () => donationApi.getNewDonationsList(id),
+    staleTime: 3600 * 3600,
+    enabled,
+  });
 };
 
 export const useAddDonationMutation = () => {
