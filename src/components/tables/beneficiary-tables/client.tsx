@@ -6,8 +6,6 @@ import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { columns } from "./columns";
 import { useGetBeneficiaryList } from "@/queries/useBeneficiary";
-import { useRefetch } from "@/contexts/app-context";
-import { useEffect } from "react";
 import { getDefaultPaginatedResponse } from "@/schemas/paginate.schema";
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
 import { DataTableComponentType } from "@/components/ui/table/data-table-factory-filter";
@@ -18,16 +16,9 @@ export const BeneficiaryClient = () => {
   const router = useRouter();
   const queryConfig = useQueryConfig();
 
-  const { data: beneficiaryData, refetch } = useGetBeneficiaryList(queryConfig);
+  const { data: beneficiaryData } = useGetBeneficiaryList(queryConfig);
 
   const data = beneficiaryData?.payload ?? getDefaultPaginatedResponse;
-
-  const { setTriggerRefetch } = useRefetch();
-
-  useEffect(() => {
-    console.log("fetch lai");
-    setTriggerRefetch(() => refetch);
-  }, [refetch, setTriggerRefetch]);
 
   const filters = [
     {

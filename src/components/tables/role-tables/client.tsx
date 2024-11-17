@@ -1,34 +1,43 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { DataTable } from "@/components/ui/data-table";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { columns } from "./columns";
 import { useGetRoleListQuery } from "@/queries/useRole";
-import { useRefetch } from "@/contexts/app-context";
-import { useEffect } from "react";
+import { DataTableComponentType } from "@/components/ui/table/data-table-factory-filter";
+import { DataTablePagination } from "@/components/ui/data-table-pagination";
+import useQueryConfig from "@/components/tables/role-tables/role-query-table";
+import { getDefaultPaginatedResponse } from "@/schemas/paginate.schema";
+import { useRoutePermission } from "@/hooks/use-route-permission";
 
 export const RoleClient = () => {
   const router = useRouter();
+  const queryConfig = useQueryConfig();
+  const { data: roleData } = useGetRoleListQuery(queryConfig);
+  const data = roleData?.payload ?? getDefaultPaginatedResponse;
 
-  const { data: roleData, refetch } = useGetRoleListQuery();
-  const data = roleData?.payload ?? [];
+  const { requiredPermission, currentRoute, requiresPermission } =
+    useRoutePermission();
 
-  const { setTriggerRefetch } = useRefetch();
+  // Will output "MANAGE_ROLES" when on /dashboard/role
+  console.log({ requiredPermission, currentRoute, requiresPermission });
 
-  useEffect(() => {
-    setTriggerRefetch(() => refetch);
-  }, [refetch, setTriggerRefetch]);
+  const filters = [
+    {
+      type: DataTableComponentType.Search,
+      props: {
+        filterKey: "name",
+        title: "tên chức vụ",
+      },
+    },
+  ];
 
   return (
     <>
       <div className="flex items-start justify-between">
-        <Heading
-          title={`Quản lý chức vụ (${data.length})`}
-          description="Manage roles (Client side table functionalities.)"
-        />
+        <Heading title={`Quản lý chức vụ`} description="" />
 
         <Button
           className="text-xs md:text-sm"
@@ -38,7 +47,12 @@ export const RoleClient = () => {
         </Button>
       </div>
       <Separator />
-      <DataTable searchKey="name" columns={columns} data={data} />
+      <DataTablePagination
+        searchKey="name"
+        columns={columns}
+        data={data}
+        filters={filters}
+      />
     </>
   );
 };

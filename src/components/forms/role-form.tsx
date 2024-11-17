@@ -1,8 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,8 +33,6 @@ import { handleErrorFromApi } from "@/lib/utils";
 import { useRefetch } from "@/contexts/app-context";
 
 export const RoleForm = () => {
-  const pathname = usePathname();
-  console.log("pathname", pathname);
   const params = useParams();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -52,6 +50,10 @@ export const RoleForm = () => {
     enabled: Boolean(updateRoleId),
   });
 
+  const isEditAdminRole = useMemo(() => {
+    return initialData?.payload.name === "admin";
+  }, [initialData]);
+
   const updateRoleMutation = useUpdateRoleMutation();
   const addRoleMutation = useAddRoleMutation();
   const getPermissonListQuery = useGetPermissionListQuery();
@@ -59,9 +61,11 @@ export const RoleForm = () => {
 
   const { triggerRefetch } = useRefetch();
 
-  const title = initialData ? "Edit role" : "Create role";
-  const description = initialData ? "Edit a role." : "Add a new role";
-  const action = initialData ? "Save changes" : "Create";
+  const title = initialData ? "Chỉnh sửa chức vụ" : "Tạo chức vụ";
+  const description = initialData
+    ? "Chỉnh sửa một chức vụ"
+    : "Thêm một chức vụ mới";
+  const action = initialData ? "Lưu thay đổi" : "Tạo mới";
 
   /**
    * Description: Khai báo type với schema validation cho form
@@ -149,7 +153,12 @@ export const RoleForm = () => {
                 <FormItem>
                   <FormLabel htmlFor="name">Tên</FormLabel>
                   <FormControl>
-                    <Input id="name" disabled={loading} {...field} />
+                    <Input
+                      id="name"
+                      disabled={loading}
+                      {...field}
+                      readOnly={isEditAdminRole}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -162,7 +171,12 @@ export const RoleForm = () => {
                 <FormItem>
                   <FormLabel htmlFor="description">Mô tả</FormLabel>
                   <FormControl>
-                    <Input id="description" disabled={loading} {...field} />
+                    <Input
+                      id="description"
+                      disabled={loading}
+                      {...field}
+                      readOnly={isEditAdminRole}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -201,6 +215,7 @@ export const RoleForm = () => {
                                     );
                                   }
                                 }}
+                                disabled={isEditAdminRole}
                               />
 
                               <FormLabel

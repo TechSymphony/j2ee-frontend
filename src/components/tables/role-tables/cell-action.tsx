@@ -12,7 +12,7 @@ import { toast } from "@/hooks/use-toast";
 import { handleErrorFromApi } from "@/lib/utils";
 import { useDeleteRoleMutation } from "@/queries/useRole";
 import { RoleType } from "@/schemas/role.schema";
-import { Edit, MoreHorizontal, Trash } from "lucide-react";
+import { Edit, Eye, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -63,15 +63,24 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Hành động</DropdownMenuLabel>
-
-          <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/role/${data.id}`)}
-          >
-            <Edit className="mr-2 h-4 w-4" /> Cập nhật
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setOpen(true)}>
-            <Trash className="mr-2 h-4 w-4" /> Xóa
-          </DropdownMenuItem>
+          {data && data.name !== "admin" ? (
+            <>
+              <DropdownMenuItem
+                onClick={() => router.push(`/dashboard/role/${data.id}`)}
+              >
+                <Edit className="mr-2 h-4 w-4" /> Cập nhật
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setOpen(true)}>
+                <Trash className="mr-2 h-4 w-4" /> Xóa
+              </DropdownMenuItem>
+            </>
+          ) : (
+            <DropdownMenuItem
+              onClick={() => router.push(`/dashboard/role/${data.id}`)}
+            >
+              <Eye className="mr-2 h-4 w-4" /> Đọc
+            </DropdownMenuItem>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </>
