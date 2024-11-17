@@ -3,8 +3,20 @@ import { ColumnDef } from "@tanstack/react-table";
 // import { CellAction } from "./cell-action";
 // import { Checkbox } from "@/components/ui/checkbox";
 import { DonationType } from "@/schemas/donation.schema";
-import { ReviewFrequencyEnum, ReviewFrequencyOptions } from "@/types/enum";// Import Select components
-import { useState } from "react";
+import {
+  ReviewDonationOptions,
+  ReviewFrequencyEnum,
+  ReviewFrequencyOptions,
+} from "@/types/enum"; // Import Select components
+import { useEffect, useState } from "react";
+import { ReviewDonationEnum } from "../../../types/enum";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { InfoCircledIcon } from "@radix-ui/react-icons";
+import { CellAction } from "./cell-action";
 
 /**
  * Description: Khai báo columns cho table
@@ -37,16 +49,65 @@ export const columns: ColumnDef<DonationType>[] = [
     header: "ID",
   },
   {
-    accessorKey: "donor.fullName",
-    header: "Tên người ủng hộ",
-  },
-  {
     accessorKey: "campaign.name",
     header: "Chiến dịch",
   },
   {
-    accessorKey: "amountBase",
-    header: "Số tiền cơ bản",
+    accessorKey: "donor.fullName",
+    header: "Tên người ủng hộ",
+  },
+  // {
+  //   accessorKey: "amountBase",
+  //   header: "Số tiền cơ bản",
+  // },
+  {
+    accessorKey: "status",
+    header: "Trạng thái",
+    cell: ({ row }) => {
+      const status =
+        ReviewDonationEnum[
+          row.original.status as keyof typeof ReviewDonationEnum
+        ];
+
+      const statusOption = ReviewDonationOptions.find(
+        (option) => option.value === status
+      );
+
+      if (status === ReviewDonationEnum.COMPLETED) {
+        return (
+          <span className="text-green-500">
+            {statusOption ? statusOption.label : "Không tìm thấy"}
+          </span>
+        );
+      }
+      if (status === ReviewDonationEnum.CANCELLED) {
+        return (
+          <span className="text-red-500">
+            {statusOption ? statusOption.label : "Không tìm thấy"}
+          </span>
+        );
+      }
+      if (status === ReviewDonationEnum.HOLDING) {
+        return (
+          <span>
+            <Popover>
+              <PopoverTrigger>
+                <span className="whitespace-nowrap flex gap-1 items-center">
+                  {statusOption ? statusOption.label : "Không tìm thấy"}{" "}
+                  <InfoCircledIcon></InfoCircledIcon>
+                </span>
+              </PopoverTrigger>
+              <PopoverContent>
+                <p className="whitespace-nowrap">
+                  {statusOption ? statusOption.tooltip : ""}
+                </p>
+              </PopoverContent>
+            </Popover>
+          </span>
+        );
+      }
+      return statusOption ? statusOption.label : "Không tìm thấy";
+    },
   },
   {
     accessorKey: "amountTotal",
@@ -61,10 +122,18 @@ export const columns: ColumnDef<DonationType>[] = [
     header: "Kỳ hạn",
     cell: ({ row }) => {
       const frequency = useState<ReviewFrequencyEnum>(
-        ReviewFrequencyEnum[row.original.frequency as keyof typeof ReviewFrequencyEnum]
+        ReviewFrequencyEnum[
+          row.original.frequency as keyof typeof ReviewFrequencyEnum
+        ]
       );
-      const frequencyOption = ReviewFrequencyOptions.find(option => option.value === frequency[0]);
+      const frequencyOption = ReviewFrequencyOptions.find(
+        (option) => option.value === frequency[0]
+      );
       return frequencyOption ? frequencyOption.label : "Không tìm thấy";
     },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => <CellAction data={row.original} />,
   },
 ];

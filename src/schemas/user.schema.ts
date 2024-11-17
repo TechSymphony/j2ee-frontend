@@ -1,6 +1,14 @@
 import z from "zod";
 import { RoleSchema } from "./role.schema";
 
+export const BasicUserSchema = z.object({
+  id: z.number(),
+  fullName: z.string(),
+  username: z.string(),
+  email: z.string(),
+  phone: z.string().optional(),
+});
+
 export const UserSchema = z.object({
   id: z.number(),
   fullName: z.string(),

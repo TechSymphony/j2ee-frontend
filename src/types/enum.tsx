@@ -27,3 +27,29 @@ export const ReviewFrequencyOptions = [
   { value: ReviewFrequencyEnum.QUARTERLY, label: "Hàng quý" },
   { value: ReviewFrequencyEnum.YEARLY, label: "Hàng năm" },
 ];
+
+export enum ReviewDonationEnum {
+  IN_PROGRESS = 0,
+  HOLDING = 1,
+  COMPLETED = 2,
+  CANCELLED = 3,
+}
+
+export const ReviewDonationOptions = [
+  { value: ReviewDonationEnum.IN_PROGRESS, label: "Đang xử lý" },
+  {
+    value: ReviewDonationEnum.HOLDING,
+    label: "Đang tạm giữ",
+    tooltip: "Hệ thống không thể xác thực tự động",
+  },
+  { value: ReviewDonationEnum.COMPLETED, label: "Đã hoàn thành" },
+  { value: ReviewDonationEnum.CANCELLED, label: "Đã huỷ" },
+];
+
+export const AnonymousDonationOptions = [
+  { value: "true", label: "Ẩn danh" },
+  {
+    value: "false",
+    label: "Công khai",
+  },
+];

@@ -21,6 +21,7 @@ import {
 } from "../ui/table/data-table-filter-box-hiarachy";
 import { useGetCategoryMenus } from "@/queries/useCategory";
 import { CategoryMenu } from "@/schemas/category.schema";
+import DonationDialog from "../donation/donation-dialog";
 // import { CampaignType } from "@/schemas/campaign.schema";
 
 const Campaign = lazy(() => import("@/components/campaign/campaign"));
@@ -96,8 +97,17 @@ export default function CampaignList() {
             {campaigns &&
               campaigns.map((campaign, index) => (
                 <Suspense key={index} fallback={<div>DD...</div>}>
-                  <div onClick={() => router.push(`/campaign/${campaign.id}`)}>
-                    <Campaign data={campaign} />
+                  <div className="rounded-xl border bg-background ">
+                    <Campaign
+                      data={campaign}
+                      onClick={() => router.push(`/campaign/${campaign.id}`)}
+                    />
+                    <div className="flex grow items-center justify-end">
+                      <DonationDialog
+                        campaignId={campaign.id}
+                        campaignName={campaign.name}
+                      ></DonationDialog>
+                    </div>
                   </div>
                 </Suspense>
               ))}

@@ -1,13 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
+import DonationDialog from "../donation/donation-dialog";
+import router from "next/router";
+import { CampaignType } from "@/schemas/campaign.schema";
 
 interface CampaignProps {
-  data: {
-    [key: string]: any;
-  };
+  data: CampaignType;
+  onClick: () => void;
 }
 
-export default function Campaign({ data }: CampaignProps) {
+export default function Campaign({ data, onClick }: CampaignProps) {
   // Tính phần trăm tiến độ chiến dịch
   const percentage = data.targetAmount
     ? (data.currentAmount / data.targetAmount) * 100
@@ -27,9 +29,10 @@ export default function Campaign({ data }: CampaignProps) {
   // Hiển thị chiến dịch
   return (
     <div
-      className="cursor-pointer group relative flex flex-col flex-nowrap overflow-hidden rounded-xl 
-        border border-gray-200 bg-white text-gray-700 transition md:hover:text-momo
-        shadow-sm hover:shadow-xl "
+      className="cursor-pointer group relative flex flex-col flex-nowrap overflow-hidden rounded-t-lg
+        transition md:hover:text-momo
+        shadow-sm hover:shadow-xl min-h-[440px]"
+      onClick={onClick}
     >
       <div className="relative w-full pt-[50%]">
         <Image
@@ -218,13 +221,6 @@ export default function Campaign({ data }: CampaignProps) {
               <div className=" text-sm font-bold text-gray-600">
                 {percentage}%
               </div>
-            </div>
-            <div className="flex grow items-center justify-end">
-              <Link href={"/"} className="overflow-hidden">
-                <span className="inline-block py-2 px-4 text-pink-darker font-bold bg-white hover:bg-slate-100 outline-none border border-pink-darker rounded-md text-center ">
-                  Quyên góp
-                </span>
-              </Link>
             </div>
           </div>
         </div>
