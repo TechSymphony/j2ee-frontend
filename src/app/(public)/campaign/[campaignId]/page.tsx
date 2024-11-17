@@ -7,6 +7,7 @@ import CampaignList from "@/components/campaign/campaign-list";
 import { useParams } from "next/navigation";
 import { useGetCampaignQuery } from "@/queries/useCampaign";
 import DonationDialog from "@/components/donation/donation-dialog";
+import { useGetTopListDonationQuery, useGetNewListDonationQuery } from "@/queries/useDonation";
 
 // import Link from 'next/link'
 
@@ -18,6 +19,32 @@ export default function CampaignDetail() {
     id: dataCampaignId,
     enabled: Boolean(dataCampaignId),
   });
+
+  const { data: topDonation } = useGetTopListDonationQuery({
+    id: dataCampaignId,
+    enabled: Boolean(dataCampaignId),
+  });
+
+  const { data: newDonation } = useGetNewListDonationQuery({
+    id: dataCampaignId,
+    enabled: Boolean(dataCampaignId),
+  });
+
+  const donations = topDonation?.payload ?? [];
+  const newDonations = newDonation?.payload ?? [];
+
+  const aggregatedDonations = donations.reduce((acc, donation) => {
+    const donorName = donation.donor.fullName;
+    if (!acc[donorName]) {
+      acc[donorName] = { ...donation };
+    } else {
+      acc[donorName].amountTotal += donation.amountTotal;
+    }
+    return acc;
+  }, {});
+
+  const aggregatedDonationsArray = Object.values(aggregatedDonations);
+
 
   const campaign = initialData?.payload ?? {
     id: 0,
@@ -125,63 +152,23 @@ export default function CampaignDetail() {
               {/* Nhà hảo tâm hàng đầu */}
               <div className="bg-white p-6 rounded-lg shadow">
                 <h2 className="text-xl font-semibold mb-4">
-                  Nhà hảo tâm hàng đầu
+                  Top 10 Nhà hảo tâm hàng đầu
                 </h2>
                 <ul className="space-y-2">
-                  {[
-                    {
-                      name: "Tạ Quý Đạt",
-                      amount: "1.000.000đ",
-                    },
-                    {
-                      name: "Nhà hảo tâm",
-                      amount: "220.000đ",
-                    },
-                    {
-                      name: "Đoàn Thị Thu Huyền",
-                      amount: "120.000đ",
-                    },
-                    {
-                      name: "Trương Quang Vũ",
-                      amount: "100.000đ",
-                    },
-                    {
-                      name: "Nguyễn Văn Trường",
-                      amount: "100.000đ",
-                    },
-                    {
-                      name: "Phạm Vũ Thảo Ly",
-                      amount: "100.000đ",
-                    },
-                    {
-                      name: "Nguyễn Trương Ngọc Thy",
-                      amount: "100.000đ",
-                    },
-                    {
-                      name: "Nguyễn Khôi",
-                      amount: "100.000đ",
-                    },
-                    {
-                      name: "Võ Văn Trà Win",
-                      amount: "100.000đ",
-                    },
-                    {
-                      name: "Đào Đức Vinh",
-                      amount: "100.000đ",
-                    },
-                  ].map((donor, index) => (
+                  {Array.isArray(aggregatedDonationsArray) && aggregatedDonationsArray.map((donation, index) => (
                     <li
                       key={index}
-                      className="flex justify-between items-center"
+                      className="flex items-center justify-between"
                     >
-                      <span>{donor.name}</span>
-                      <span className="font-semibold">{donor.amount}</span>
+                      <div className="flex items-center">
+                        <span>{donation.donor.fullName}</span>
+                      </div>
+                      <span className="font-semibold">
+                        {donation.amountTotal.toLocaleString("de-DE")}đ
+                      </span>
                     </li>
                   ))}
                 </ul>
-                <Button variant="outline" className="w-full mt-4">
-                  Xem tất cả
-                </Button>
               </div>
               {/* Nhà hảo tâm mới nhất */}
               <div className="bg-white p-6 rounded-lg shadow">
@@ -189,75 +176,20 @@ export default function CampaignDetail() {
                   Nhà hảo tâm mới nhất
                 </h2>
                 <ul className="space-y-2">
-                  {[
-                    {
-                      initials: "NL",
-                      name: "Trần Thị Ngọc Lan",
-                      amount: "1.311đ",
-                    },
-                    {
-                      initials: "VD",
-                      name: "Trần Việt Dũng",
-                      amount: "1.000đ",
-                    },
-                    {
-                      initials: "VK",
-                      name: "Bùi Văn Kiên",
-                      amount: "1.000đ",
-                    },
-                    {
-                      initials: "TV",
-                      name: "Trần Lê Trường Vĩ",
-                      amount: "2.000đ",
-                    },
-                    {
-                      initials: "NN",
-                      name: "Nguyễn Hữu Nghĩa",
-                      amount: "1.000đ",
-                    },
-                    {
-                      initials: "NT",
-                      name: "Nhà hảo tâm",
-                      amount: "10.000đ",
-                    },
-                    {
-                      initials: "LN",
-                      name: "Lê Ái Nhân",
-                      amount: "10.000đ",
-                    },
-                    {
-                      initials: "NL",
-                      name: "Nguyễn Thị Thu Lê",
-                      amount: "1.000đ",
-                    },
-                    {
-                      initials: "QV",
-                      name: "Liên Quang Vinh",
-                      amount: "1.000đ",
-                    },
-                    {
-                      initials: "DP",
-                      name: "Thái Duy Phong",
-                      amount: "1.000đ",
-                    },
-                  ].map((donor, index) => (
+                  {Array.isArray(newDonations) && newDonations.map((donation, index) => (
                     <li
                       key={index}
                       className="flex items-center justify-between"
                     >
                       <div className="flex items-center">
-                        <Avatar className="w-8 h-8 mr-2">
-                          <AvatarFallback>{donor.initials}</AvatarFallback>
-                        </Avatar>
-                        <span>{donor.name}</span>
+                        <span>{donation.donor.fullName}</span>
                       </div>
-                      <span className="font-semibold">{donor.amount}</span>
+                      <span className="font-semibold">
+                        {donation.amountBase.toLocaleString("de-DE")}đ
+                      </span>
                     </li>
                   ))}
                 </ul>
-                <Button variant="outline" className="w-full mt-4">
-                  Xem tất cả
-                </Button>
               </div>
             </div>
             {/* Right content */}
