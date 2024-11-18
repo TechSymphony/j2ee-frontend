@@ -34,8 +34,12 @@ import {
 } from "@/schemas/donation.schema";
 import { useExportDonationMutation } from "@/queries/useDonation";
 import { handleErrorFromApi } from "@/lib/utils";
+import { toast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 export const ExportDonationDialog = () => {
+  const [open, setOpen] = useState(false);
+
   const getCampaignListQuery = useGetCampaignListQuery();
   const items = getCampaignListQuery.data?.payload.content;
 
@@ -59,7 +63,7 @@ export const ExportDonationDialog = () => {
       if (res?.payload) {
         const blob = new Blob([res.payload], { type: "application/pdf" }); // Set the MIME type
         const url = window.URL.createObjectURL(blob);
-        console.log(blob, "hi");
+
         // Create an anchor element to trigger the download
         const a = document.createElement("a");
         a.href = url;
@@ -72,6 +76,11 @@ export const ExportDonationDialog = () => {
         // Cleanup
         a.remove();
         window.URL.revokeObjectURL(url);
+
+        toast({
+          description: "Xuất danh sách thành công",
+          duration: 5000,
+        });
       }
     } catch (error: any) {
       handleErrorFromApi({ error, setError: form.setError });
@@ -80,7 +89,7 @@ export const ExportDonationDialog = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button variant="outline">Xuất báo cáo</Button>
           </DialogTrigger>
@@ -144,7 +153,11 @@ export const ExportDonationDialog = () => {
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit" onClick={form.handleSubmit(onSubmit)}>
+              <Button
+                type="submit"
+                disabled={exportDonationList.isPending}
+                onClick={form.handleSubmit(onSubmit)}
+              >
                 Xuất danh sách
               </Button>
             </DialogFooter>

@@ -43,3 +43,10 @@ export const handleErrorFromApi = ({
     });
   }
 };
+
+export const logFormData = (formData: FormData) => {
+  const entries = Array.from(formData.entries());
+  entries.forEach(([key, value]) => {
+    console.log(key, value);
+  });
+};

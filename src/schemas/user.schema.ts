@@ -16,7 +16,9 @@ export const UserSchema = z.object({
   phone: z.string().optional(),
   createdAt: z.date(),
   updatedAt: z.date(),
-  role: RoleSchema,
+  role: RoleSchema.nullish(),
+  username: z.string(),
+  isStudent: z.boolean(),
 });
 
 export type UserType = z.TypeOf<typeof UserSchema>;

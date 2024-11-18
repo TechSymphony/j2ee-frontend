@@ -21,7 +21,6 @@ const donationApi = {
     http.get<DonationResType>(`/campaigns/${id}/donations`),
   exportDonationList: (body: ExportDonationBodyType) =>
     http.post<Blob>(`${prefix}/export`, body, {
-      // contentType: "application/pdf",
       isBlob: true,
     }),
 };

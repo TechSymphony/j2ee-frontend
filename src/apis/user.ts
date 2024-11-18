@@ -26,9 +26,7 @@ const userApi = {
     http.put<null>(`${prefix}/${id}/reset-password`, body),
   changePassword: (body: ChangePasswordBodyType) =>
     http.put<null>(`${prefix}/change-password`, body),
-  importStudent: (body: ImportStudentBodyType) =>
-    http.post(`${prefix}/import/student`, body, {
-      contentType: "multipart/form-data",
-    }),
+  importStudent: (body: FormData) =>
+    http.postWithFiles<UserListResType>(`${prefix}/import/student`, body),
 };
 export default userApi;

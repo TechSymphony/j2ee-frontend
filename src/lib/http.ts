@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import envConfig from "@/config";
 import { userManager } from "@/lib/auth";
+import { logFormData } from "./utils";
 
 type CustomOptions = Omit<RequestInit, "method"> & {
   baseUrl?: string | undefined;
-  contentType?: string | undefined;
   isBlob?: boolean;
 };
 
@@ -55,8 +55,6 @@ function convertBody(
   options?: CustomOptions | undefined,
   optionContentType?: string
 ) {
-  if (!options?.body) return undefined;
-
   // Get the Content-Type from the headers
   const contentType = optionContentType || "";
 
@@ -75,6 +73,7 @@ function convertBody(
     // If Content-Type is multipart/form-data, handle form data (we'll assume it's a Blob/File)
     else if (contentType === "multipart/form-data") {
       body = options.body instanceof FormData ? options.body : new FormData();
+      logFormData(body);
     }
     // For other content types, just pass the body as is
     else {
@@ -83,21 +82,23 @@ function convertBody(
   } else {
     body = undefined;
   }
-
+  console.log(contentType, body, "mybody");
   return body;
 }
-
+interface BaseHeader {
+  Authorization?: string;
+  "Content-Type"?: string;
+}
 const request = async <Response>(
   method: "GET" | "POST" | "PUT" | "DELETE",
   url: string,
   options?: CustomOptions | undefined
 ) => {
-  const baseHeaders = {
-    "Content-Type": options?.contentType ?? "application/json",
+  const baseHeaders: BaseHeader = {
     Authorization: "",
   };
 
-  const body = convertBody(options, baseHeaders["Content-Type"]);
+  const body = convertBody(options, options?.headers?.["Content-Type"] ?? "");
   const user = await userManager.getUser().then((user) => user);
   const accessToken = user?.access_token;
 
@@ -142,7 +143,6 @@ const request = async <Response>(
   // Check if the response is JSON or a binary file (e.g., PDF)
   const contentType = res.headers.get("Content-Type");
   let payload: Response;
-  console.log(baseHeaders, contentType, res, "hi");
 
   // Handle JSON response
   if (contentType?.includes("application/json")) {
@@ -180,32 +180,58 @@ const request = async <Response>(
   return data;
 };
 
+const withDefaultJsonHeaders = (options?: Omit<CustomOptions, "body">) => {
+  const headers = {
+    "Content-Type": "application/json",
+    ...(options?.headers || {}),
+  };
+  return { ...options, headers };
+};
+
 const http = {
   get<Response>(
     url: string,
     options?: Omit<CustomOptions, "body"> | undefined
   ) {
-    return request<Response>("GET", url, options);
+    return request<Response>("GET", url, withDefaultJsonHeaders(options));
   },
   post<Response>(
     url: string,
     body: any,
     options?: Omit<CustomOptions, "body"> | undefined
   ) {
-    return request<Response>("POST", url, { ...options, body });
+    return request<Response>("POST", url, {
+      ...withDefaultJsonHeaders(options),
+      body,
+    });
   },
   put<Response>(
     url: string,
     body: any,
     options?: Omit<CustomOptions, "body"> | undefined
   ) {
-    return request<Response>("PUT", url, { ...options, body });
+    return request<Response>("PUT", url, {
+      ...withDefaultJsonHeaders(options),
+      body,
+    });
   },
   delete<Response>(
     url: string,
     options?: Omit<CustomOptions, "body"> | undefined
   ) {
-    return request<Response>("DELETE", url, { ...options });
+    return request<Response>("DELETE", url, {
+      ...withDefaultJsonHeaders(options),
+    });
+  },
+  postWithFiles<Response>(
+    url: string,
+    body: any,
+    options?: Omit<CustomOptions, "body"> | undefined
+  ) {
+    return request<Response>("POST", url, {
+      ...options,
+      body,
+    });
   },
 };
 
