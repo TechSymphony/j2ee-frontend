@@ -1,23 +1,41 @@
 "use client";
-import { Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger } from "../ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
-import { useGetCampaignListQuery } from '../../queries/useCampaign';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { useGetCampaignListQuery } from "../../queries/useCampaign";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ExportDonationBody, ExportDonationBodyType } from "@/schemas/donation.schema";
+import {
+  ExportDonationBody,
+  ExportDonationBodyType,
+} from "@/schemas/donation.schema";
 import { useExportDonationMutation } from "@/queries/useDonation";
+import { handleErrorFromApi } from "@/lib/utils";
 
 export const ExportDonationDialog = () => {
-
   const getCampaignListQuery = useGetCampaignListQuery();
   const items = getCampaignListQuery.data?.payload.content;
 
@@ -36,19 +54,32 @@ export const ExportDonationDialog = () => {
       ...data,
     };
 
-    const res = await exportDonationList.mutateAsync(body);
+    try {
+      const res = await exportDonationList.mutateAsync(body);
+      if (res?.payload) {
+        const blob = new Blob([res.payload], { type: "application/pdf" }); // Set the MIME type
+        const url = window.URL.createObjectURL(blob);
+        console.log(blob, "hi");
+        // Create an anchor element to trigger the download
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "donation-list.pdf";
 
-    if (res?.payload) {
-      const url = window.URL.createObjectURL(res?.payload);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = "donation-list.pdf";
-      a.click();
+        // Append the anchor to the body (optional, but safer)
+        document.body.appendChild(a);
+        a.click();
+
+        // Cleanup
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      }
+    } catch (error: any) {
+      handleErrorFromApi({ error, setError: form.setError });
     }
-  }
+  };
   return (
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <Dialog>
           <DialogTrigger asChild>
             <Button variant="outline">Xuất báo cáo</Button>
@@ -75,7 +106,10 @@ export const ExportDonationDialog = () => {
                           </SelectTrigger>
                           <SelectContent>
                             {items?.map((item) => (
-                              <SelectItem key={item.id} value={item.id.toString()}>
+                              <SelectItem
+                                key={item.id}
+                                value={item.id.toString()}
+                              >
                                 {item.name}
                               </SelectItem>
                             ))}
@@ -97,7 +131,11 @@ export const ExportDonationDialog = () => {
                     <FormItem>
                       <FormLabel>Xuất danh sách chỉ sinh viên? </FormLabel>
                       <FormControl>
-                        <Checkbox id="type" required={false} onCheckedChange={field.onChange} />
+                        <Checkbox
+                          id="type"
+                          required={false}
+                          onCheckedChange={field.onChange}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -106,11 +144,13 @@ export const ExportDonationDialog = () => {
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit" onClick={form.handleSubmit(onSubmit)}>Xuất danh sách</Button>
+              <Button type="submit" onClick={form.handleSubmit(onSubmit)}>
+                Xuất danh sách
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
-        </form>
+      </form>
     </Form>
-  )
-}
+  );
+};

@@ -1,20 +1,32 @@
-import { Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger } from "../ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 import { Button } from "../ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
-import { ImportStudentBody, ImportStudentBodyType } from "@/schemas/user.schema";
+import {
+  ImportStudentBody,
+  ImportStudentBodyType,
+} from "@/schemas/user.schema";
 import { useImportStudentMutation } from "@/queries/useUser";
+import { handleErrorFromApi } from "@/lib/utils";
 
 export function ImportStudentDialog() {
-
   const form = useForm<ImportStudentBodyType>({
     resolver: zodResolver(ImportStudentBody),
   });
@@ -24,23 +36,32 @@ export function ImportStudentDialog() {
   const importStudentMutation = useImportStudentMutation();
 
   const onSubmit = async (data: ImportStudentBodyType) => {
-    
-    const element = document.getElementById("file") as HTMLInputElement;
-    const file = element.files![0];
-  
-    const formData = new FormData();
-    formData.append("file", file);
-  
-    console.log(formData);
-    console.log(file);
+    // const element = document.getElementById("file") as HTMLInputElement;
+    // const file = element.files![0];
 
-    const res = await importStudentMutation.mutateAsync(data);
-    console.log(res);
-  }
+    // const formData = new FormData();
+    // formData.append("file", file);
+
+    // console.log(formData);
+    // console.log(file);
+    const formData = new FormData();
+    formData.append("file", data.file[0]); // Assuming 'file' is an array with a single file in FileList
+    console.log(data, data.file[0], formData);
+
+    try {
+      const res = await importStudentMutation.mutateAsync(formData);
+      console.log(res);
+
+      if (res?.payload) {
+      }
+    } catch (error: any) {
+      handleErrorFromApi({ error, setError: form.setError });
+    }
+  };
 
   return (
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <Dialog>
           <DialogTrigger asChild>
             <Button variant="outline">Nhập danh sách sinh viên</Button>
@@ -70,11 +91,13 @@ export function ImportStudentDialog() {
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit" onClick={form.handleSubmit(onSubmit)}>Nhập danh sách</Button>
+              <Button type="submit" onClick={form.handleSubmit(onSubmit)}>
+                Nhập danh sách
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
-        </form>
+      </form>
     </Form>
-  )
+  );
 }

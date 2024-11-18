@@ -69,3 +69,10 @@ export const useDeleteRoleMutation = () => {
     },
   });
 };
+
+export const useGetRoleOptionsQuery = () => {
+  return useQuery({
+    queryKey: ["roles"],
+    queryFn: roleApi.getRoleOptions,
+  });
+};

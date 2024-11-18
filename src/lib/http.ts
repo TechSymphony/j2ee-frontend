@@ -4,6 +4,8 @@ import { userManager } from "@/lib/auth";
 
 type CustomOptions = Omit<RequestInit, "method"> & {
   baseUrl?: string | undefined;
+  contentType?: string | undefined;
+  isBlob?: boolean;
 };
 
 const ENTITY_ERROR_STATUS = 422;
@@ -49,20 +51,56 @@ export class EntityError extends HttpError {
     this.payload = payload;
   }
 }
+function convertBody(
+  options?: CustomOptions | undefined,
+  optionContentType?: string
+) {
+  if (!options?.body) return undefined;
+
+  // Get the Content-Type from the headers
+  const contentType = optionContentType || "";
+
+  let body;
+
+  // Check if body exists and handle different types
+  if (options?.body) {
+    // If Content-Type is application/json, stringify the body
+    if (contentType === "application/json") {
+      body = JSON.stringify(options.body);
+    }
+    // If the body is already a Blob or File, keep it as is
+    else if (options.body instanceof Blob || options.body instanceof File) {
+      body = options.body;
+    }
+    // If Content-Type is multipart/form-data, handle form data (we'll assume it's a Blob/File)
+    else if (contentType === "multipart/form-data") {
+      body = options.body instanceof FormData ? options.body : new FormData();
+    }
+    // For other content types, just pass the body as is
+    else {
+      body = options.body;
+    }
+  } else {
+    body = undefined;
+  }
+
+  return body;
+}
 
 const request = async <Response>(
   method: "GET" | "POST" | "PUT" | "DELETE",
   url: string,
   options?: CustomOptions | undefined
 ) => {
-  const body = options?.body ? JSON.stringify(options.body) : undefined;
+  const baseHeaders = {
+    "Content-Type": options?.contentType ?? "application/json",
+    Authorization: "",
+  };
+
+  const body = convertBody(options, baseHeaders["Content-Type"]);
   const user = await userManager.getUser().then((user) => user);
   const accessToken = user?.access_token;
 
-  const baseHeaders = {
-    "Content-Type": "application/json",
-    Authorization: "",
-  };
   if (accessToken) {
     // fix bug vì nếu không đăng nhập Bearer rỗng sẽ khiến hệ thống tưởng đang bị hack
     baseHeaders.Authorization = `Bearer ${accessToken}`;
@@ -90,7 +128,7 @@ const request = async <Response>(
    */
 
   const params: URLSearchParams = new URL(window.location.href).searchParams;
-  // console.log(fullUrl + "?" + params.toString());
+
   const res = await fetch(fullUrl + "?" + params.toString(), {
     ...options,
     headers: {
@@ -101,7 +139,22 @@ const request = async <Response>(
     method,
   });
 
-  const payload: Response = res.status === NO_CONTENT ? {} : await res.json();
+  // Check if the response is JSON or a binary file (e.g., PDF)
+  const contentType = res.headers.get("Content-Type");
+  let payload: Response;
+  console.log(baseHeaders, contentType, res, "hi");
+
+  // Handle JSON response
+  if (contentType?.includes("application/json")) {
+    payload = res.status === NO_CONTENT ? {} : await res.json();
+  }
+  // Handle binary file response (e.g., PDF)
+  else if (contentType?.includes("application/pdf") || options?.isBlob) {
+    const blob = await res.blob();
+    payload = blob as unknown as Response;
+  } else {
+    throw new Error(`Unexpected content type: ${contentType}`);
+  }
 
   const data = {
     status: res.status,

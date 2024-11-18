@@ -10,13 +10,11 @@ import {
   ChangePasswordBodyType,
   ImportStudentBodyType,
 } from "@/schemas/user.schema";
-import { RoleListResType } from "@/schemas/role.schema";
 
 const prefix = "/users";
 
 const userApi = {
   getUserList: () => http.get<UserListResType>(prefix),
-  getRoleList: () => http.get<RoleListResType>("/roles"),
   addUser: (body: CreateUserBodyType) => http.post<UserResType>(prefix, body),
   updateUser: (id: number, body: UpdateUserBodyType) =>
     http.put<UserResType>(`${prefix}/${id}`, body),
@@ -30,7 +28,7 @@ const userApi = {
     http.put<null>(`${prefix}/change-password`, body),
   importStudent: (body: ImportStudentBodyType) =>
     http.post(`${prefix}/import/student`, body, {
-      headers: { "Content-Type": "multipart/form-data" },
+      contentType: "multipart/form-data",
     }),
 };
 export default userApi;
