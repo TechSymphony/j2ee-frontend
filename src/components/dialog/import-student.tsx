@@ -7,85 +7,40 @@ import { Dialog,
     DialogTrigger } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
-import { toast } from "@/hooks/use-toast";
-import http from "@/lib/http";
-
-function checkFileType(file: File) {
-    console.log(file);
-    console.log(file.name);
-    if (file?.name) {
-        const fileType = file.name.split(".").pop();
-        console.log(fileType);
-        if (fileType === "xlsx" || fileType === "xls") return true;
-    }
-    return false;
-}
-
-const formSchema = z.object({
-    file: z.instanceof(FileList).optional(),
-  });
-
-type ImportStudentFormValues = z.infer<typeof formSchema>;
-
-const onSubmit = async (data: z.infer<typeof formSchema>) => {
-
-    console.log(data)
-  
-  const element = document.getElementById("file") as HTMLInputElement;
-  const file = element.files![0];
-
-  const formData = new FormData();
-  formData.append("file", file);
-
-  console.log(formData);
-  
-  
-    console.log(file);
-
-  http.post(`/users/import/student`, formData).then(res => {
-    console.log(res);
-  });
-
-//   let url;
-//   if (student_only) {
-//     url = `${apiURL}/donations/export?type=student_only&`;
-//   } else {
-//     url = `${apiURL}/donations/export?`;
-//   }
-  
-
-
-//   fetch(url + new URLSearchParams({
-//     campaign_id: campaignId
-//   }).toString(), {
-//     method: "GET",
-//     headers: {
-//       "Authorization": "Bearer " + process.env.NEXT_PUBLIC_ACCESS_TOKEN
-//     }
-//   }).then(res => res.blob()).then(blob => {
-//     const url = window.URL.createObjectURL(blob);
-//     const a = document.createElement('a');
-//     a.href = url;
-//     a.download = "donation-list.pdf";
-//     a.click();
-//   }).catch(err => console.log(err));
-}
+import { ImportStudentBody, ImportStudentBodyType } from "@/schemas/user.schema";
+import { useImportStudentMutation } from "@/queries/useUser";
 
 export function ImportStudentDialog() {
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<ImportStudentBodyType>({
+    resolver: zodResolver(ImportStudentBody),
   });
 
   const fileRef = form.register("file");
 
+  const importStudentMutation = useImportStudentMutation();
+
+  const onSubmit = async (data: ImportStudentBodyType) => {
+    
+    const element = document.getElementById("file") as HTMLInputElement;
+    const file = element.files![0];
+  
+    const formData = new FormData();
+    formData.append("file", file);
+  
+    console.log(formData);
+    console.log(file);
+
+    const res = await importStudentMutation.mutateAsync(data);
+    console.log(res);
+  }
+
   return (
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} enctype="multipart/form-data">
+        <form onSubmit={form.handleSubmit(onSubmit)}>
         <Dialog>
           <DialogTrigger asChild>
             <Button variant="outline">Nhập danh sách sinh viên</Button>

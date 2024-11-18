@@ -90,3 +90,8 @@ export const ChangePasswordBody = z
   });
 
 export type ChangePasswordBodyType = z.TypeOf<typeof ChangePasswordBody>;
+export const ImportStudentBody = z.object({
+  file: z.instanceof(FileList),
+});
+
+export type ImportStudentBodyType = z.TypeOf<typeof ImportStudentBody>;

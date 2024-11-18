@@ -8,6 +8,7 @@ import {
   UpdateBasicUserBodyType,
   ResetUserPasswordBodyType,
   ChangePasswordBodyType,
+  ImportStudentBodyType,
 } from "@/schemas/user.schema";
 import { RoleListResType } from "@/schemas/role.schema";
 
@@ -27,5 +28,9 @@ const userApi = {
     http.put<null>(`${prefix}/${id}/reset-password`, body),
   changePassword: (body: ChangePasswordBodyType) =>
     http.put<null>(`${prefix}/change-password`, body),
+  importStudent: (body: ImportStudentBodyType) =>
+    http.post(`${prefix}/import/student`, body, {
+      headers: { "Content-Type": "multipart/form-data" },
+    }),
 };
 export default userApi;
