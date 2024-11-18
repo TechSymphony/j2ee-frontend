@@ -42,13 +42,6 @@ export const useUpdateUserMutation = () => {
   });
 };
 
-export const useGetRoleListQuery = () => {
-  return useQuery({
-    queryKey: ["roles"],
-    queryFn: userApi.getRoleList,
-  });
-};
-
 export const useAddUserMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -103,8 +96,22 @@ export const useResetUserPasswordMutation = () => {
     },
   });
 };
+
 export const useChangePasswordMutation = () => {
   return useMutation({
     mutationFn: (body: ChangePasswordBodyType) => userApi.changePassword(body),
+  });
+};
+
+export const useImportStudentMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: userApi.importStudent,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["users"],
+      });
+    },
   });
 };

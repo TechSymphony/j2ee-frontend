@@ -8,6 +8,7 @@ import { AppContextProvider } from "@/contexts/app-context";
 import UserProvider from "@/contexts/user-context";
 import { RouteAuthorize } from "@/components/authorization/route-authorize";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import ErrorBoundary from "./error-boundary";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

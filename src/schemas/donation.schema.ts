@@ -73,3 +73,11 @@ export const CreateDonationBody = z
   .strict();
 
 export type CreateDonationBodyType = z.TypeOf<typeof CreateDonationBody>;
+export const ExportDonationBody = z.object({
+  campaign: z.string().regex(/^\d+$/).transform(Number),
+  type: z
+    .optional(z.boolean())
+    .transform((value) => (value ? "student_only" : "")),
+});
+
+export type ExportDonationBodyType = z.infer<typeof ExportDonationBody>;

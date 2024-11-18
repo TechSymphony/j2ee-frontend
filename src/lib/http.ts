@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import envConfig from "@/config";
 import { userManager } from "@/lib/auth";
+import { logFormData } from "./utils";
 
 type CustomOptions = Omit<RequestInit, "method"> & {
   baseUrl?: string | undefined;
+  isBlob?: boolean;
 };
 
 const ENTITY_ERROR_STATUS = 422;
@@ -49,20 +51,56 @@ export class EntityError extends HttpError {
     this.payload = payload;
   }
 }
+function convertBody(
+  options?: CustomOptions | undefined,
+  optionContentType?: string
+) {
+  // Get the Content-Type from the headers
+  const contentType = optionContentType || "";
 
+  let body;
+
+  // Check if body exists and handle different types
+  if (options?.body) {
+    // If Content-Type is application/json, stringify the body
+    if (contentType === "application/json") {
+      body = JSON.stringify(options.body);
+    }
+    // If the body is already a Blob or File, keep it as is
+    else if (options.body instanceof Blob || options.body instanceof File) {
+      body = options.body;
+    }
+    // If Content-Type is multipart/form-data, handle form data (we'll assume it's a Blob/File)
+    else if (contentType === "multipart/form-data") {
+      body = options.body instanceof FormData ? options.body : new FormData();
+      logFormData(body);
+    }
+    // For other content types, just pass the body as is
+    else {
+      body = options.body;
+    }
+  } else {
+    body = undefined;
+  }
+  return body;
+}
+interface BaseHeader {
+  Authorization?: string;
+  "Content-Type"?: string;
+}
 const request = async <Response>(
   method: "GET" | "POST" | "PUT" | "DELETE",
   url: string,
   options?: CustomOptions | undefined
 ) => {
-  const body = options?.body ? JSON.stringify(options.body) : undefined;
+  const baseHeaders: BaseHeader = {
+    Authorization: "",
+  };
+
+  const body = convertBody(options, options?.headers?.["Content-Type"] ?? "");
   const user = await userManager.getUser().then((user) => user);
   const accessToken = user?.access_token;
 
-  const baseHeaders = {
-    "Content-Type": "application/json",
-    Authorization: "",
-  };
   if (accessToken) {
     // fix bug vì nếu không đăng nhập Bearer rỗng sẽ khiến hệ thống tưởng đang bị hack
     baseHeaders.Authorization = `Bearer ${accessToken}`;
@@ -90,7 +128,7 @@ const request = async <Response>(
    */
 
   const params: URLSearchParams = new URL(window.location.href).searchParams;
-  // console.log(fullUrl + "?" + params.toString());
+
   const res = await fetch(fullUrl + "?" + params.toString(), {
     ...options,
     headers: {
@@ -101,7 +139,21 @@ const request = async <Response>(
     method,
   });
 
-  const payload: Response = res.status === NO_CONTENT ? {} : await res.json();
+  // Check if the response is JSON or a binary file (e.g., PDF)
+  const contentType = res.headers.get("Content-Type");
+  let payload: Response;
+
+  // Handle JSON response
+  if (contentType?.includes("application/json") || res.status === NO_CONTENT) {
+    payload = res.status === NO_CONTENT ? {} : await res.json();
+  }
+  // Handle binary file response (e.g., PDF)
+  else if (contentType?.includes("application/pdf") || options?.isBlob) {
+    const blob = await res.blob();
+    payload = blob as unknown as Response;
+  } else {
+    throw new Error(`Unexpected content type: ${contentType}`);
+  }
 
   const data = {
     status: res.status,
@@ -127,32 +179,58 @@ const request = async <Response>(
   return data;
 };
 
+const withDefaultJsonHeaders = (options?: Omit<CustomOptions, "body">) => {
+  const headers = {
+    "Content-Type": "application/json",
+    ...(options?.headers || {}),
+  };
+  return { ...options, headers };
+};
+
 const http = {
   get<Response>(
     url: string,
     options?: Omit<CustomOptions, "body"> | undefined
   ) {
-    return request<Response>("GET", url, options);
+    return request<Response>("GET", url, withDefaultJsonHeaders(options));
   },
   post<Response>(
     url: string,
     body: any,
     options?: Omit<CustomOptions, "body"> | undefined
   ) {
-    return request<Response>("POST", url, { ...options, body });
+    return request<Response>("POST", url, {
+      ...withDefaultJsonHeaders(options),
+      body,
+    });
   },
   put<Response>(
     url: string,
     body: any,
     options?: Omit<CustomOptions, "body"> | undefined
   ) {
-    return request<Response>("PUT", url, { ...options, body });
+    return request<Response>("PUT", url, {
+      ...withDefaultJsonHeaders(options),
+      body,
+    });
   },
   delete<Response>(
     url: string,
     options?: Omit<CustomOptions, "body"> | undefined
   ) {
-    return request<Response>("DELETE", url, { ...options });
+    return request<Response>("DELETE", url, {
+      ...withDefaultJsonHeaders(options),
+    });
+  },
+  postWithFiles<Response>(
+    url: string,
+    body: any,
+    options?: Omit<CustomOptions, "body"> | undefined
+  ) {
+    return request<Response>("POST", url, {
+      ...options,
+      body,
+    });
   },
 };
 

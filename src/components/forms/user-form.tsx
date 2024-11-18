@@ -27,7 +27,6 @@ import { Heading } from "@/components/ui/heading";
 import { toast } from "@/hooks/use-toast";
 import {
   useAddUserMutation,
-  useGetRoleListQuery,
   useGetUserQuery,
   useUpdateUserMutation,
 } from "@/queries/useUser";
@@ -39,6 +38,7 @@ import {
 } from "@/schemas/user.schema";
 import { handleErrorFromApi } from "@/lib/utils";
 import { useRefetch } from "@/contexts/app-context";
+import { useGetRoleOptionsQuery } from "@/queries/useRole";
 
 export const UserForm = () => {
   const params = useParams();
@@ -60,8 +60,8 @@ export const UserForm = () => {
 
   const updateUserMutation = useUpdateUserMutation();
   const addUserMutation = useAddUserMutation();
-  const getRoleListQuery = useGetRoleListQuery();
-  const items = getRoleListQuery.data?.payload;
+  const getRoleListQuery = useGetRoleOptionsQuery();
+  const items = getRoleListQuery.data?.payload ?? [];
 
   const { triggerRefetch } = useRefetch();
 
@@ -105,8 +105,6 @@ export const UserForm = () => {
       });
     }
   }, [initialData, form]);
-
-  console.log("Form: ", form.watch());
 
   const onSubmit = async (data: UpdateUserBodyType | CreateUserBodyType) => {
     try {
@@ -212,9 +210,9 @@ export const UserForm = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {items?.map((item) => (
+                      {items.map((item) => (
                         <SelectItem key={item.id} value={item.id.toString()}>
-                          {item.name} (ID: {item.id})
+                          {item.name}
                         </SelectItem>
                       ))}
                     </SelectContent>

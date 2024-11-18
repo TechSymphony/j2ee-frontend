@@ -24,6 +24,9 @@ export const RoleListRes = z.array(RoleSchema);
 
 export type RoleListResType = z.TypeOf<typeof RoleListRes>;
 
+const optionsSchema = z.array(RoleSchema.extend({}));
+export type RoleOptionsResType = z.TypeOf<typeof optionsSchema>;
+
 export const RoleRes = z.object({
   id: z.number(),
   name: z.string(),

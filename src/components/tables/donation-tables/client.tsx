@@ -19,6 +19,8 @@ import {
   AnonymousDonationOptions,
   ReviewDonationOptions,
 } from "../../../types/enum";
+import { Button } from "@/components/ui/button";
+import { ExportDonationDialog } from "@/components/dialog/export-donation";
 
 interface Props {
   type: "admin" | "user";
@@ -84,6 +86,7 @@ export const DonationClient = ({ type }: Props) => {
         >
           <Plus className="mr-2 h-4 w-4" /> Add New
         </Button> */}
+        <ExportDonationDialog />
       </div>
       <Separator />
       <DataTablePagination

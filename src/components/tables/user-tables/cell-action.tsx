@@ -10,7 +10,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/hooks/use-toast";
 import { handleErrorFromApi } from "@/lib/utils";
-import { useDeleteUserMutation, useResetUserPasswordMutation } from "@/queries/useUser";
+import {
+  useDeleteUserMutation,
+  useResetUserPasswordMutation,
+} from "@/queries/useUser";
 import { UserType } from "@/schemas/user.schema";
 import { Edit, Key, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -32,7 +35,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
    */
   const onDelete = async () => {
     try {
-      console.log("delete");
       setLoading(true);
       await deleteUserMutation.mutateAsync(data.id);
       toast({
@@ -41,12 +43,13 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       });
     } catch (error: any) {
       handleErrorFromApi({ error });
+      console.log(error);
     } finally {
       setLoading(false);
       setDeleteOpen(false);
     }
   };
-  
+
   const resetPasswordMutation = useResetUserPasswordMutation();
 
   const onResetPassword = async () => {

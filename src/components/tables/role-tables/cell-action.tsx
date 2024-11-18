@@ -31,7 +31,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
    */
   const onDelete = async () => {
     try {
-      console.log("delete");
       setLoading(true);
       await deleteRoleMutation.mutateAsync(data.id);
       toast({

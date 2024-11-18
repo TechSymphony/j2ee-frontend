@@ -44,15 +44,15 @@ export const columns: ColumnDef<RoleType>[] = [
     accessorKey: "description",
     header: "Mô tả",
   },
-  {
-    header: "Không thể xóa",
-    cell: ({ row }) =>
-      row.original.name !== "admin" ? (
-        <CheckIcon className="text-green-500" />
-      ) : (
-        <X className="text-red-500" />
-      ),
-  },
+  // {
+  //   header: "Không thể xóa",
+  //   cell: ({ row }) =>
+  //     row.original.name !== "admin" ? (
+  //       <CheckIcon className="text-green-500" />
+  //     ) : (
+  //       <X className="text-red-500" />
+  //     ),
+  // },
   {
     id: "actions",
     cell: ({ row }) => <CellAction data={row.original} />,
