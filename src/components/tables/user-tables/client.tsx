@@ -10,11 +10,13 @@ import { useRefetch } from "@/contexts/app-context";
 import { useEffect } from "react";
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
 import { getDefaultPaginatedResponse } from "@/schemas/paginate.schema";
-import useQueryConfig from "@/hooks/useQueryConfig";
+import useQueryConfig from "./user-query-table";
+import { DataTableComponentType } from "@/components/ui/table/data-table-factory-filter";
 
 export const UserClient = () => {
   const router = useRouter();
   const queryConfig = useQueryConfig();
+  
   const { data: fetchData, refetch } = useGetUserListQuery(queryConfig);
   const data = fetchData?.payload ?? getDefaultPaginatedResponse;
 
@@ -24,6 +26,15 @@ export const UserClient = () => {
     setTriggerRefetch(() => refetch);
   }, [refetch, setTriggerRefetch]);
 
+  const filters = [
+    {
+        type: DataTableComponentType.Search,
+        props: {
+            filterKey: "fullName",
+            title: "Họ và tên",
+        },
+    }
+];
   return (
     <>
       <div className="flex items-start justify-between">
@@ -40,7 +51,11 @@ export const UserClient = () => {
         </Button>
       </div>
       <Separator />
-      <DataTablePagination searchKey="fullName" columns={columns} data={data} />
+      <DataTablePagination 
+        searchKey="fullName" 
+        columns={columns} 
+        data={data} 
+        filters={filters} />
     </>
   );
 };
