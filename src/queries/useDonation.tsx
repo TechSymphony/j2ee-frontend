@@ -1,5 +1,6 @@
 import donationApi from "@/apis/donations";
 import { QueryConfig } from "@/hooks/useQueryConfig";
+import { ExportDonationBodyType } from "@/schemas/donation.schema";
 // import { UpdateCampaignBodyType } from "@/schemas/campaign.schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -28,7 +29,6 @@ export const useGetMyDonationListQuery = (queryConfig?: QueryConfig) => {
     staleTime: 0,
     enabled: true,
   });
-
 };
 
 export const useGetTopListDonationQuery = ({
@@ -70,5 +70,11 @@ export const useAddDonationMutation = () => {
         queryKey: ["campaigns-detail"],
       });
     },
+  });
+};
+export const useExportDonationMutation = () => {
+  return useMutation({
+    mutationFn: ({ ...body }: ExportDonationBodyType) =>
+      donationApi.exportDonationList(body),
   });
 };

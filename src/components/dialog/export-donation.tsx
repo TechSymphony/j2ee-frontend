@@ -1,3 +1,4 @@
+"use client";
 import { Dialog,
     DialogContent,
     DialogDescription,
@@ -10,60 +11,41 @@ import { Checkbox } from "../ui/checkbox";
 import { useGetCampaignListQuery } from '../../queries/useCampaign';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ExportDonationBody, ExportDonationBodyType } from "@/schemas/donation.schema";
+import { useExportDonationMutation } from "@/queries/useDonation";
 
-const formSchema = z.object({
-  campaign: z.string(),
-  student_only: z.optional(z.boolean())
-});
-
-type ExportDonationFormValues = z.infer<typeof formSchema>;
-
-const onSubmit = async (data: ExportDonationFormValues) => {
-  const apiURL = process.env.NEXT_PUBLIC_API_ENDPOINT;
-  // get student only checkbox by react
-
-  const student_only = data.student_only;
-  const campaignId = data.campaign;
-
-  let url;
-  if (student_only) {
-    url = `${apiURL}/donations/export?type=student_only&`;
-  } else {
-    url = `${apiURL}/donations/export?`;
-  }
-
-  console.log(url + new URLSearchParams({
-    campaign_id: campaignId
-  }));
-
-  fetch(url + new URLSearchParams({
-    campaign_id: campaignId
-  }).toString(), {
-    method: "GET",
-    headers: {
-      "Authorization": "Bearer " + process.env.NEXT_PUBLIC_ACCESS_TOKEN
-    }
-  }).then(res => res.blob()).then(blob => {
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = "donation-list.pdf";
-    a.click();
-  }).catch(err => console.log(err));
-}
-
-export function ExportDonationDialog() {
+export const ExportDonationDialog = () => {
 
   const getCampaignListQuery = useGetCampaignListQuery();
   const items = getCampaignListQuery.data?.payload.content;
 
-  const form = useForm<ExportDonationFormValues>({
+  const formSchema = ExportDonationBody;
+
+  const form = useForm<ExportDonationBodyType>({
     resolver: zodResolver(formSchema),
   });
 
+  const exportDonationList = useExportDonationMutation();
+
+  const onSubmit = async (data: ExportDonationBodyType) => {
+    // get student only checkbox by react
+
+    const body: ExportDonationBodyType = {
+      ...data,
+    };
+
+    const res = await exportDonationList.mutateAsync(body);
+
+    if (res?.payload) {
+      const url = window.URL.createObjectURL(res?.payload);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = "donation-list.pdf";
+      a.click();
+    }
+  }
   return (
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -110,12 +92,12 @@ export function ExportDonationDialog() {
               <div className="">
                 <FormField
                   control={form.control}
-                  name="student_only"
+                  name="type"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Xuất danh sách chỉ sinh viên? </FormLabel>
                       <FormControl>
-                        <Checkbox id="student_only" checked={field.value} required={false} onCheckedChange={field.onChange} />
+                        <Checkbox id="type" required={false} onCheckedChange={field.onChange} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
