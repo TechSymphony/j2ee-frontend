@@ -12,6 +12,7 @@ import { DataTablePagination } from "@/components/ui/data-table-pagination";
 import { getDefaultPaginatedResponse } from "@/schemas/paginate.schema";
 import useQueryConfig from "./user-query-table";
 import { DataTableComponentType } from "@/components/ui/table/data-table-factory-filter";
+import { ImportStudentDialog } from "@/components/dialog/import-student";
 
 export const UserClient = () => {
   const router = useRouter();
@@ -43,6 +44,7 @@ export const UserClient = () => {
           description=""
         />
 
+        <ImportStudentDialog />
         <Button
           className="text-xs md:text-sm"
           onClick={() => router.push(`/dashboard/user/new`)}
