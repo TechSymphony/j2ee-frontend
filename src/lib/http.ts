@@ -82,7 +82,6 @@ function convertBody(
   } else {
     body = undefined;
   }
-  console.log(contentType, body, "mybody");
   return body;
 }
 interface BaseHeader {
@@ -145,7 +144,7 @@ const request = async <Response>(
   let payload: Response;
 
   // Handle JSON response
-  if (contentType?.includes("application/json")) {
+  if (contentType?.includes("application/json") || res.status === NO_CONTENT) {
     payload = res.status === NO_CONTENT ? {} : await res.json();
   }
   // Handle binary file response (e.g., PDF)

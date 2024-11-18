@@ -42,9 +42,7 @@ export default function RootLayout({
                   enableSystem
                   disableTransitionOnChange
                 >
-                  <RouteAuthorize>
-                    <ErrorBoundary>{children}</ErrorBoundary>
-                  </RouteAuthorize>
+                  <RouteAuthorize>{children}</RouteAuthorize>
 
                   <Toaster />
                 </ThemeProvider>

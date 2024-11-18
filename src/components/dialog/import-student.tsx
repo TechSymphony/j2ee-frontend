@@ -130,7 +130,7 @@ export function ImportStudentDialog() {
                     <TableHead className="whitespace-nowrap">
                       Số điện thoại
                     </TableHead>
-                    <TableHead className="whitespace-nowrap">Vai trò</TableHead>
+                    {/* <TableHead className="whitespace-nowrap">Vai trò</TableHead> */}
                     <TableHead className="whitespace-nowrap">
                       Tên đăng nhập
                     </TableHead>
@@ -146,7 +146,7 @@ export function ImportStudentDialog() {
                       <TableCell>{user.fullName}</TableCell>
                       <TableCell>{user.email}</TableCell>
                       <TableCell>{user.phone}</TableCell>
-                      <TableCell>{user?.role?.name}</TableCell>
+                      {/* <TableCell>{user?.role?.name}</TableCell> */}
                       <TableCell>{user.username}</TableCell>
                       <TableCell>
                         {user.isStudent ? (

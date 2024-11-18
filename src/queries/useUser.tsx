@@ -104,7 +104,14 @@ export const useChangePasswordMutation = () => {
 };
 
 export const useImportStudentMutation = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: userApi.importStudent,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["users"],
+      });
+    },
   });
 };
