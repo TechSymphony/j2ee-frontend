@@ -23,6 +23,7 @@ export const CampaignSchema = z.object({
   endDate: z.date(),
   status: z.number(),
   numberOfDonations: z.number().optional(),
+  disabledAt: z.boolean(),
 });
 
 export type CampaignType = z.TypeOf<typeof CampaignSchema>;
@@ -48,6 +49,7 @@ export const CampaignRes = z.object({
   endDate: z.date(),
   status: z.number(),
   numberOfDonations: z.number().default(0),
+  disabledAt: z.boolean(),
 });
 
 export type CampaignResType = z.TypeOf<typeof CampaignRes>;
@@ -64,6 +66,7 @@ export const CreateCampaignBody = z
     startDate: z.date(),
     endDate: z.date(),
     status: z.number(),
+    disabledAt: z.boolean().default(false),
   })
   .strict();
 
@@ -81,6 +84,7 @@ export const UpdateCampaignBody = z
     startDate: z.date(),
     endDate: z.date(),
     status: z.number(),
+    disabledAt: z.boolean(),
   })
   .strict();
 

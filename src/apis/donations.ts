@@ -22,9 +22,9 @@ const donationApi = {
     ),
   getMyDonationList: () => http.get<DonationListResType>(`/me${prefix}`),
   getTopListDonation: (id: number) =>
-    http.get<DonationTopResType>(`/campaigns/${id}/top-donations`),
+    http.get<DonationResType>(`public/campaigns/${id}/top-donations`),
   getNewDonationsList: (id: number) =>
-    http.get<DonationTopResType>(`/campaigns/${id}/donations`),
+    http.get<DonationResType>(`public/campaigns/${id}/donations`),
   exportDonationList: (body: ExportDonationBodyType) =>
     http.post<Blob>(`${prefix}/export`, body, {
       isBlob: true,
