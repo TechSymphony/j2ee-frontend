@@ -1,6 +1,7 @@
 import donationApi from "@/apis/donations";
 import { QueryConfig } from "@/hooks/useQueryConfig";
 import { ExportDonationBodyType } from "@/schemas/donation.schema";
+import { ReviewDonationEnum } from "@/types/enum";
 // import { UpdateCampaignBodyType } from "@/schemas/campaign.schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -67,7 +68,22 @@ export const useAddDonationMutation = () => {
     mutationFn: donationApi.addDonation,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["campaigns-detail"],
+        queryKey: ["donations-detail"],
+      });
+    },
+  });
+};
+
+export const useUpdateClientDonationMutation = ({ id }: { id: number }) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: () => donationApi.updateDonationClient(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["donations-detail", id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["donations", "my-donations"],
       });
     },
   });

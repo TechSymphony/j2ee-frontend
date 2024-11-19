@@ -144,15 +144,22 @@ const request = async <Response>(
   let payload: Response;
 
   // Handle JSON response
-  if (contentType?.includes("application/json") || res.status === NO_CONTENT) {
-    payload = res.status === NO_CONTENT ? {} : await res.json();
-  }
-  // Handle binary file response (e.g., PDF)
-  else if (contentType?.includes("application/pdf") || options?.isBlob) {
-    const blob = await res.blob();
-    payload = blob as unknown as Response;
+  if (contentType) {
+    if (
+      contentType?.includes("application/json") ||
+      res.status === NO_CONTENT
+    ) {
+      payload = res.status === NO_CONTENT ? {} : await res.json();
+    }
+    // Handle binary file response (e.g., PDF)
+    else if (contentType?.includes("application/pdf") || options?.isBlob) {
+      const blob = await res.blob();
+      payload = blob as unknown as Response;
+    } else {
+      throw new Error(`Unexpected content type: ${contentType}`);
+    }
   } else {
-    throw new Error(`Unexpected content type: ${contentType}`);
+    payload = {};
   }
 
   const data = {

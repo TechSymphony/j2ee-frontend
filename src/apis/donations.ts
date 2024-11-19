@@ -14,6 +14,11 @@ const donationApi = {
   getDonation: (id: number) => http.get<DonationResType>(`${prefix}/${id}`),
   addDonation: (body: CreateDonationBodyType) =>
     http.post<CreatedDonationResType>("public" + prefix, body),
+  updateDonationClient: (id: number) =>
+    http.put<CreatedDonationResType>(
+      "public" + prefix + `/${id}/payment/event`,
+      {}
+    ),
   getMyDonationList: () => http.get<DonationListResType>(`/me${prefix}`),
   getTopListDonation: (id: number) =>
     http.get<DonationResType>(`/campaigns/${id}/top-donations`),
