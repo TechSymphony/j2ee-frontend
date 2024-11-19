@@ -305,17 +305,14 @@ export const CampaignForm = () => {
                         value,
                         categories ?? []
                       );
-
-                      field.onChange(selectedCategory); // Cập nhật giá trị object của beneficiary
+                      field.onChange(selectedCategory);
                     }}
                   >
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Chọn loại chiến dịch">
-                          {findOptionByValue(
-                            field?.value?.id?.toString(),
-                            categories ?? []
-                          )?.name || "Chọn loại chiến dịch"}
+                      <SelectTrigger >
+                        <SelectValue placeholder={findOptionByValue(field?.value?.id?.toString(),
+                          categories ?? [])?.name || "Chọn loại chiến dịch"
+                        }>
                         </SelectValue>
                       </SelectTrigger>
                     </FormControl>
@@ -338,10 +335,7 @@ export const CampaignForm = () => {
 };
 
 // Helper functions to find the option and its parent in the hierarchy
-function findOptionByValue(
-  value: string,
-  options: CategoryMenu[]
-): CategoryMenu | undefined {
+function findOptionByValue(value: string, options: CategoryMenu[]): CategoryMenu | undefined {
   let result = undefined;
   for (const option of options) {
     if (option.id == Number(value)) {
@@ -349,11 +343,8 @@ function findOptionByValue(
       break;
     }
     if (option.children && option.children.length > 0) {
-      const found = findOptionByValue(value, option.children);
-      if (found) {
-        result = found;
-        break;
-      }
+      result = findOptionByValue(value, option.children);
+      if (result) break;
     }
   }
   return result;
