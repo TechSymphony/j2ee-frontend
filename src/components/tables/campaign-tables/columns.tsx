@@ -3,9 +3,12 @@ import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
 import { CampaignType } from "@/schemas/campaign.schema";
 import { ReviewStatusEnum, ReviewStatusOptions } from "@/types/enum";// Import Select components
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Switch } from "@/components/ui/switch";
-import { useUpdateCampaignStatusMutation } from "@/queries/useCampaign";
+import { useUpdateCampaignStatusMutation, useUpdateCampaignStatusShowMutation } from "@/queries/useCampaign";
+import SelectBoxEnum from "@/components/ui/select-box-enum";
+import { toast } from "@/hooks/use-toast";
+import { useRefetch } from "@/contexts/app-context";
 
 /**
  * Description: Khai báo columns cho table
@@ -27,12 +30,12 @@ export const columns: ColumnDef<CampaignType>[] = [
     header: "Trạng thái hiển thị",
     cell: ({ row }) => {
       const [isDisabled, setIsDisabled] = useState(row.original.disabledAt);
-      const updateCampaignStatusMutation = useUpdateCampaignStatusMutation();
+      const updateCampaignStatusShowMutation = useUpdateCampaignStatusShowMutation();
 
       const handleToggle = async () => {
         setIsDisabled(!isDisabled);
 
-        await updateCampaignStatusMutation.mutateAsync({
+        await updateCampaignStatusShowMutation.mutateAsync({
           id: row.original.id,
           disabledAt: !isDisabled,
         });
@@ -63,29 +66,52 @@ export const columns: ColumnDef<CampaignType>[] = [
     header: "Ngày kết thúc",
   },
   {
-    accessorKey: "status",
     header: "Trạng thái",
-    cell: ({ row }) => {
-      const [status, setStatus] = useState<ReviewStatusEnum>(
-        ReviewStatusEnum[row.original.status as keyof typeof ReviewStatusEnum]
-      );
-
-      useEffect(() => {
-        setStatus(ReviewStatusEnum[row.original.status as keyof typeof ReviewStatusEnum]);
-      }, [row.original.status]);
-
-      const statusOption = ReviewStatusOptions.find(option => option.value === status);
-      if (status === ReviewStatusEnum.APPROVED) {
-        return <span className="text-green-500">{statusOption ? statusOption.label : "Không tìm thấy"}</span>;
-      }
-      if (status === ReviewStatusEnum.REJECT) {
-        return <span className="text-red-500">{statusOption ? statusOption.label : "Không tìm thấy"}</span>;
-      }
-      return statusOption ? statusOption.label : "Không tìm thấy";
-    },
+    cell: ({ row }) => <StatusCell row={row} />,
   },
   {
     id: "actions",
     cell: ({ row }) => <CellAction data={row.original} />,
   },
 ];
+
+const StatusCell = ({ row }: { row: any }) => {
+  const [status, setStatus] =
+    useState<ReviewStatusEnum>(
+      ReviewStatusEnum[
+      row.original
+        .status as keyof typeof ReviewStatusEnum
+      ]
+    );
+
+  console.log(status);
+
+  const { triggerRefetch } = useRefetch();
+  const updateCampaignStatusMutation = useUpdateCampaignStatusMutation();
+
+  const handleValueChange = (value: ReviewStatusEnum) => {
+    updateCampaignStatus(value);
+  };
+
+  const updateCampaignStatus = async (value: ReviewStatusEnum) => {
+    await updateCampaignStatusMutation.mutateAsync({
+      id: row.original.id,
+      status: value,
+    });
+    setStatus(value);
+    toast({
+      description: "Cập nhật trạng thái thành công",
+    });
+    triggerRefetch();
+  };
+
+  return (
+    <>
+      <SelectBoxEnum
+        value={status}
+        options={ReviewStatusOptions}
+        onValueChange={handleValueChange}
+      />
+    </>
+  );
+}
