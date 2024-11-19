@@ -86,6 +86,7 @@ export const CampaignForm = () => {
       startDate: new Date(),
       endDate: new Date(),
       status: ReviewStatusEnum.WAITING,
+      disabledAt: false,
     },
   });
 
@@ -102,6 +103,7 @@ export const CampaignForm = () => {
         startDate,
         endDate,
         status,
+        disabledAt,
       } = initialData.payload;
       form.reset({
         beneficiary,
@@ -114,6 +116,7 @@ export const CampaignForm = () => {
         startDate: new Date(startDate),
         endDate: new Date(endDate),
         status: ReviewStatusEnum[status as keyof typeof ReviewStatusEnum],
+        disabledAt,
       });
     }
   }, [initialData, form]);

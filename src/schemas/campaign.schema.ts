@@ -49,7 +49,7 @@ export const CampaignRes = z.object({
   endDate: z.date(),
   status: z.number(),
   numberOfDonations: z.number().default(0),
-  disabledAt: z.boolean().default(true),
+  disabledAt: z.boolean(),
 });
 
 export type CampaignResType = z.TypeOf<typeof CampaignRes>;
@@ -66,7 +66,7 @@ export const CreateCampaignBody = z
     startDate: z.date(),
     endDate: z.date(),
     status: z.number(),
-    disabledAt: z.boolean().default(true),
+    disabledAt: z.boolean().default(false),
   })
   .strict();
 
