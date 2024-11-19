@@ -1,11 +1,9 @@
 "use client";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Heart, Home } from "lucide-react";
 import CampaignList from "@/components/campaign/campaign-list";
 import { useParams } from "next/navigation";
-import { useGetCampaignQuery } from "@/queries/useCampaign";
+import { useGetCampaignClientQuery } from "@/queries/useCampaign";
 import DonationDialog from "@/components/donation/donation-dialog";
 import { useGetTopListDonationQuery, useGetNewListDonationQuery } from "@/queries/useDonation";
 
@@ -15,7 +13,7 @@ export default function CampaignDetail() {
   const params = useParams();
   const dataCampaignId = Number(params.campaignId as string);
 
-  const { data: initialData } = useGetCampaignQuery({
+  const { data: initialData } = useGetCampaignClientQuery({
     id: dataCampaignId,
     enabled: Boolean(dataCampaignId),
   });
@@ -63,12 +61,14 @@ export default function CampaignDetail() {
       verificationStatus: false,
     },
     numberOfDonations: 0,
+    disabledAt: false,
   };
 
+  console.log(initialData?.payload);
+  console.log(campaign.disabledAt);
+
   // Tính phần trăm tiến độ chiến dịch
-  const percentage = campaign.targetAmount
-    ? (campaign.currentAmount / campaign.targetAmount) * 100
-    : 0;
+  const percentage = (campaign.currentAmount / campaign.targetAmount) * 100;
 
   // Tính ngày còn lại của chiến dịch
   const startDate = new Date(campaign.startDate);
@@ -230,7 +230,7 @@ export default function CampaignDetail() {
                       <div
                         className="h-1.5 rounded-lg bg-pink-darker"
                         style={{
-                          width: `${percentage}`,
+                          width: `${percentage}%`,
                         }}
                       ></div>
                     </div>
@@ -259,10 +259,20 @@ export default function CampaignDetail() {
                       </div>
                     </div>
                   </div>
-                  <DonationDialog
-                    campaignId={dataCampaignId}
-                    campaignName={campaign.name}
-                  ></DonationDialog>
+                  {campaign.currentAmount >= campaign.targetAmount ? (
+                    <div className="text-green-500 font-semibold">
+                      Chiến dịch đã đạt target
+                    </div>
+                  ) : campaign.disabledAt ? (
+                    <div className="text-red-500 font-semibold">
+                      Hiện chiến dịch đã tạm dừng hoạt động
+                    </div>
+                  ) : (
+                    <DonationDialog
+                      campaignId={dataCampaignId}
+                      campaignName={campaign.name}
+                    ></DonationDialog>
+                  )}
                 </div>
               </div>
             </div>

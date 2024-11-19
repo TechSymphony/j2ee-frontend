@@ -50,6 +50,7 @@ export default function CampaignList() {
     refetch,
   } = useGetCampaignClientListQuery(queryConfig);
   const campaigns = campaignListData?.payload.content ?? [];
+  console.log(campaigns);
 
   const [pageIndex, setPageIndex] = useQueryState(
     "page",
@@ -102,12 +103,6 @@ export default function CampaignList() {
                       data={campaign}
                       onClick={() => router.push(`/campaign/${campaign.id}`)}
                     />
-                    <div className="flex grow items-center justify-end">
-                      <DonationDialog
-                        campaignId={campaign.id}
-                        campaignName={campaign.name}
-                      ></DonationDialog>
-                    </div>
                   </div>
                 </Suspense>
               ))}

@@ -23,6 +23,49 @@ export const useGetCampaignClientListQuery = (
     });
 };
 
+export const useUpdateCampaignStatusMutation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async ({ id, disabledAt }: { id: number; disabledAt: boolean }) => {
+            // Fetch the current campaign data
+            const campaign = await campaignApi.getCampaign(id);
+            const currentCampaign = campaign.payload;
+            // Update only the disabledAt field
+            return campaignApi.updateCampaign(id, {
+                code: currentCampaign.code,
+                name: currentCampaign.name,
+                category: currentCampaign.category,
+                description: currentCampaign.description ?? "",
+                targetAmount: currentCampaign.targetAmount,
+                currentAmount: currentCampaign.currentAmount,
+                startDate: currentCampaign.startDate,
+                endDate: currentCampaign.endDate,
+                disabledAt: disabledAt,
+                status: currentCampaign.status,
+            });
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["campaigns"],
+            });
+        },
+    });
+};
+
+export const useGetCampaignClientQuery = ({
+    id,
+    enabled,
+}: {
+    id: number;
+    enabled: boolean;
+}) => {
+    return useQuery({
+        queryKey: ["client-campaigns-detail", id],
+        queryFn: () => campaignApi.getCampaignClient(id),
+        enabled,
+    });
+}
+
 export const useGetCampaignList = (queryConfig?: campaignQueryConfig) => {
     return useQuery({
         queryKey: ["campaigns", queryConfig],
