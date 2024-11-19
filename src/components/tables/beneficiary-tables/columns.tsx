@@ -7,8 +7,9 @@ import SelectBoxEnum from "@/components/ui/select-box-enum";
 import { toast } from "@/hooks/use-toast";
 import { useRefetch } from "@/contexts/app-context";
 import PopupBeneficiary from "@/components/modal/popup-beneficiary";
+import { useUpdateBeneficiaryStatusMutation } from "@/queries/useBeneficiary";
 
-export const columns: ColumnDef<BenefipaymentciaryType>[] = [
+export const columns: ColumnDef<BeneficiaryType>[] = [
     {
         accessorKey: "id",
         header: "ID",
@@ -28,13 +29,14 @@ export const columns: ColumnDef<BenefipaymentciaryType>[] = [
             const [verificationStatus, setVerificationStatus] =
                 useState<ReviewStatusEnum>(
                     ReviewStatusEnum[
-                        row.original
-                            .verificationStatus as keyof typeof ReviewStatusEnum
+                    row.original
+                        .verificationStatus as keyof typeof ReviewStatusEnum
                     ]
                 );
 
             const { triggerRefetch } = useRefetch();
             const [isOpenPopup, setIsOpenPopup] = useState(false);
+            const updateBeneficiaryStatusMutation = useUpdateBeneficiaryStatusMutation();
 
             const handleValueChange = (value: ReviewStatusEnum) => {
                 if (value === ReviewStatusEnum.APPROVED) {
@@ -45,28 +47,16 @@ export const columns: ColumnDef<BenefipaymentciaryType>[] = [
             };
 
             const updateBeneficiaryStatus = async (value: ReviewStatusEnum) => {
-                const apiURL = process.env.NEXT_PUBLIC_API_ENDPOINT;
-                await fetch(`${apiURL}/beneficiaries/${row.original.id}`, {
-                    method: "PUT",
-                    headers: {
-                        Authorization:
-                            "Bearer " + process.env.NEXT_PUBLIC_ACCESS_TOKEN,
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        situationDetail: row.original.situationDetail,
-                        supportReceived: row.original.supportReceived,
-                        verificationStatus: value,
-                    }),
-                }).then((res) => res.json());
-
+                await updateBeneficiaryStatusMutation.mutateAsync({
+                    id: row.original.id,
+                    verificationStatus: value,
+                });
                 setVerificationStatus(value);
                 toast({
                     description: "Cập nhật trạng thái thành công",
                 });
                 triggerRefetch();
             };
-
             const handleCampaignCreation = async (isSuccess: boolean) => {
                 if (isSuccess) {
                     await updateBeneficiaryStatus(ReviewStatusEnum.APPROVED);
