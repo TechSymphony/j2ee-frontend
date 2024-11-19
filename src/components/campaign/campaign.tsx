@@ -1,7 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
 import DonationDialog from "../donation/donation-dialog";
-import router from "next/router";
 import { CampaignType } from "@/schemas/campaign.schema";
 
 interface CampaignProps {
@@ -223,6 +221,22 @@ export default function Campaign({ data, onClick }: CampaignProps) {
               </div>
             </div>
           </div>
+        </div>
+        <div className="mt-3">
+          {!data.disabledAt ? (
+            <DonationDialog
+              campaignId={data.id}
+              campaignName={data.name}
+            ></DonationDialog>
+          ) : (
+            <div>
+              {data.currentAmount === data.targetAmount ? (
+                "Chiến dịch đã đạt target"
+              ) : (
+                "Hiện chiến dịch đã tạm dừng hoạt động"
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

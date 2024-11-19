@@ -1,11 +1,9 @@
 "use client";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Heart, Home } from "lucide-react";
 import CampaignList from "@/components/campaign/campaign-list";
 import { useParams } from "next/navigation";
-import { useGetCampaignQuery } from "@/queries/useCampaign";
+import { useGetCampaignClientQuery } from "@/queries/useCampaign";
 import DonationDialog from "@/components/donation/donation-dialog";
 import {
   useGetTopListDonationQuery,
@@ -18,7 +16,7 @@ export default function CampaignDetail() {
   const params = useParams();
   const dataCampaignId = Number(params.campaignId as string);
 
-  const { data: initialData } = useGetCampaignQuery({
+  const { data: initialData } = useGetCampaignClientQuery({
     id: dataCampaignId,
     enabled: Boolean(dataCampaignId),
   });
@@ -47,6 +45,11 @@ export default function CampaignDetail() {
   }, {});
 
   const aggregatedDonationsArray = Object.values(aggregatedDonations);
+  // Sort the array by amountTotal in descending order
+  const sortedAggregatedDonationsArray = aggregatedDonationsArray.sort((a, b) => b.amountTotal - a.amountTotal);
+
+  // Take the top 10 elements
+  const top10Donations = sortedAggregatedDonationsArray.slice(0, 10)
 
   const campaign = initialData?.payload ?? {
     id: 0,
@@ -65,12 +68,11 @@ export default function CampaignDetail() {
       verificationStatus: false,
     },
     numberOfDonations: 0,
+    disabledAt: false,
   };
 
   // Tính phần trăm tiến độ chiến dịch
-  const percentage = campaign.targetAmount
-    ? (campaign.currentAmount / campaign.targetAmount) * 100
-    : 0;
+  const percentage = (campaign.currentAmount / campaign.targetAmount) * 100;
 
   // Tính ngày còn lại của chiến dịch
   const startDate = new Date(campaign.startDate);
@@ -157,8 +159,8 @@ export default function CampaignDetail() {
                   Top 10 Nhà hảo tâm hàng đầu
                 </h2>
                 <ul className="space-y-2">
-                  {Array.isArray(aggregatedDonationsArray) &&
-                    aggregatedDonationsArray.map((donation, index) => (
+                  {Array.isArray(top10Donations) &&
+                    top10Donations.map((donation, index) => (
                       <li
                         key={index}
                         className="flex items-center justify-between"
@@ -234,7 +236,7 @@ export default function CampaignDetail() {
                       <div
                         className="h-1.5 rounded-lg bg-pink-darker"
                         style={{
-                          width: `${percentage}`,
+                          width: `${percentage}%`,
                         }}
                       ></div>
                     </div>
@@ -263,10 +265,20 @@ export default function CampaignDetail() {
                       </div>
                     </div>
                   </div>
-                  <DonationDialog
-                    campaignId={dataCampaignId}
-                    campaignName={campaign.name}
-                  ></DonationDialog>
+                  {campaign.currentAmount >= campaign.targetAmount ? (
+                    <div className="text-green-500 font-semibold">
+                      Chiến dịch đã đạt target
+                    </div>
+                  ) : campaign.disabledAt ? (
+                    <div className="text-red-500 font-semibold">
+                      Hiện chiến dịch đã tạm dừng hoạt động
+                    </div>
+                  ) : (
+                    <DonationDialog
+                      campaignId={dataCampaignId}
+                      campaignName={campaign.name}
+                    ></DonationDialog>
+                  )}
                 </div>
               </div>
             </div>

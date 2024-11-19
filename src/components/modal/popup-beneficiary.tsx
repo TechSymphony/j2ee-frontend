@@ -72,6 +72,7 @@ export default function PopupBeneficiary({ isOpenPopup, setIsOpenPopup, benefici
             startDate: new Date(),
             endDate: new Date(),
             status: ReviewStatusEnum.WAITING,
+            disabledAt: false,
         },
     });
     console.log("form", form.getValues());

@@ -4,6 +4,7 @@ import {
   UpdateBeneficiaryBodyType,
   UpdateMyBeneficiaryBodyType,
 } from "@/schemas/beneficiary.schema";
+import { ReviewStatusEnum } from "@/types/enum";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useGetBeneficiaryList = (queryConfig?: beneficiaryQueryConfig) => {
@@ -59,6 +60,26 @@ export const useGetUserBeneficiaryQuery = ({
   });
 };
 
+export const useUpdateBeneficiaryStatusMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, verificationStatus }: { id: number; verificationStatus: ReviewStatusEnum }) => {
+      // Fetch the current beneficiary data
+      const beneficiary = await beneficiaryApi.getBeneficiary(id);
+      const currentBeneficiary = beneficiary.payload;
+      // Update only the verificationStatus field
+      return beneficiaryApi.updateBeneficiary(id, {
+        ...currentBeneficiary,
+        verificationStatus: ReviewStatusEnum[verificationStatus as keyof typeof ReviewStatusEnum],
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["beneficiaries"],
+      });
+    },
+  });
+};
 
 export const useGetMyBeneficiaryListQuery = (
   queryConfig?: beneficiaryQueryConfig
