@@ -45,6 +45,11 @@ export default function CampaignDetail() {
   }, {});
 
   const aggregatedDonationsArray = Object.values(aggregatedDonations);
+  // Sort the array by amountTotal in descending order
+  const sortedAggregatedDonationsArray = aggregatedDonationsArray.sort((a, b) => b.amountTotal - a.amountTotal);
+
+  // Take the top 10 elements
+  const top10Donations = sortedAggregatedDonationsArray.slice(0, 10)
 
   const campaign = initialData?.payload ?? {
     id: 0,
@@ -154,8 +159,8 @@ export default function CampaignDetail() {
                   Top 10 Nhà hảo tâm hàng đầu
                 </h2>
                 <ul className="space-y-2">
-                  {Array.isArray(aggregatedDonationsArray) &&
-                    aggregatedDonationsArray.map((donation, index) => (
+                  {Array.isArray(top10Donations) &&
+                    top10Donations.map((donation, index) => (
                       <li
                         key={index}
                         className="flex items-center justify-between"
