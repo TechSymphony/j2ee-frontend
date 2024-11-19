@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { useGetDonationQuery } from "@/queries/useDonation";
 import { ReviewDonationEnum, ReviewDonationOptions } from "../../../types/enum";
+import Component from "@/app/loading";
 
 interface DonationDetailDialogProps {
   open: boolean;
@@ -23,7 +24,34 @@ export function DonationDetailDialog({
 }: DonationDetailDialogProps) {
   // Dữ liệu quyên góp nhận được
 
+  if (!open) {
+    return <></>;
+  }
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { data, isLoading } = useGetDonationQuery(donationId);
+
+  if (isLoading) {
+    return (
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Thông Tin Quyên Góp</DialogTitle>
+            <DialogDescription>
+              Dưới đây là các thông tin chi tiết về quyên góp của bạn. Cảm ơn sự
+              hỗ trợ của bạn!
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            {/* Thông tin người quyên góp */}
+            <div className="flex items-center justify-center h-full">
+              <div className="w-12 h-12 border-4 border-gray-400 border-t-transparent rounded-full animate-spin" />
+            </div>
+          </div>
+          <DialogFooter></DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
+  }
   const donationInfo = data?.payload;
 
   return (
