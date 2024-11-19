@@ -4,6 +4,7 @@ import {
   CreateDonationBodyType,
   DonationListResType,
   DonationResType,
+  DonationTopResType,
   ExportDonationBodyType,
 } from "@/schemas/donation.schema";
 
@@ -21,9 +22,9 @@ const donationApi = {
     ),
   getMyDonationList: () => http.get<DonationListResType>(`/me${prefix}`),
   getTopListDonation: (id: number) =>
-    http.get<DonationResType>(`/campaigns/${id}/top-donations`),
+    http.get<DonationTopResType>(`/campaigns/${id}/top-donations`),
   getNewDonationsList: (id: number) =>
-    http.get<DonationResType>(`/campaigns/${id}/donations`),
+    http.get<DonationTopResType>(`/campaigns/${id}/donations`),
   exportDonationList: (body: ExportDonationBodyType) =>
     http.post<Blob>(`${prefix}/export`, body, {
       isBlob: true,
