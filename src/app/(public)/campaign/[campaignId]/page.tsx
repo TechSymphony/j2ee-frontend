@@ -7,7 +7,10 @@ import CampaignList from "@/components/campaign/campaign-list";
 import { useParams } from "next/navigation";
 import { useGetCampaignQuery } from "@/queries/useCampaign";
 import DonationDialog from "@/components/donation/donation-dialog";
-import { useGetTopListDonationQuery, useGetNewListDonationQuery } from "@/queries/useDonation";
+import {
+  useGetTopListDonationQuery,
+  useGetNewListDonationQuery,
+} from "@/queries/useDonation";
 
 // import Link from 'next/link'
 
@@ -33,8 +36,8 @@ export default function CampaignDetail() {
   const donations = topDonation?.payload ?? [];
   const newDonations = newDonation?.payload ?? [];
 
-  const aggregatedDonations = donations.reduce((acc, donation) => {
-    const donorName = donation.donor.fullName;
+  const aggregatedDonations = donations?.reduce((acc, donation) => {
+    const donorName = donation?.donor?.fullName || "";
     if (!acc[donorName]) {
       acc[donorName] = { ...donation };
     } else {
@@ -44,7 +47,6 @@ export default function CampaignDetail() {
   }, {});
 
   const aggregatedDonationsArray = Object.values(aggregatedDonations);
-
 
   const campaign = initialData?.payload ?? {
     id: 0,
@@ -155,19 +157,20 @@ export default function CampaignDetail() {
                   Top 10 Nhà hảo tâm hàng đầu
                 </h2>
                 <ul className="space-y-2">
-                  {Array.isArray(aggregatedDonationsArray) && aggregatedDonationsArray.map((donation, index) => (
-                    <li
-                      key={index}
-                      className="flex items-center justify-between"
-                    >
-                      <div className="flex items-center">
-                        <span>{donation.donor.fullName}</span>
-                      </div>
-                      <span className="font-semibold">
-                        {donation.amountTotal.toLocaleString("de-DE")}đ
-                      </span>
-                    </li>
-                  ))}
+                  {Array.isArray(aggregatedDonationsArray) &&
+                    aggregatedDonationsArray.map((donation, index) => (
+                      <li
+                        key={index}
+                        className="flex items-center justify-between"
+                      >
+                        <div className="flex items-center">
+                          <span>{donation.donor.fullName}</span>
+                        </div>
+                        <span className="font-semibold">
+                          {donation.amountTotal.toLocaleString("de-DE")}đ
+                        </span>
+                      </li>
+                    ))}
                 </ul>
               </div>
               {/* Nhà hảo tâm mới nhất */}
@@ -176,19 +179,20 @@ export default function CampaignDetail() {
                   Nhà hảo tâm mới nhất
                 </h2>
                 <ul className="space-y-2">
-                  {Array.isArray(newDonations) && newDonations.map((donation, index) => (
-                    <li
-                      key={index}
-                      className="flex items-center justify-between"
-                    >
-                      <div className="flex items-center">
-                        <span>{donation.donor.fullName}</span>
-                      </div>
-                      <span className="font-semibold">
-                        {donation.amountBase.toLocaleString("de-DE")}đ
-                      </span>
-                    </li>
-                  ))}
+                  {Array.isArray(newDonations) &&
+                    newDonations.map((donation, index) => (
+                      <li
+                        key={index}
+                        className="flex items-center justify-between"
+                      >
+                        <div className="flex items-center">
+                          <span>{donation.donor.fullName}</span>
+                        </div>
+                        <span className="font-semibold">
+                          {donation.amountBase.toLocaleString("de-DE")}đ
+                        </span>
+                      </li>
+                    ))}
                 </ul>
               </div>
             </div>

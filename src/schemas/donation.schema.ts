@@ -54,7 +54,11 @@ export const DonationRes = z.object({
   message: z.string(),
 });
 
+export const DonationTopRes = z.array(DonationRes);
+
 export type DonationResType = z.TypeOf<typeof DonationRes>;
+
+export type DonationTopResType = z.TypeOf<typeof DonationTopRes>;
 
 export const CreatedDonationRes = z.object({
   id: z.number(),
