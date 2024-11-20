@@ -1,7 +1,7 @@
 import { BellIcon } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import Stomp, { Client } from "stompjs";
+import Stomp from "stompjs";
 import SockJS from "sockjs-client";
 import { NotificationType } from '../../schemas/notification.schema';
 import { useState } from "react";
