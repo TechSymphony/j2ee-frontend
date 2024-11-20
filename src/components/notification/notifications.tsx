@@ -1,9 +1,29 @@
 import { BellIcon } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import Stomp, { Client } from "stompjs";
+import SockJS from "sockjs-client";
+import { NotificationType } from '../../schemas/notification.schema';
+import { useState } from "react";
 
-function Notifications({ notifications }) {
-  notifications = [];
+function Notifications() {
+
+  const [notifications, setNotification] = useState<NotificationType[]>([]);
+
+  const socket = new SockJS("https://localhost:8080/ws")
+  const privateStompClient = Stomp.over(socket);
+
+  privateStompClient.connect({}, function (frame) {
+    console.log(frame);
+    privateStompClient.subscribe(`/specific/test/messages`, onMessageReceived);
+  })
+
+  const onMessageReceived = (message: Stomp.Message) => {
+    const newMessage: NotificationType = JSON.parse(message.body);
+    notifications.push(newMessage);
+    setNotification(notifications);
+  }
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -30,7 +50,7 @@ function Notifications({ notifications }) {
                 key={index}
                 className="p-2 bg-gray-100 rounded-md hover:bg-gray-200 transition"
               >
-                {notification}
+                {notification.message}
               </li>
             ))}
           </ul>
