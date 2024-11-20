@@ -5,17 +5,19 @@ import Stomp, { Client } from "stompjs";
 import SockJS from "sockjs-client";
 import { NotificationType } from '../../schemas/notification.schema';
 import { useState } from "react";
+import { useUser } from "@/contexts/user-context";
 
 function Notifications() {
 
   const [notifications, setNotification] = useState<NotificationType[]>([]);
+  const username = useUser().state.user?.profile.sub;
 
   const socket = new SockJS("https://localhost:8080/ws")
   const privateStompClient = Stomp.over(socket);
 
   privateStompClient.connect({}, function (frame) {
     console.log(frame);
-    privateStompClient.subscribe(`/specific/test/messages`, onMessageReceived);
+    privateStompClient.subscribe(`/specific/${username}/messages`, onMessageReceived);
   })
 
   const onMessageReceived = (message: Stomp.Message) => {
