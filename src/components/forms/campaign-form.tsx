@@ -40,6 +40,7 @@ import { handleErrorFromApi } from "@/lib/utils";
 import { useRefetch } from "@/contexts/app-context";
 import { ReviewStatusEnum, ReviewStatusOptions } from "@/types/enum";
 import { CategoryMenu } from "../../schemas/category.schema";
+import { InitTextarea } from "./init-textarea";
 
 export const CampaignForm = () => {
   const params = useParams();
@@ -188,12 +189,13 @@ export const CampaignForm = () => {
                 <FormItem>
                   <FormLabel htmlFor="description">Mô tả</FormLabel>
                   <FormControl>
-                    <Input id="description" disabled={loading} {...field} />
+                    <Input id="description" type="hidden" disabled={loading} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            <InitTextarea form={form} field="description" />
             <FormField
               control={form.control}
               name="code"

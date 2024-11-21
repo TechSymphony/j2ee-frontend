@@ -19,29 +19,7 @@ import { CreateBeneficiaryBody, CreateBeneficiaryBodyType } from "@/schemas/bene
 import { useCreateBeneficiary } from "@/queries/useBeneficiary";
 import { toast } from "@/hooks/use-toast";
 import { handleErrorFromApi } from "@/lib/utils";
-
-const InitTextarea = function ({ form }) {
-  const { quill, quillRef } = useQuill();
-
-  const { setValue } = form;
-
-  React.useEffect(() => {
-    if (quill) {
-      quill.on("text-change", () => {
-        setValue("situationDetail", quill.getSemanticHTML());
-      });
-    }
-  }, [quill]);
-
-  return (
-    <>
-      <b id="editor-label"></b>
-      <div id="editor">
-        <div ref={quillRef} />
-      </div>
-    </>
-  );
-};
+import { InitTextarea } from "./init-textarea";
 
 export default function BeneficiaryForm() {
   const [loading, setLoading] = useState(false);
@@ -93,7 +71,7 @@ export default function BeneficiaryForm() {
                 </FormItem>
               )}
             />
-            <InitTextarea form={form} />
+            <InitTextarea form={form} field="situationDetail" />
           </div>
           <div className="mb-6">
             <FormField
