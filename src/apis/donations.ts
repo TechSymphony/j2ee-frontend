@@ -4,6 +4,9 @@ import {
   CreateDonationBodyType,
   DonationListResType,
   DonationResType,
+  DonationTopResType,
+  ExportDonationBodyType,
+  DonationStatisResType,
 } from "@/schemas/donation.schema";
 
 const prefix = "/donations";
