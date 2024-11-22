@@ -101,9 +101,17 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
                 <Edit className="mr-2 h-4 w-4" /> Cập nhật
               </DropdownMenuItem>
             )}
-          <DropdownMenuItem onClick={() => setOpen(true)}>
-            <Trash className="mr-2 h-4 w-4" /> Xóa
-          </DropdownMenuItem>
+
+          {(ReviewStatusEnum[
+            data.verificationStatus as unknown as keyof typeof ReviewStatusEnum
+          ] === ReviewStatusEnum.REJECT ||
+            ReviewStatusEnum[
+            data.verificationStatus as unknown as keyof typeof ReviewStatusEnum
+            ] === ReviewStatusEnum.WAITING) && (
+              <DropdownMenuItem onClick={() => setOpen(true)}>
+                <Trash className="mr-2 h-4 w-4" /> Xóa
+              </DropdownMenuItem>
+            )}
         </DropdownMenuContent>
       </DropdownMenu>
       <BeneficiaryClientPopup

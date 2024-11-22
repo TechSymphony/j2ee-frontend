@@ -12,6 +12,7 @@ import { toast } from "@/hooks/use-toast";
 import { handleErrorFromApi } from "@/lib/utils";
 import { useDeleteCampaignMutation } from "@/queries/useCampaign";
 import { CampaignType } from "@/schemas/campaign.schema";
+import { ReviewStatusEnum } from "@/types/enum";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -65,13 +66,15 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuLabel>Hành động</DropdownMenuLabel>
 
           {/* Chỉ hiển thị nút "Update" khi trạng thái không bị "REJECT" */}
-          {data.status !== "REJECT" && (
-            <DropdownMenuItem
-              onClick={() => router.push(`/dashboard/campaign/${data.id}`)}
-            >
-              <Edit className="mr-2 h-4 w-4" /> Cập nhật
-            </DropdownMenuItem>
-          )}
+          {ReviewStatusEnum[
+            data.status as unknown as keyof typeof ReviewStatusEnum
+          ] === ReviewStatusEnum.WAITING && (
+              <DropdownMenuItem
+                onClick={() => router.push(`/dashboard/campaign/${data.id}`)}
+              >
+                <Edit className="mr-2 h-4 w-4" /> Cập nhật
+              </DropdownMenuItem>
+            )}
           <DropdownMenuItem onClick={() => setOpen(true)}>
             <Trash className="mr-2 h-4 w-4" /> Xóa
           </DropdownMenuItem>
