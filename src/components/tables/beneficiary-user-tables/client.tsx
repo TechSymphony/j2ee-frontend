@@ -11,6 +11,8 @@ import { DataTablePagination } from "@/components/ui/data-table-pagination";
 import { DataTableComponentType } from "@/components/ui/table/data-table-factory-filter";
 import useQueryConfig from "./beneficiary-query-table";
 import { ReviewStatusOptions } from "@/types/enum";
+import { useState } from "react";
+import BeneficiaryClientPopup from "@/components/modal/popup-beneficiary-client";
 
 export const BeneficiaryUserTable = () => {
   const router = useRouter();
@@ -44,6 +46,18 @@ export const BeneficiaryUserTable = () => {
       },
     },
   ];
+
+
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [popupMode, setPopupMode] = useState<"create" | "edit" | "show">("create");
+  const [selectedId, setSelectedId] = useState<number | undefined>(undefined);
+
+  const handleAddNew = () => {
+    setPopupMode("create");
+    setSelectedId(undefined);
+    setPopupOpen(true);
+  };
+
   return (
     <>
       <div className="flex items-start justify-between">
@@ -54,7 +68,7 @@ export const BeneficiaryUserTable = () => {
 
         <Button
           className="text-xs md:text-sm"
-          onClick={() => router.push(`/beneficiary`)}
+          onClick={handleAddNew}
         >
           <Plus className="mr-2 h-4 w-4" /> Thêm mới
         </Button>
@@ -65,6 +79,13 @@ export const BeneficiaryUserTable = () => {
         columns={columns}
         data={data}
         filters={filters}
+      />
+      <BeneficiaryClientPopup
+        id={selectedId}
+        setId={setSelectedId}
+        mode={popupMode}
+        open={popupOpen}
+        setOpen={setPopupOpen}
       />
     </>
   );

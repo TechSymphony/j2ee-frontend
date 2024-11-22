@@ -122,7 +122,13 @@ export const useDeleteMyBeneficiaryMutation = () => {
   });
 };
 export const useCreateBeneficiary = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: beneficiaryApi.createUserBeneficiary,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["my-beneficiaries"],
+      });
+    },
   });
 };

@@ -12,13 +12,12 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { useQuill } from "react-quilljs";
 import "quill/dist/quill.snow.css";
 import { CreateBeneficiaryBody, CreateBeneficiaryBodyType } from "@/schemas/beneficiary.schema";
 import { useCreateBeneficiary } from "@/queries/useBeneficiary";
 import { toast } from "@/hooks/use-toast";
 import { handleErrorFromApi } from "@/lib/utils";
+import { ReviewStatusEnum } from "@/types/enum";
 import { InitTextarea } from "./init-textarea";
 
 export default function BeneficiaryForm() {
@@ -26,12 +25,17 @@ export default function BeneficiaryForm() {
 
   const form = useForm<CreateBeneficiaryBodyType>({
     resolver: zodResolver(CreateBeneficiaryBody),
+    defaultValues: {
+      situationDetail: "",
+      supportReceived: 0,
+      verificationStatus: ReviewStatusEnum.WAITING,
+    },
   });
 
   const createBeneficiary = useCreateBeneficiary();
 
   const onSubmit = async (data: CreateBeneficiaryBodyType) => {
-  
+
     try {
       setLoading(true);
       await createBeneficiary.mutateAsync(data);
@@ -85,7 +89,10 @@ export default function BeneficiaryForm() {
                       type="number"
                       placeholder="Nhập số tiền dự kiến"
                       disabled={loading}
-                      {...field}
+                      value={field.value || ""}
+                      onChange={(e) =>
+                        field.onChange(Number(e.target.value))
+                      }
                     ></Input>
                   </FormControl>
                   <FormMessage />
