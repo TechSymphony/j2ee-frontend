@@ -21,7 +21,6 @@ import {
 } from "../ui/table/data-table-filter-box-hiarachy";
 import { useGetCategoryMenus } from "@/queries/useCategory";
 import { CategoryMenu } from "@/schemas/category.schema";
-import DonationDialog from "../donation/donation-dialog";
 // import { CampaignType } from "@/schemas/campaign.schema";
 
 const Campaign = lazy(() => import("@/components/campaign/campaign"));
@@ -88,16 +87,18 @@ export default function CampaignList() {
         ></DataTableFilterBoxHiarachy>
       </div>
       {isLoading ? ( // Nếu dữ liệu đang được tải thì hiển thị Loading
-        <>
-          <div>Đang tải...</div>
-        </>
+        <div className="text-center text-gray-500 my-6">Đang tải...</div>
+      ) : campaigns.length === 0 ? ( // Nếu không có dữ liệu
+        <div className="text-center text-gray-500 my-6">
+          Không tìm thấy kết quả
+        </div>
       ) : (
         <>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 my-4">
             {campaigns &&
               campaigns.map((campaign, index) => (
                 <Suspense key={index} fallback={<div>DD...</div>}>
-                  <div className="rounded-xl border bg-background ">
+                  <div className="rounded-xl border bg-background">
                     <Campaign
                       data={campaign}
                       onClick={() => router.push(`/campaign/${campaign.id}`)}
@@ -110,17 +111,20 @@ export default function CampaignList() {
             <>
               <Pagination>
                 <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        if (pageIndex > 0) handlePageChange(pageIndex - 1);
-                      }}
-                    >
-                      Trước
-                    </PaginationPrevious>
-                  </PaginationItem>
+                  {/* Ẩn nút PaginationPrevious nếu ở trang đầu tiên */}
+                  {pageIndex > 0 && (
+                    <PaginationItem>
+                      <PaginationPrevious
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (pageIndex > 0) handlePageChange(pageIndex - 1);
+                        }}
+                      >
+                        Trước
+                      </PaginationPrevious>
+                    </PaginationItem>
+                  )}
 
                   {/* Loop through total pages and display each page number */}
                   {[...Array(totalPages)].map((_, idx) => (
@@ -139,24 +143,27 @@ export default function CampaignList() {
                   ))}
 
                   {/* Pagination Ellipsis (for larger number of pages) */}
-                  {totalPages > 3 && (
+                  {totalPages > 4 && (
                     <PaginationItem>
                       <PaginationEllipsis />
                     </PaginationItem>
                   )}
 
-                  <PaginationItem>
-                    <PaginationNext
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        if (pageIndex < totalPages - 1)
-                          handlePageChange(pageIndex + 1);
-                      }}
-                    >
-                      Sau
-                    </PaginationNext>
-                  </PaginationItem>
+                  {/* Ẩn nút PaginationNext nếu ở trang cuối cùng */}
+                  {pageIndex < totalPages - 1 && (
+                    <PaginationItem>
+                      <PaginationNext
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (pageIndex < totalPages - 1)
+                            handlePageChange(pageIndex + 1);
+                        }}
+                      >
+                        Sau
+                      </PaginationNext>
+                    </PaginationItem>
+                  )}
                 </PaginationContent>
               </Pagination>
             </>
