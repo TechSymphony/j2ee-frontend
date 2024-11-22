@@ -41,6 +41,7 @@
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
     "lucide-react": "^0.439.0",
+    "net": "^1.0.2",
     "next": "^14.2.8",
     "next-themes": "^0.3.0",
     "nextjs-toploader": "^3.6.15",

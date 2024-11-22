@@ -1,58 +1,56 @@
+"use client";
 import { BellIcon } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import Stomp from "stompjs";
-import SockJS from "sockjs-client";
-import { NotificationType } from '../../schemas/notification.schema';
+import { useWebsockets } from "@/contexts/websocket-context";
+import { NotificationType } from "@/schemas/notification.schema";
 import { useState } from "react";
-import { useUser } from "@/contexts/user-context";
 
 function Notifications() {
+  const { setCallback, updateReadNotifications } = useWebsockets();
+  const [messages, setMessages] = useState<Array<NotificationType>>([]);
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
+  
+  setCallback(setMessages);
 
-  const [notifications, setNotification] = useState<NotificationType[]>([]);
-  const username = useUser().state.user?.profile.sub;
+  const setNotificationAsRead = () => {
+    for(const message of messages) {
+      updateReadNotifications(message.id);
+    }
+    setUnreadNotifications(0);
+  }
 
-  const socket = new SockJS("https://localhost:8080/ws")
-  const privateStompClient = Stomp.over(socket);
-
-  privateStompClient.connect({}, function (frame) {
-    console.log(frame);
-    privateStompClient.subscribe(`/specific/${username}/messages`, onMessageReceived);
-  })
-
-  const onMessageReceived = (message: Stomp.Message) => {
-    const newMessage: NotificationType = JSON.parse(message.body);
-    notifications.push(newMessage);
-    setNotification(notifications);
+  for(const message of messages) {
+    setUnreadNotifications(!message.isRead ? unreadNotifications+1 : unreadNotifications);
   }
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild onClick={setNotificationAsRead}>
         <button className="relative p-2 rounded-full hover:bg-gray-200 focus:outline-none">
           <BellIcon className="w-6 h-6" />
-          {notifications.length > 0 && (
+          {unreadNotifications > 0 && (
             <Badge
               variant="destructive"
               className="absolute top-0 right-0 h-4 w-4 flex items-center justify-center rounded-full text-white text-xs bg-red-600"
             >
-              {notifications.length}
+              {unreadNotifications}
             </Badge>
           )}
         </button>
       </PopoverTrigger>
 
       <PopoverContent className="p-4 w-72 shadow-lg rounded-lg">
-        {notifications.length === 0 ? (
-          <p className="text-gray-500 text-sm">No new notifications</p>
+        {messages.length === 0 ? (
+          <p className="text-gray-500 text-sm">No new messages</p>
         ) : (
           <ul className="space-y-2">
-            {notifications.map((notification, index) => (
+            {messages.map((message, index) => (
               <li
                 key={index}
                 className="p-2 bg-gray-100 rounded-md hover:bg-gray-200 transition"
               >
-                {notification.message}
+                {message.message}
               </li>
             ))}
           </ul>
