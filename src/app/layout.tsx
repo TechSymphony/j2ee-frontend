@@ -9,6 +9,7 @@ import UserProvider from "@/contexts/user-context";
 import { RouteAuthorize } from "@/components/authorization/route-authorize";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import ErrorBoundary from "./error-boundary";
+import WebsocketsContextProvider from "@/contexts/websocket-context";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -42,7 +43,11 @@ export default function RootLayout({
                   enableSystem
                   disableTransitionOnChange
                 >
-                  <RouteAuthorize>{children}</RouteAuthorize>
+                  <RouteAuthorize>
+                    <WebsocketsContextProvider>
+                      {children}
+                    </WebsocketsContextProvider>
+                  </RouteAuthorize>
 
                   <Toaster />
                 </ThemeProvider>
