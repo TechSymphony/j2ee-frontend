@@ -40,6 +40,7 @@ import { handleErrorFromApi } from "@/lib/utils";
 import { useRefetch } from "@/contexts/app-context";
 import { ReviewStatusEnum, ReviewStatusOptions } from "@/types/enum";
 import { CategoryMenu } from "../../schemas/category.schema";
+import { InitTextarea } from "./init-textarea";
 
 export const CampaignForm = () => {
   const params = useParams();
@@ -163,37 +164,47 @@ export const CampaignForm = () => {
       </div>
       <Separator />
       <Form {...form}>
+        <link
+          href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css"
+          rel="stylesheet"
+        />
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="w-full space-y-8"
         >
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel htmlFor="name">Tên</FormLabel>
+                <FormControl>
+                  <Input id="name" disabled={loading} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel htmlFor="description">Mô tả</FormLabel>
+                <FormControl>
+                  <Input
+                    id="description"
+                    type="hidden"
+                    disabled={loading}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <InitTextarea form={form} field="description" />
           <div className="gap-8 md:grid md:grid-cols-2">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="name">Tên</FormLabel>
-                  <FormControl>
-                    <Input id="name" disabled={loading} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="description">Mô tả</FormLabel>
-                  <FormControl>
-                    <Input id="description" disabled={loading} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <FormField
               control={form.control}
               name="code"
@@ -309,11 +320,15 @@ export const CampaignForm = () => {
                     }}
                   >
                     <FormControl>
-                      <SelectTrigger >
-                        <SelectValue placeholder={findOptionByValue(field?.value?.id?.toString(),
-                          categories ?? [])?.name || "Chọn loại chiến dịch"
-                        }>
-                        </SelectValue>
+                      <SelectTrigger>
+                        <SelectValue
+                          placeholder={
+                            findOptionByValue(
+                              field?.value?.id?.toString(),
+                              categories ?? []
+                            )?.name || "Chọn loại chiến dịch"
+                          }
+                        ></SelectValue>
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -335,7 +350,10 @@ export const CampaignForm = () => {
 };
 
 // Helper functions to find the option and its parent in the hierarchy
-function findOptionByValue(value: string, options: CategoryMenu[]): CategoryMenu | undefined {
+function findOptionByValue(
+  value: string,
+  options: CategoryMenu[]
+): CategoryMenu | undefined {
   let result = undefined;
   for (const option of options) {
     if (option.id == Number(value)) {
