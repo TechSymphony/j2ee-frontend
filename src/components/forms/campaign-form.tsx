@@ -164,6 +164,10 @@ export const CampaignForm = () => {
       </div>
       <Separator />
       <Form {...form}>
+        <link
+          href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css"
+          rel="stylesheet"
+        />
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="w-full space-y-8"
