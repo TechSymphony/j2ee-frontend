@@ -203,7 +203,7 @@ export const CampaignForm = () => {
               </FormItem>
             )}
           />
-          <InitTextarea form={form} field="description" />
+          <InitTextarea form={form} field="description" fieldValue={form.getValues("description")} />
           <div className="gap-8 md:grid md:grid-cols-2">
             <FormField
               control={form.control}
