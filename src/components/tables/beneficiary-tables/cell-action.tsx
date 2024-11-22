@@ -8,12 +8,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { toast } from "@/hooks/use-toast";
-import { handleErrorFromApi } from "@/lib/utils";
 import { BeneficiaryType } from "@/schemas/beneficiary.schema";
-import { Edit, Eye, MoreHorizontal, Trash } from "lucide-react";
+import { Eye, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ReviewStatusEnum } from "@/types/enum";
+
 
 interface CellActionProps {
   data: BeneficiaryType;
@@ -45,7 +45,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   //     }
   //   };
 
-  const onDelete = async function () {};
+  const onDelete = async function () { };
 
   return (
     <>
@@ -65,16 +65,25 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Hành động</DropdownMenuLabel>
 
-          <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/beneficiary/${data.id}`)}
-          >
-            <Eye className="mr-2 h-4 w-4" /> Hiển thị
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/beneficiary/${data.id}`)}
-          >
-            <Edit className="mr-2 h-4 w-4" /> Cập nhật
-          </DropdownMenuItem>
+          {(ReviewStatusEnum[
+            data.verificationStatus as unknown as keyof typeof ReviewStatusEnum
+          ] === ReviewStatusEnum.APPROVED ||
+            ReviewStatusEnum[
+            data.verificationStatus as unknown as keyof typeof ReviewStatusEnum
+            ] === ReviewStatusEnum.WAITING) && (
+              <DropdownMenuItem
+                onClick={() => router.push(`/dashboard/beneficiary/${data.id}`)}
+              >
+                <Eye className="mr-2 h-4 w-4" /> Hiển thị
+              </DropdownMenuItem>
+            )}
+          {ReviewStatusEnum[
+            data.verificationStatus as unknown as keyof typeof ReviewStatusEnum
+          ] === ReviewStatusEnum.REJECT && (
+              <DropdownMenuItem onClick={() => setOpen(true)}>
+                <Trash className="mr-2 h-4 w-4" /> Xóa
+              </DropdownMenuItem>
+            )}
         </DropdownMenuContent>
       </DropdownMenu>
     </>
