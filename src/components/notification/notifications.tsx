@@ -4,14 +4,20 @@ import { Badge } from "../ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { useWebsockets } from "@/contexts/websocket-context";
 import { NotificationType } from "@/schemas/notification.schema";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function Notifications() {
-  const { setCallback, updateReadNotifications } = useWebsockets();
+  const { notifications, setCallback, updateReadNotifications } = useWebsockets();
   const [messages, setMessages] = useState<Array<NotificationType>>([]);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
   
   setCallback(setMessages);
+
+  useEffect(() => {
+    console.log(messages.length);
+    console.log(notifications.length);
+    setMessages(messages);
+  }, [messages, notifications]);
 
   const setNotificationAsRead = () => {
     for(const message of messages) {
@@ -20,21 +26,17 @@ function Notifications() {
     setUnreadNotifications(0);
   }
 
-  for(const message of messages) {
-    setUnreadNotifications(!message.isRead ? unreadNotifications+1 : unreadNotifications);
-  }
-
   return (
     <Popover>
       <PopoverTrigger asChild onClick={setNotificationAsRead}>
         <button className="relative p-2 rounded-full hover:bg-gray-200 focus:outline-none">
           <BellIcon className="w-6 h-6" />
-          {unreadNotifications > 0 && (
+          {messages.length > 0 && (
             <Badge
               variant="destructive"
               className="absolute top-0 right-0 h-4 w-4 flex items-center justify-center rounded-full text-white text-xs bg-red-600"
             >
-              {unreadNotifications}
+              {messages.length}
             </Badge>
           )}
         </button>
