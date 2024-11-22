@@ -37,6 +37,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { Checkbox } from "../ui/checkbox";
 
 export function ImportStudentDialog() {
   const [open, setOpen] = useState(false);
@@ -54,6 +55,7 @@ export function ImportStudentDialog() {
   const onSubmit = async (data: ImportStudentBodyType) => {
     const formData = new FormData();
     formData.append("file", data.file[0]);
+    formData.append("isStudent", data.isStudent ? "true" : "false");
     try {
       const res = await importStudentMutation.mutateAsync(formData);
 
@@ -92,6 +94,25 @@ export function ImportStudentDialog() {
                         <FormLabel>Tệp tin cần nhập vào hệ thống</FormLabel>
                         <FormControl>
                           <Input id="file" type="file" {...fileRef} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="">
+                  <FormField
+                    control={form.control}
+                    name="isStudent"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Là sinh viên? </FormLabel>
+                        <FormControl>
+                          <Checkbox
+                            id="isStudent"
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
