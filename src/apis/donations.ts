@@ -6,6 +6,7 @@ import {
   DonationResType,
   DonationTopResType,
   ExportDonationBodyType,
+  DonationStatisResType,
 } from "@/schemas/donation.schema";
 
 const prefix = "/donations";
@@ -29,5 +30,6 @@ const donationApi = {
     http.post<Blob>(`${prefix}/export`, body, {
       isBlob: true,
     }),
+  getDonationStatis: () => http.get<DonationStatisResType>(`${prefix}/report`),
 };
 export default donationApi;

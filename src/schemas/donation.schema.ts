@@ -85,3 +85,10 @@ export const ExportDonationBody = z.object({
 });
 
 export type ExportDonationBodyType = z.infer<typeof ExportDonationBody>;
+
+export const DonationStatisRes = z.object({
+  period: z.string(),
+  amountTotal: z.number(),
+});
+
+export type DonationStatisResType = z.TypeOf<typeof DonationStatisRes>;
