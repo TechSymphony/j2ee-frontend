@@ -94,6 +94,7 @@ export const ChangePasswordBody = z
 export type ChangePasswordBodyType = z.TypeOf<typeof ChangePasswordBody>;
 export const ImportStudentBody = z.object({
   file: typeof window === "undefined" ? z.any() : z.instanceof(FileList),
+  isStudent: z.boolean().optional(),
 });
 
 export type ImportStudentBodyType = z.TypeOf<typeof ImportStudentBody>;
