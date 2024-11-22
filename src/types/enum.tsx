@@ -1,6 +1,3 @@
-import { Badge } from "@/components/ui/badge";
-import exp from "constants";
-
 export enum ReviewStatusEnum {
   WAITING = 0,
   APPROVED = 1,
@@ -12,6 +9,11 @@ export enum ReviewFrequencyEnum {
   MONTHLY = 1,
   QUARTERLY = 2,
   YEARLY = 3,
+}
+export enum StatisEnum {
+  DAILY = "daily",
+  MONTHLY = "monthly",
+  YEARLY = "yearly",
 }
 
 // Create an array of options manually because js is too stupid
@@ -52,4 +54,10 @@ export const AnonymousDonationOptions = [
     value: "false",
     label: "Công khai",
   },
+];
+
+export const StatisTypeOptions = [
+  { value: StatisEnum.DAILY, label: "Ngày" },
+  { value: StatisEnum.MONTHLY, label: "Tháng" },
+  { value: StatisEnum.YEARLY, label: "Năm" },
 ];

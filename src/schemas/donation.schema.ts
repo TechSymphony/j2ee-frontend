@@ -73,3 +73,10 @@ export const CreateDonationBody = z
   .strict();
 
 export type CreateDonationBodyType = z.TypeOf<typeof CreateDonationBody>;
+
+export const DonationStatisRes = z.object({
+  period: z.string(),
+  amountTotal: z.number(),
+});
+
+export type DonationStatisResType = z.TypeOf<typeof DonationStatisRes>;

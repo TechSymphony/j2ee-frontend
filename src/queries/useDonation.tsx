@@ -28,7 +28,6 @@ export const useGetMyDonationListQuery = (queryConfig?: QueryConfig) => {
     staleTime: 0,
     enabled: true,
   });
-
 };
 
 export const useGetTopListDonationQuery = ({
@@ -70,5 +69,12 @@ export const useAddDonationMutation = () => {
         queryKey: ["campaigns-detail"],
       });
     },
+  });
+};
+
+export const useGetDonationStatisQuery = (queryConfig?: QueryConfig) => {
+  return useQuery({
+    queryKey: ["donation-statis", queryConfig],
+    queryFn: donationApi.getDonationStatis,
   });
 };
