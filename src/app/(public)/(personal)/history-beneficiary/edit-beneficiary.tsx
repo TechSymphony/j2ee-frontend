@@ -165,7 +165,7 @@ export default function EditBeneficiary({
                         <Select
                           onValueChange={(value) => field.onChange(value)}
                           value={field.value?.toString() || ""}
-                          // disabled={!initialData}
+                          disabled={true}
                         >
                           <SelectTrigger>
                             <SelectValue placeholder="Chọn trạng thái" />

@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
 // import { Checkbox } from "@/components/ui/checkbox";
 import { BeneficiaryType } from "@/schemas/beneficiary.schema";
-import { ReviewStatusEnum } from "@/types/enum"; // Import Select components
+import { ReviewStatusEnum, ReviewStatusOptions } from "@/types/enum"; // Import Select components
 
 import classNames from "classnames";
 
@@ -33,19 +33,23 @@ export const columns: ColumnDef<BeneficiaryType>[] = [
     cell: ({ row }) => {
       const verificationStatus =
         ReviewStatusEnum[
-          row.original
-            .verificationStatus as unknown as keyof typeof ReviewStatusEnum
+        row.original
+          .verificationStatus as unknown as keyof typeof ReviewStatusEnum
         ];
+
+      const statusOption = ReviewStatusOptions.find(
+        (option) => option.value === verificationStatus
+      );
 
       return (
         <div
-          className={classNames("text-xs font-semibold", {
+          className={classNames("text-sm font-semibold", {
             "text-green-500": verificationStatus === ReviewStatusEnum.APPROVED,
             "text-red-500": verificationStatus === ReviewStatusEnum.REJECT,
             "text-yellow-500": verificationStatus === ReviewStatusEnum.WAITING,
           })}
         >
-          {row.original.verificationStatus}
+          {statusOption ? statusOption.label : row.original.verificationStatus}
         </div>
       );
     },

@@ -40,8 +40,8 @@ export type UpdateBeneficiaryBodyType = z.TypeOf<typeof UpdateBeneficiaryBody>;
 export const UpdateMyBeneficiaryBody = z
   .object({
     situationDetail: z.string().optional(),
-    supportReceived: z.number().optional(),
-    verificationStatus: z.string().optional(),
+    supportReceived: z.number().min(500000, { message: "Vui lòng nhập số tiền - tối thiểu 500.000 đồng" }),
+    verificationStatus: z.number(),
   })
   .strict();
 
@@ -51,12 +51,8 @@ export type UpdateMyBeneficiaryBodyType = z.TypeOf<
 
 export const CreateBeneficiaryBody = z.object({
   situationDetail: z.string(),
-  supportReceived: z
-    .string()
-    .refine((val) => !Number.isNaN(parseInt(val, 10)), {
-      message: "Vui lòng nhập số tiền mong muốn kêu gọi.",
-    }),
-  verificationStatus: z.string().default("WAITING"),
+  supportReceived: z.number().min(500000, { message: "Vui lòng nhập số tiền - tối thiểu 500.000 đồng" }),
+  verificationStatus: z.number(),
 });
 
 export type CreateBeneficiaryBodyType = z.TypeOf<typeof CreateBeneficiaryBody>;
