@@ -94,3 +94,10 @@ export const useExportDonationMutation = () => {
       donationApi.exportDonationList(body),
   });
 };
+
+export const useGetDonationStatisQuery = (queryConfig?: QueryConfig) => {
+  return useQuery({
+    queryKey: ["donation-statis", queryConfig],
+    queryFn: donationApi.getDonationStatis,
+  });
+};
