@@ -36,16 +36,31 @@ import {
   CreateCampaignBodyType,
   UpdateCampaignBodyType,
 } from "@/schemas/campaign.schema";
-import { handleErrorFromApi } from "@/lib/utils";
 import { useRefetch } from "@/contexts/app-context";
 import { ReviewStatusEnum, ReviewStatusOptions } from "@/types/enum";
 import { CategoryMenu } from "../../schemas/category.schema";
-import { InitTextarea } from "./init-textarea";
+import QuillEditor from "@/components/ui/quill-editor";
+
 
 export const CampaignForm = () => {
   const params = useParams();
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [image, setImage] = useState<File | null>();
+  const [error, setError] = useState<string | null>();
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        setError('Vui lòng chọn tệp có định dạng là hình ảnh.');
+        setImage(null);
+      } else {
+        setError(null);
+        setImage(file);
+      }
+    }
+  };
+
 
   // Get category list
   const { data: fetchCategoryList } = useGetCategoryMenus();
@@ -88,6 +103,7 @@ export const CampaignForm = () => {
       endDate: new Date(),
       status: ReviewStatusEnum.WAITING,
       disabledAt: false,
+      shortDescription: "",
     },
   });
 
@@ -105,6 +121,7 @@ export const CampaignForm = () => {
         endDate,
         status,
         disabledAt,
+        shortDescription,
       } = initialData.payload;
       form.reset({
         beneficiary,
@@ -118,45 +135,52 @@ export const CampaignForm = () => {
         endDate: new Date(endDate),
         status: ReviewStatusEnum[status as keyof typeof ReviewStatusEnum],
         disabledAt,
+        shortDescription,
       });
     }
   }, [initialData, form]);
 
-  const onSubmit = async (
-    data: UpdateCampaignBodyType | CreateCampaignBodyType
-  ) => {
-    console.log("check form", data);
+  console.log(form.getValues());
+
+  const onSubmit = async (data: UpdateCampaignBodyType | CreateCampaignBodyType) => {
+    if (!image) {
+      toast({
+        description: "Vui lòng chọn hình ảnh cho chiến dịch",
+      });
+      return;
+    }
 
     try {
       setLoading(true);
+      const formData = new FormData();
+      formData.append("campaign", new Blob([JSON.stringify(data)], { type: "application/json" }));
+      formData.append("image", image);
+
       if (initialData) {
-        const body: UpdateCampaignBodyType & { id: number } = {
-          id: updateCampaignId as number,
-          ...data,
-        };
-        await updateCampaignMutation.mutateAsync(body);
+        formData.append("id", updateCampaignId.toString());
+        await updateCampaignMutation.mutateAsync({ id: updateCampaignId, formData });
         toast({
           description: "Cập nhật chiến dịch thành công",
+          duration: 3000,
         });
         await refetch();
         triggerRefetch();
       } else {
-        await addCampaignMutation.mutateAsync(data as CreateCampaignBodyType);
+
+
+        await addCampaignMutation.mutateAsync(formData);
+        triggerRefetch();
         toast({
           description: "Tạo chiến dịch thành công",
-          duration: 5000,
+          duration: 3000,
         });
       }
-      triggerRefetch();
-      router.push(`/dashboard/campaign`);
     } catch (error: any) {
       console.error("API Error:", error);
-      handleErrorFromApi({ error, setError: form.setError });
     } finally {
       setLoading(false);
     }
   };
-  console.log(form.formState?.errors);
   return (
     <>
       <div className="flex items-center justify-between">
@@ -177,9 +201,22 @@ export const CampaignForm = () => {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel htmlFor="name">Tên</FormLabel>
+                <FormLabel htmlFor="name">Tên chiến dịch</FormLabel>
                 <FormControl>
                   <Input id="name" disabled={loading} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="shortDescription"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel htmlFor="short_description">Mô tả ngắn</FormLabel>
+                <FormControl>
+                  <Input id="short_description" disabled={loading} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -190,20 +227,18 @@ export const CampaignForm = () => {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel htmlFor="description">Mô tả</FormLabel>
-                <FormControl>
-                  <Input
-                    id="description"
-                    type="hidden"
-                    disabled={loading}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
+                <FormLabel htmlFor="name">Mô tả tình trạng cần hỗ trợ</FormLabel>
+                <div className="col-span-3 w-full space-y-2">
+                  <FormMessage />
+                </div>
+                <QuillEditor
+                  value={field.value || ""}
+                  onChange={field.onChange}
+                  disabled={false}
+                />
               </FormItem>
             )}
           />
-          <InitTextarea form={form} field="description" fieldValue={form.getValues("description")} />
           <div className="gap-8 md:grid md:grid-cols-2">
             <FormField
               control={form.control}
@@ -339,6 +374,18 @@ export const CampaignForm = () => {
                 </FormItem>
               )}
             />
+          </div>
+          <div>
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Hình ảnh
+            </label>
+            <input
+              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+              type="file"
+              name="image"
+              onChange={handleFileChange}
+            />
+            {error && <p className="mt-2 text-[0.8rem] font-medium text-destructive">{error}</p>}
           </div>
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}
