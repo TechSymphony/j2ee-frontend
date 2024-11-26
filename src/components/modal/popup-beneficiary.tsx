@@ -43,6 +43,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { BeneficiaryType } from "@/schemas/beneficiary.schema";
 import { useGetCategoryMenus } from "@/queries/useCategory";
 import { useGetUserBeneficiaryQuery } from "@/queries/useBeneficiary";
+import QuillEditor from "@/components/ui/quill-editor";
+import { useState } from "react";
 
 interface Props {
     isOpenPopup: boolean;
@@ -53,6 +55,21 @@ interface Props {
 
 export default function PopupBeneficiary({ isOpenPopup, setIsOpenPopup, beneficiary, onCampaignCreation }: Props) {
 
+    const [image, setImage] = useState<File | null>();
+    const [error, setError] = useState<string | null>();
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            if (!file.type.startsWith('image/')) {
+                setError('Vui lòng chọn tệp có định dạng là hình ảnh.');
+                setImage(null);
+            } else {
+                setError(null);
+                setImage(file);
+            }
+        }
+    };
     const addCampaignMutation = useAddCampaignMutation();
     const { data: fetchCategoryList } = useGetCategoryMenus();
 
@@ -73,6 +90,7 @@ export default function PopupBeneficiary({ isOpenPopup, setIsOpenPopup, benefici
             endDate: new Date(),
             status: ReviewStatusEnum.WAITING,
             disabledAt: false,
+            shortDescription: "",
         },
     });
     console.log("form", form.getValues());
@@ -88,8 +106,18 @@ export default function PopupBeneficiary({ isOpenPopup, setIsOpenPopup, benefici
     const onSubmit = async (values: CreateCampaignBodyType) => {
         if (addCampaignMutation.isPending) return;
         values.beneficiary = beneficiary; // Assign beneficiary to data before submitting
+
+        if (!image) {
+            toast({
+                description: "Vui lòng chọn hình ảnh cho chiến dịch",
+            });
+            return;
+        }
         try {
-            await addCampaignMutation.mutateAsync(values as CreateCampaignBodyType);
+            const formData = new FormData();
+            formData.append("campaign", new Blob([JSON.stringify(values)], { type: "application/json" }));
+            formData.append("image", image);
+            await addCampaignMutation.mutateAsync(formData);
             toast({
                 description: "Tạo chiến dịch thành công",
                 duration: 5000,
@@ -107,7 +135,7 @@ export default function PopupBeneficiary({ isOpenPopup, setIsOpenPopup, benefici
             open={isOpenPopup}
             onOpenChange={setIsOpenPopup}
         >
-            <DialogContent className="sm:max-w-[600px] max-h-screen overflow-auto" >
+            <DialogContent className="sm:max-w-[800px] max-h-screen overflow-auto" >
                 <DialogHeader>
                     <DialogTitle className="text-xl font-bold">Thông báo</DialogTitle>
                     <DialogDescription className="text-sm">
@@ -124,10 +152,10 @@ export default function PopupBeneficiary({ isOpenPopup, setIsOpenPopup, benefici
                     </div>
                 )}
                 <div className="text-sm text-red-600 font-semibold">
-                    - Số lượng mong muốn được hỗ trợ đang chờ: {waitingCount}
+                    - Số lượng nguyện vọng đang chờ: {waitingCount}
                 </div>
                 <div className="text-sm text-red-600 font-semibold">
-                    - Số lượng mong muốn được hỗ trợ  bị từ chối: {rejectedCount}
+                    - Số lượng nguyện vọng bị từ chối: {rejectedCount}
                 </div>
                 <Form {...form}>
                     <form
@@ -140,7 +168,7 @@ export default function PopupBeneficiary({ isOpenPopup, setIsOpenPopup, benefici
                                 name="name"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <div className="grid grid-cols-4 items-center justify-items-start gap-4">
+                                        <div>
                                             <Label htmlFor="name">Tên chiến dịch</Label>
                                             <div className="col-span-3 w-full space-y-2">
                                                 <Input id="name" className="w-full" {...field} />
@@ -152,13 +180,13 @@ export default function PopupBeneficiary({ isOpenPopup, setIsOpenPopup, benefici
                             />
                             <FormField
                                 control={form.control}
-                                name="description"
+                                name="shortDescription"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                                            <Label htmlFor="description">Mô tả</Label>
+                                        <div>
+                                            <Label htmlFor="short_description">Mô tả</Label>
                                             <div className="col-span-3 w-full space-y-2">
-                                                <Input id="description" className="w-full" {...field} />
+                                                <Input id="short_description" className="w-full" {...field} />
                                                 <FormMessage />
                                             </div>
                                         </div>
@@ -167,10 +195,27 @@ export default function PopupBeneficiary({ isOpenPopup, setIsOpenPopup, benefici
                             />
                             <FormField
                                 control={form.control}
+                                name="description"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel htmlFor="name">Mô tả tình trạng cần hỗ trợ</FormLabel>
+                                        <div className="col-span-3 w-full space-y-2">
+                                            <FormMessage />
+                                        </div>
+                                        <QuillEditor
+                                            value={field.value || ""}
+                                            onChange={field.onChange}
+                                            disabled={false}
+                                        />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
                                 name="code"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <div className="grid grid-cols-4 items-center justify-items-start gap-4">
+                                        <div>
                                             <Label htmlFor="code">Mã chiến dịch</Label>
                                             <div className="col-span-3 w-full space-y-2">
                                                 <Input id="code" className="w-full" {...field} />
@@ -186,7 +231,7 @@ export default function PopupBeneficiary({ isOpenPopup, setIsOpenPopup, benefici
                                 name="targetAmount"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <div className="grid grid-cols-4 items-center justify-items-start gap-4">
+                                        <div>
                                             <Label htmlFor="target_amount">Số tiền mục tiêu</Label>
                                             <div className="col-span-3 w-full space-y-2">
                                                 <Input
@@ -295,6 +340,18 @@ export default function PopupBeneficiary({ isOpenPopup, setIsOpenPopup, benefici
                                     </FormItem>
                                 )}
                             />
+                            <div>
+                                <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                    Hình ảnh
+                                </label>
+                                <input
+                                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                                    type="file"
+                                    name="image"
+                                    onChange={handleFileChange}
+                                />
+                                {error && <p className="mt-2 text-[0.8rem] font-medium text-destructive">{error}</p>}
+                            </div>
                         </div>
                         <DialogFooter>
                             <Button
