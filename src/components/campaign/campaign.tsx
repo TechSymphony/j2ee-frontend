@@ -1,9 +1,7 @@
 import Image from "next/image";
 import { CampaignType } from "@/schemas/campaign.schema";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { getImage } from "@/utils/image";
+import DonationDialog from "../donation/donation-dialog";
 
 interface CampaignProps {
   data: CampaignType;
@@ -12,10 +10,10 @@ interface CampaignProps {
 
 export default function Campaign({ data, onClick }: CampaignProps) {
 
-  const imageUrl = getImage(data.image);
-
-  const router = useRouter();
-  console.log(data);
+  let imageUrl = getImage(data.image);
+  if (!data.image) {
+    imageUrl = "/static/images/campaign.jpg";
+  };
 
   // Tính phần trăm tiến độ chiến dịch
   const percentage = data.targetAmount
@@ -42,9 +40,8 @@ export default function Campaign({ data, onClick }: CampaignProps) {
       className="cursor-pointer group relative flex flex-col flex-nowrap overflow-hidden rounded-xl
         transition md:hover:text-momo
         shadow-sm hover:shadow-xl min-h-[460px]"
-      onClick={onClick}
     >
-      <div className="relative w-full h-5 pt-[50%]">
+      <div className="relative w-full h-5 pt-[50%]" onClick={onClick}>
         <Image
           src={imageUrl}
           alt="Image"
@@ -55,7 +52,7 @@ export default function Campaign({ data, onClick }: CampaignProps) {
           unoptimized
         />
       </div>
-      <div className="min-h-1 flex-1 px-4 pb-3 pt-4">
+      <div className="min-h-1 flex-1 px-4 pb-3 pt-4" onClick={onClick}>
         <div className="line-clamp-3 text-lg font-bold leading-snug transition ">
           {data.name}
         </div>
@@ -116,12 +113,10 @@ export default function Campaign({ data, onClick }: CampaignProps) {
               Chiến dịch đã kết thúc
             </div>
           ) : !data.disabledAt ? (
-            <Button
-              className="w-full bg-pink-500 text-gray-100 text-base hover:bg-pink-600"
-              onClick={() => router.push(`/campaign/${data.id}`)}
-            >
-              Quyên góp
-            </Button>
+            <DonationDialog
+              campaignId={data.id}
+              campaignName={data.name}
+            ></DonationDialog>
           ) : (
             <div className="text-yellow-600 font-semibold">
               Hiện chiến dịch đã tạm dừng hoạt động
