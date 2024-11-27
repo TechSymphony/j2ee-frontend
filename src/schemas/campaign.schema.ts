@@ -25,6 +25,7 @@ export const CampaignSchema = z.object({
   numberOfDonations: z.number().optional(),
   disabledAt: z.boolean(),
   shortDescription: z.string().optional(),
+  image: z.string(),
 });
 
 export type CampaignType = z.TypeOf<typeof CampaignSchema>;
