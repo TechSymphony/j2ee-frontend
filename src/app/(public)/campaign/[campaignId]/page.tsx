@@ -63,11 +63,11 @@ export default function CampaignDetail() {
     endDate: new Date(),
     status: "",
     beneficiary: {
-      id: 0,
       user: {},
       situationDetail: "",
-      supportReceived: 0,
-      verificationStatus: false,
+    },
+    category: {
+      name: "",
     },
     numberOfDonations: 0,
     disabledAt: false,
@@ -80,7 +80,10 @@ export default function CampaignDetail() {
     ? Math.round((campaign.currentAmount / campaign.targetAmount) * 100 * 100) / 100
     : 0;
 
-  const imageUrl = getImage(campaign.image);
+  let imageUrl = getImage(campaign.image);
+  if (!campaign.image) {
+    imageUrl = '/static/images/campaign.jpg';
+  };
 
   // Tính ngày còn lại của chiến dịch
   const endDate = new Date(campaign.endDate);
@@ -102,9 +105,7 @@ export default function CampaignDetail() {
         <main className="container mx-auto px-4 py-8">
           <div className="flex items-center text-sm text-gray-600 mb-4">
             <Home className="w-4 h-4 mr-2" />
-            <span>Vì Nhân Ái</span>
-            <span className="mx-2">&gt;</span>
-            <span>Tài Trợ MoMo</span>
+            <span>{campaign.category.name}</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -287,11 +288,11 @@ export default function CampaignDetail() {
                       Chiến dịch đã đạt target
                     </div>
                   ) : remainingDays === 0 ? (
-                    <div className="text-red-500 text-base font-medium">
-                      Chiến dịch đã kết thúc cảm ơn sự hỗ trợ của bạn
+                    <div className="text-red-500 text-base font-semibold">
+                      Chiến dịch đã kết thúc
                     </div>
                   ) : campaign.disabledAt ? (
-                    <div className="text-red-500 font-semibold">
+                    <div className="text-yellow-600 font-semibold">
                       Hiện chiến dịch đã tạm dừng hoạt động
                     </div>
                   ) : (
