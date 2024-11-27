@@ -137,7 +137,7 @@ export const navItems: NavItem[] = [
   },
 
   {
-    title: "Người thụ hưởng",
+    title: "Nguyện Vọng",
     href: "/dashboard/beneficiary",
     icon: "billing",
     label: "money",
