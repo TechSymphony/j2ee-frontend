@@ -3,7 +3,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
 import { CampaignType } from "@/schemas/campaign.schema";
 import { ReviewStatusEnum, ReviewStatusOptions } from "@/types/enum";// Import Select components
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import { useUpdateCampaignStatusMutation, useUpdateCampaignStatusShowMutation } from "@/queries/useCampaign";
 import SelectBoxEnum from "@/components/ui/select-box-enum";
@@ -88,6 +88,10 @@ const StatusCell = ({ row }: { row: any }) => {
 
   const { triggerRefetch } = useRefetch();
   const updateCampaignStatusMutation = useUpdateCampaignStatusMutation();
+
+  useEffect(() => {
+    setStatus(ReviewStatusEnum[row.original.status as keyof typeof ReviewStatusEnum]);
+  }, [row.original.status]);
 
   const handleValueChange = (value: ReviewStatusEnum) => {
     updateCampaignStatus(value);

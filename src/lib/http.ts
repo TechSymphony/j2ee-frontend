@@ -239,6 +239,16 @@ const http = {
       body,
     });
   },
+  putWithFiles<Response>(
+    url: string,
+    body: any,
+    options?: Omit<CustomOptions, "body"> | undefined
+  ) {
+    return request<Response>("PUT", url, {
+      ...options,
+      body,
+    });
+  },
 };
 
 export default http;

@@ -104,11 +104,9 @@ export const useGetCampaignQuery = ({
 export const useUpdateCampaignMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({
-            id,
-            ...body
-        }: UpdateCampaignBodyType & { id: number }) =>
-            campaignApi.updateCampaign(id, body),
+        mutationFn: ({ id, formData }: { id: number, formData: FormData }) => {
+            return campaignApi.updateCampaign(id, formData);
+        },
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["campaigns"],
@@ -120,7 +118,7 @@ export const useUpdateCampaignMutation = () => {
 export const useAddCampaignMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: campaignApi.addCampaign,
+        mutationFn: (body: FormData) => campaignApi.addCampaign(body),
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["campaigns"],

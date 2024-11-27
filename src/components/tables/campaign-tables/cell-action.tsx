@@ -68,7 +68,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           {/* Chỉ hiển thị nút "Update" khi trạng thái không bị "REJECT" */}
           {ReviewStatusEnum[
             data.status as unknown as keyof typeof ReviewStatusEnum
-          ] === ReviewStatusEnum.WAITING && (
+          ] !== ReviewStatusEnum.REJECT && (
               <DropdownMenuItem
                 onClick={() => router.push(`/dashboard/campaign/${data.id}`)}
               >
