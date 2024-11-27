@@ -2,6 +2,8 @@ import Image from "next/image";
 import { CampaignType } from "@/schemas/campaign.schema";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { getImage } from "@/utils/image";
 
 interface CampaignProps {
   data: CampaignType;
@@ -10,11 +12,14 @@ interface CampaignProps {
 
 export default function Campaign({ data, onClick }: CampaignProps) {
 
+  const imageUrl = getImage(data.image);
+
   const router = useRouter();
+  console.log(data);
 
   // Tính phần trăm tiến độ chiến dịch
   const percentage = data.targetAmount
-    ? (data.currentAmount / data.targetAmount) * 100
+    ? Math.round((data.currentAmount / data.targetAmount) * 100 * 100) / 100
     : 0;
 
   // Tính ngày còn lại của chiến dịch
@@ -39,44 +44,28 @@ export default function Campaign({ data, onClick }: CampaignProps) {
         shadow-sm hover:shadow-xl min-h-[460px]"
       onClick={onClick}
     >
-      <div className="relative w-full pt-[50%]">
+      <div className="relative w-full h-5 pt-[50%]">
         <Image
-          src="/static/images/campaign.jpg"
-          alt="campaign"
+          src={imageUrl}
+          alt="Image"
           width={200}
           height={200}
           quality={100}
           className="absolute left-0 top-0 h-full w-full bg-white object-cover"
+          unoptimized
         />
       </div>
       <div className="min-h-1 flex-1 px-4 pb-3 pt-4">
         <div className="line-clamp-3 text-lg font-bold leading-snug transition ">
           {data.name}
         </div>
+
       </div>
       <div className="mb-4 px-4 pt-0">
         {/* sponsor  */}
         <div className="mb-3 flex flex-nowrap items-center space-x-2">
-          <div className="shrink-0">
-            <div className="overflow-hidden rounded-full border border-gray-200 p-1">
-              <div className="relative h-11 w-11 md:h-7 md:w-7">
-                <Image
-                  src="/static/images/sponsor.png"
-                  alt="campaign"
-                  width={200}
-                  height={200}
-                  quality={100}
-                  className="absolute left-0 top-0 h-full w-full bg-white object-cover"
-                />
-              </div>
-            </div>
-          </div>
-          <div className="flex-1 text-xs leading-4 text-gray-600 md:text-sm">
-            {data.beneficiary?.user.fullName ? (
-              data.beneficiary?.user.fullName
-            ) : (
-              <div >Phòng công tác sinh viên</div>
-            )}
+          <div className="flex-1 font-semibold leading-4 text-pink-600 md:text-sm">
+            {data.shortDescription}
           </div>
           <div className="shrink-0">
             <span className="rounded-3xl px-2 py-1 text-xs text-orange-400 bg-[rgba(252,100,45,.15)]">
@@ -117,14 +106,14 @@ export default function Campaign({ data, onClick }: CampaignProps) {
             </div>
           </div>
         </div>
-        <div className="mt-3">
+        <div className="mt-3 h-8 w-full">
           {data.currentAmount === data.targetAmount ? (
             <div className="text-green-500 font-semibold">
               Chiến dịch đã đạt target
             </div>
           ) : remainingDays === 0 ? (
-            <div className="text-red-500 text-base font-medium">
-              Chiến dịch đã kết thúc cảm ơn sự hỗ trợ của bạn
+            <div className="text-red-500 text-base font-semibold">
+              Chiến dịch đã kết thúc
             </div>
           ) : !data.disabledAt ? (
             <Button
@@ -134,7 +123,7 @@ export default function Campaign({ data, onClick }: CampaignProps) {
               Quyên góp
             </Button>
           ) : (
-            <div className="text-red-500 font-semibold">
+            <div className="text-yellow-600 font-semibold">
               Hiện chiến dịch đã tạm dừng hoạt động
             </div>
           )

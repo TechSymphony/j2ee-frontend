@@ -9,11 +9,12 @@ import {
   useGetTopListDonationQuery,
   useGetNewListDonationQuery,
 } from "@/queries/useDonation";
-
-// import Link from 'next/link'
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { getImage } from "@/utils/image";
 
 export default function CampaignDetail() {
   const params = useParams();
+
   const dataCampaignId = Number(params.campaignId as string);
 
   const { data: initialData } = useGetCampaignClientQuery({
@@ -70,10 +71,16 @@ export default function CampaignDetail() {
     },
     numberOfDonations: 0,
     disabledAt: false,
+    shortDescription: "",
+    image: "",
   };
 
   // Tính phần trăm tiến độ chiến dịch
-  const percentage = (campaign.currentAmount / campaign.targetAmount) * 100;
+  const percentage = campaign.targetAmount
+    ? Math.round((campaign.currentAmount / campaign.targetAmount) * 100 * 100) / 100
+    : 0;
+
+  const imageUrl = getImage(campaign.image);
 
   // Tính ngày còn lại của chiến dịch
   const endDate = new Date(campaign.endDate);
@@ -107,48 +114,38 @@ export default function CampaignDetail() {
               <div className="flex items-center space-x-2 text-pink-600">
                 <Heart className="w-5 h-5 fill-current" />
                 <span className="text-sm">
-                  Trồng khoảng khổ để ấm Trăng mới cuộc đời, sáng đến cùng em
-                  đến trường để cùng các những gói hỗ trợ giúp học và hoàn cảnh
-                  của từng trẻ em khó khăn, đặc biệt đảm bảo các em có thể duy
-                  trì được việc học tập.
+                  {campaign.shortDescription || "Chưa có mô tả"}
                 </span>
               </div>
-              <Image
-                src="/static/images/campaign.jpg"
-                alt="Children smiling"
-                width={600}
-                height={400}
-                className="w-full rounded-lg"
-              />
-              <div className="bg-white p-6 rounded-lg shadow">
-                <h2 className="text-xl font-semibold mb-4">Câu chuyện</h2>
-                <p className="text-gray-600 mb-4">
-                  Gia Bảo, Gia Hân, Trường Vy và Gia Huy - bốn anh chị em nhỏ
-                  với những nụ cười rạng rỡ và áo đồng phục trắng tinh là hình
-                  ảnh đẹp mà chúng tôi đã gặp. Ấy vậy mà đằng sau những nụ cười
-                  ấy là một hoàn cảnh gia đình vô cùng khó khăn khiến các em có
-                  nguy cơ không được đến trường.
-                </p>
+              <AspectRatio ratio={16 / 9}>
                 <Image
-                  src="/static/images/campaign.jpg"
-                  alt="Children smiling"
-                  width={600}
-                  height={400}
-                  className="w-full rounded-lg mb-4"
+                  src={imageUrl}
+                  alt="Image"
+                  fill
+                  className="rounded-md object-cover"
+                  unoptimized
                 />
-                <p className="text-gray-600 text-sm italic">
-                  Sau những nụ cười hạnh phúc là hoàn cảnh gia đình khó khăn
-                  khiến các em có nguy cơ không được đến trường
-                </p>
+              </AspectRatio>
+
+              <div className="bg-white p-6 rounded-lg shadow">
+                <h2 className="text-xl font-semibold mb-4">Mô tả chiến dịch</h2>
+                <div dangerouslySetInnerHTML={{ __html: campaign.description }} className="text-gray-600 mb-4" />
+                <AspectRatio ratio={16 / 9}>
+                  <Image
+                    src={imageUrl}
+                    alt="Image"
+                    fill
+                    className="rounded-md object-cover"
+                    unoptimized
+                  />
+                </AspectRatio>
               </div>
               {(campaign.beneficiary !== null) ? (
                 <div className="bg-white p-6 rounded-lg shadow">
                   <h2 className="text-xl font-semibold mb-4">
                     Một chút mô tả về nguyện vọng
                   </h2>
-                  <p className="text-gray-600 mb-4">
-                    {campaign.beneficiary.situationDetail}
-                  </p>
+                  <div dangerouslySetInnerHTML={{ __html: campaign.beneficiary.situationDetail }} className="text-gray-600 mb-4" />
                 </div>
               ) : (
                 <div className="bg-white p-6 rounded-lg shadow">
@@ -207,7 +204,7 @@ export default function CampaignDetail() {
                           <span>{donation.donor.fullName}</span>
                         </div>
                         <span className="font-semibold">
-                          {donation.amountBase.toLocaleString("de-DE")}đ
+                          {donation.amountTotal.toLocaleString("de-DE")}đ
                         </span>
                       </li>
                     ))}
@@ -234,12 +231,15 @@ export default function CampaignDetail() {
                     <div className="flex items-center space-x-2">
                       <span className="text-base font-semibold">Người thụ hưởng</span>
                     </div>
-                    {campaign.beneficiary !== null && (
+                    {campaign.beneficiary !== null ? (
                       <p className="text-sm text-muted-foreground">
-                        {campaign?.beneficiary?.user?.fullName ?? "N/A"}
+                        {campaign.beneficiary.user?.fullName ?? "N/A"}
+                      </p>
+                    ) : (
+                      <p className="text-sm text-muted-foreground">
+                        Phòng công tác sinh viên
                       </p>
                     )}
-
                   </div>
                   <div className="space-y-2">
                     <div className="flex justify-between">
