@@ -20,7 +20,7 @@ import { handleErrorFromApi } from "@/lib/utils";
 import { useRefetch } from "@/contexts/app-context";
 import {
   useAddCategoryMutation,
-  useGetCategoryListQuery,
+  useGetCategoryMenus,
   useGetCategoryQuery,
   useUpdateCategoryMutation,
 } from "@/queries/useCategory";
@@ -60,7 +60,7 @@ export const CategoryForm = () => {
   /**
    * Description: Lấy danh sách category để đổ ra select box
    */
-  const { data: fetchCategoryList } = useGetCategoryListQuery();
+  const { data: fetchCategoryList } = useGetCategoryMenus();
   const categories = fetchCategoryList?.payload;
   const updateCategoryMutation = useUpdateCategoryMutation();
   const addCategoryMutation = useAddCategoryMutation();
@@ -182,23 +182,26 @@ export const CategoryForm = () => {
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Chọn danh mục cha" />
+                          <SelectValue placeholder={
+                            initialData
+                              ? initialData.payload.parent?.name
+                              : "Vui lòng chọn danh mục cha"
+                          }>
+                          </SelectValue>
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {categories &&
-                          categories.content &&
-                          categories.content.map((category) => (
-                            <SelectItem
-                              key={category.id}
-                              value={JSON.stringify({
-                                id: category.id,
-                                name: category.name,
-                              })}
-                            >
-                              {category.name}
-                            </SelectItem>
-                          ))}
+                        {categories && categories.map((category) => (
+                          <SelectItem
+                            key={category.id}
+                            value={JSON.stringify({
+                              id: category.id,
+                              name: category.name,
+                            })}
+                          >
+                            {category.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
