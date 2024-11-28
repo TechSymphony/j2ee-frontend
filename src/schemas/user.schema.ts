@@ -19,6 +19,7 @@ export const UserSchema = z.object({
   role: RoleSchema.nullish(),
   username: z.string(),
   isStudent: z.boolean(),
+  enabled: z.boolean(),
 });
 
 export type UserType = z.TypeOf<typeof UserSchema>;
@@ -39,6 +40,8 @@ export const UserRes = BasicUserRes.extend({
   createdAt: z.date(),
   updatedAt: z.date(),
   role: RoleSchema,
+  enabled: z.boolean(),
+  isStudent: z.boolean(),
 });
 
 export type UserResType = z.TypeOf<typeof UserRes>;
@@ -50,6 +53,8 @@ export const CreateUserBody = z
     username: z.string().trim().min(2).max(256).optional(),
     phone: z.string().trim().min(2).max(256),
     role: RoleSchema,
+    enabled: z.boolean().optional().default(true),
+    isStudent: z.boolean().optional().default(false),
   })
   .strict();
 
@@ -68,6 +73,8 @@ export type UpdateBasicUserBodyType = z.TypeOf<typeof UpdateBasicUserBody>;
 export const UpdateUserBody = UpdateBasicUserBody.extend({
   username: z.string().trim().min(2).max(256).optional(),
   role: RoleSchema,
+  enabled: z.boolean().optional().default(true),
+  isStudent: z.boolean().optional().default(false),
 }).strict();
 export type UpdateUserBodyType = z.TypeOf<typeof UpdateUserBody>;
 

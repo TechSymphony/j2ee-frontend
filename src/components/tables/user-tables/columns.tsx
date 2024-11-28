@@ -3,6 +3,9 @@ import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
 import { Checkbox } from "@/components/ui/checkbox";
 import { UserType } from "@/schemas/user.schema";
+import { useState } from "react";
+import { useUpdateUserIsStudentMutation, useUpdateUserStatusMutation } from "@/queries/useUser";
+import { Switch } from "@/components/ui/switch";
 
 /**
  * Description: Khai báo columns cho table
@@ -45,6 +48,60 @@ export const columns: ColumnDef<UserType>[] = [
   {
     accessorKey: "phone",
     header: "Số điện thoại",
+  },
+  {
+    accessorKey: "role.name",
+    header: "Vai trò",
+  },
+  {
+    accessorKey: "enabled",
+    header: "Trạng thái người dùng?",
+    cell: ({ row }) => {
+      const [enabled, setEnabled] = useState(row.original.enabled);
+      const updateUserStatusMutation = useUpdateUserStatusMutation();
+
+
+      const handleToggle = async () => {
+        setEnabled(!enabled);
+
+        await updateUserStatusMutation.mutateAsync({
+          id: row.original.id,
+          enabled: !enabled,
+        });
+      };
+
+      return (
+        <Switch className="bg-green-500 border-2 border-gray-300 rounded-full "
+          checked={enabled}
+          onCheckedChange={handleToggle}
+        />
+      );
+    },
+  },
+  {
+    accessorKey: "isStudent",
+    header: "Là sinh viên?",
+    cell: ({ row }) => {
+      const [isStudent, setIsStudent] = useState(row.original.isStudent);
+      const updateUserIsStudentMutation = useUpdateUserIsStudentMutation();
+
+
+      const handleToggle = async () => {
+        setIsStudent(!isStudent);
+
+        await updateUserIsStudentMutation.mutateAsync({
+          id: row.original.id,
+          isStudent: !isStudent,
+        });
+      };
+
+      return (
+        <Switch className="bg-green-500 border-2 border-gray-300 rounded-full "
+          checked={isStudent}
+          onCheckedChange={handleToggle}
+        />
+      );
+    },
   },
   {
     id: "actions",

@@ -39,6 +39,7 @@ import {
 import { handleErrorFromApi } from "@/lib/utils";
 import { useRefetch } from "@/contexts/app-context";
 import { useGetRoleOptionsQuery } from "@/queries/useRole";
+import { Switch } from "../ui/switch";
 
 export const UserForm = () => {
   const params = useParams();
@@ -71,7 +72,7 @@ export const UserForm = () => {
   const description = initialData
     ? "Chỉnh sửa thông tin người dùng"
     : "Thêm mới một người dùng";
-  const action = initialData ? "Cập nhật" : "Xóa";
+  const action = initialData ? "Cập nhật" : "Thêm";
 
   /**
    * Description: Khai báo type với schema validation cho form
@@ -96,12 +97,14 @@ export const UserForm = () => {
    */
   useEffect(() => {
     if (initialData) {
-      const { role, fullName, email, phone } = initialData.payload;
+      const { role, fullName, email, phone, enabled, isStudent } = initialData.payload;
       form.reset({
         role,
         fullName,
         email,
         phone,
+        enabled,
+        isStudent,
       });
     }
   }, [initialData, form]);
@@ -217,6 +220,40 @@ export const UserForm = () => {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="enabled"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="block">Trạng thái người dùng</FormLabel>
+                    <FormControl>
+                      <Switch className="bg-green-500 border-2 border-gray-300 rounded-full"
+                        checked={field.value}
+                        onCheckedChange={(value) => field.onChange(value)}
+                        defaultChecked={true}
+                      />
+                    </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="isStudent"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="block">Là sinh viên</FormLabel>
+                    <FormControl>
+                      <Switch className="bg-green-500 border-2 border-gray-300 rounded-full"
+                        checked={field.value}
+                        onCheckedChange={(value) => field.onChange(value)}
+                        defaultChecked={false}
+                      />
+                    </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
