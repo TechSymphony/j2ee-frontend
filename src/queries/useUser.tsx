@@ -115,3 +115,35 @@ export const useImportStudentMutation = () => {
     },
   });
 };
+
+export const useUpdateUserStatusMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, enabled }: {id: number; enabled: boolean}) => {
+      const user = await userApi.getUser(id);
+      const currentUser = user.payload;
+      return userApi.updateUser(id, {...currentUser, enabled: enabled});
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["users"],
+      });
+    },
+  });
+};
+
+export const useUpdateUserIsStudentMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, isStudent }: {id: number; isStudent: boolean}) => {
+      const user = await userApi.getUser(id);
+      const currentUser = user.payload;
+      return userApi.updateUser(id, {...currentUser, isStudent: isStudent});
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["users"],
+      });
+    },
+  });
+};
