@@ -31,7 +31,11 @@ const permissions: string[] = [
  * return value: boolean
  */
 
-export function authorizeCheck(user: CustomUser | null, permission: string) {
+export function authorizeCheck(
+  user: CustomUser | null,
+  permission: string,
+  permissions: string[]
+) {
   if (!allPermissions.includes(permission)) {
     throw new Error(
       `Permission ${permission} doesn't exists in the app, please check again`
@@ -60,10 +64,14 @@ export function useAuthorize(): {
   const {
     state: { user },
   } = useUser();
+  const permissions = (user?.profile?.authorities as string[]) ?? [];
+  console.log({ permissions });
 
   const { requiredPermission } = useRoutePermission();
   const isAuthorized =
-    requiredPermission !== "" ? authorizeCheck(user, requiredPermission) : true;
+    requiredPermission !== ""
+      ? authorizeCheck(user, requiredPermission, permissions)
+      : true;
   return {
     isAuthorized,
   };

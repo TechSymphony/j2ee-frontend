@@ -37,11 +37,16 @@ import {
   DataTableComponentProps,
   DataTableComponentType,
 } from "@/components/ui/table/data-table-factory-filter";
-import { DataTableFilterBoxProps } from "@/components/ui/table/data-table-filter-box";
+import {
+  DataTableFilterBox,
+  DataTableFilterBoxProps,
+} from "@/components/ui/table/data-table-filter-box";
 import {
   DataTableFilterSelect,
   DataTableSelectProps,
 } from "@/components/ui/table/data-table-select";
+import { ReviewStatusOptions, StatisTypeOptions } from "@/types/enum";
+import { useGetCampaignListQuery } from "@/queries/useCampaign";
 
 const chartConfig = {
   views: {
@@ -59,11 +64,11 @@ const chartConfig = {
 
 type PeriodType = "daily" | "monthly" | "yearly" | "invalid";
 
-interface Props {
-  filters?: DataTableComponentProps[];
-}
+// interface Props {
+//   filters?: DataTableComponentProps[];
+// }
 
-export function BarGraph({ filters }: Props) {
+export function BarGraph() {
   const router = useRouter();
   const [activeChart, setActiveChart] =
     React.useState<keyof typeof chartConfig>("amountTotal");
@@ -73,6 +78,43 @@ export function BarGraph({ filters }: Props) {
     string,
     string | number
   >[];
+  const { data: campaignListData } = useGetCampaignListQuery();
+  const campaigns = campaignListData?.payload.content;
+  console.log({ campaigns });
+  const campaignOptions = React.useMemo(() => {
+    if (!campaigns) return [];
+    return campaigns.map((campaign) => ({
+      value: campaign.id,
+      label: campaign.name,
+    }));
+  }, [campaigns]);
+  console.log({ campaignOptions });
+  const filters = [
+    {
+      type: DataTableComponentType.Select,
+      props: {
+        filterKey: "groupBy",
+        title: "Loại thống kê",
+        options: StatisTypeOptions,
+      },
+    },
+    {
+      type: DataTableComponentType.FilterDate,
+      props: {
+        filterKey: "period",
+        title: "Khoảng ngày",
+      },
+    },
+    {
+      type: DataTableComponentType.Select,
+      props: {
+        filterKey: "campaignId",
+        title: "Chiến dịch",
+        options: campaignOptions,
+      },
+    },
+  ];
+
   // console.log("chartdata", chartData);
   const renderFilters = (filters: DataTableComponentProps[]) => {
     const listNameFilters: string[] = [];
@@ -91,6 +133,14 @@ export function BarGraph({ filters }: Props) {
           listNameFilters.push(`${filter.props.filterKey}_lt`);
           return (
             <DataTableFilterDateRange
+              key={filter.props.filterKey}
+              {...(filter.props as DataTableFilterBoxProps)}
+            />
+          );
+        case DataTableComponentType.FilterBox:
+          listNameFilters.push(filter.props.filterKey);
+          return (
+            <DataTableFilterBox
               key={filter.props.filterKey}
               {...(filter.props as DataTableFilterBoxProps)}
             />
@@ -182,7 +232,7 @@ export function BarGraph({ filters }: Props) {
   return (
     <Card>
       <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
-        <div className="flex justify-between w-full">
+        <div className="flex flex-col">
           <div className="flex flex-col justify-center gap-1 px-6 py-5 sm:py-6">
             <CardTitle>
               Thống kê các quyên góp dựa theo khoảng thời gian và chiến dịch
@@ -191,7 +241,7 @@ export function BarGraph({ filters }: Props) {
               Hiển thị các quyên góp theo năm hiện tại
             </CardDescription>
           </div>
-          <div className="flex flex-1 items-center justify-start gap-2 px-6 py-5 sm:py-6">
+          <div className="flex flex-1 items-center justify-start gap-2 px-6 pb-5 sm:pb-6">
             {filters?.length ? renderFilters(filters) : ""}
           </div>
         </div>
@@ -201,44 +251,50 @@ export function BarGraph({ filters }: Props) {
           config={chartConfig}
           className="aspect-auto h-[280px] w-full"
         >
-          <BarChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
-          >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="period"
-              // dataKey="date"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              minTickGap={32}
-            />
-            <YAxis
-              dataKey="amountTotal"
-              // dataKey="desktop"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              minTickGap={32}
-              // unit={" VND"}
-            />
-            <ChartTooltip
-              content={
-                <ChartTooltipContent className="w-[150px]" nameKey="views" />
-              }
-            />
-            <Bar
-              dataKey={activeChart}
-              onClick={handleBarClick}
-              className="cursor-pointer"
-              fill={`var(--color-${activeChart})`}
-            />
-          </BarChart>
+          {chartData && chartData.length > 0 ? (
+            <BarChart
+              accessibilityLayer
+              data={chartData}
+              margin={{
+                left: 12,
+                right: 12,
+              }}
+            >
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="period"
+                // dataKey="date"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                minTickGap={32}
+              />
+              <YAxis
+                dataKey="amountTotal"
+                // dataKey="desktop"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                minTickGap={32}
+                // unit={" VND"}
+              />
+              <ChartTooltip
+                content={
+                  <ChartTooltipContent className="w-[150px]" nameKey="views" />
+                }
+              />
+              <Bar
+                dataKey={activeChart}
+                onClick={handleBarClick}
+                className="cursor-pointer"
+                fill={`var(--color-${activeChart})`}
+              />
+            </BarChart>
+          ) : (
+            <p className="flex items-center justify-center text-lg font-bold">
+              Không có dữ liệu hiển thị
+            </p>
+          )}
         </ChartContainer>
       </CardContent>
     </Card>

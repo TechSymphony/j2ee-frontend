@@ -101,3 +101,50 @@ export const useGetDonationStatisQuery = (queryConfig?: QueryConfig) => {
     queryFn: donationApi.getDonationStatis,
   });
 };
+
+export const useUpdateDonationVerifyStatus = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      donationStatus,
+    }: {
+      id: number;
+      donationStatus: ReviewDonationEnum;
+    }) => {
+      // const donation = await donationApi.getDonation(id);
+      // const currentDonation = donation.payload;
+
+      return donationApi.updateDonationVerifyStatus(
+        id,
+        //   {
+        //   ...currentDonation,
+        //   donationStatus:
+        //     ReviewDonationEnum[donationStatus as keyof typeof ReviewDonationEnum],
+        // }
+        {
+          donationStatus:
+            ReviewDonationEnum[
+              donationStatus as unknown as keyof typeof ReviewDonationEnum
+            ], // COMPLETED | CANCELLED
+        }
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["donations", "my-donations"],
+      });
+    },
+  });
+};
+
+// mutationFn: async ({ id, verificationStatus }: { id: number; verificationStatus: ReviewStatusEnum }) => {
+//   // Fetch the current beneficiary data
+//   const beneficiary = await beneficiaryApi.getBeneficiary(id);
+//   const currentBeneficiary = beneficiary.payload;
+//   // Update only the verificationStatus field
+//   return beneficiaryApi.updateBeneficiary(id, {
+//     ...currentBeneficiary,
+//     verificationStatus: ReviewStatusEnum[verificationStatus as keyof typeof ReviewStatusEnum],
+//   });
+// },

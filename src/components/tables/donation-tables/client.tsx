@@ -95,7 +95,7 @@ export const DonationClient = ({ type }: Props) => {
         </Button> */}
         <ExportDonationDialog />
       </div>
-      <Separator />
+      <Separator className="my-4" />
       <DataTablePagination
         searchKey=""
         columns={columns}
