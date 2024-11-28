@@ -25,6 +25,7 @@ export const DonationSchema = z.object({
   amountBase: z.number(),
   amountTotal: z.number(),
   donationDate: z.date(),
+  isAbleToPreview: z.boolean(),
   frequency: z.number(),
   status: z.number(),
 });
