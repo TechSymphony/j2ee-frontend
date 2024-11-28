@@ -31,6 +31,7 @@ const UserContext = createContext<
       dispatch: React.Dispatch<UserAction>;
       isSuperAdmin: boolean;
       setIsSuperAdmin: React.Dispatch<React.SetStateAction<boolean>>;
+      isLoading: boolean;
     }
   | undefined
 >(undefined);
@@ -53,26 +54,33 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [state, dispatch] = useReducer(userReducer, { user: null });
   const [isSuperAdmin, setIsSuperAdmin] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   useEffect(() => {
     const loadData = async () => {
-      const data = await userManager.getUser().then((user) => user);
-      if (data) {
-        const authorities = (data?.profile?.authorities as string[]) || [];
-        authorities.some((permission) => {
-          if (permission === "SUPER_ADMIN") {
-            setIsSuperAdmin(true);
-          }
-        });
-        dispatch({ type: "SET_USER", payload: data });
-      }
+      try {
+        const data = await userManager.getUser().then((user) => user);
+        if (data) {
+          const authorities = (data?.profile?.authorities as string[]) || [];
+          authorities.some((permission) => {
+            if (permission === "SUPER_ADMIN") {
+              setIsSuperAdmin(true);
+            }
+          });
+          dispatch({ type: "SET_USER", payload: data });
+        }
 
-      console.log(data?.profile?.authorities);
+        console.log(data?.profile?.authorities);
+      } catch (error) {
+        console.error("Failed to load user data:", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
     loadData();
   }, []);
   return (
     <UserContext.Provider
-      value={{ state, dispatch, isSuperAdmin, setIsSuperAdmin }}
+      value={{ state, dispatch, isSuperAdmin, setIsSuperAdmin, isLoading }}
     >
       {children}
     </UserContext.Provider>
@@ -85,6 +93,7 @@ export const useUser = (): {
   dispatch: React.Dispatch<UserAction>;
   isSuperAdmin: boolean;
   setIsSuperAdmin: React.Dispatch<React.SetStateAction<boolean>>;
+  isLoading: boolean;
 } => {
   const context = useContext(UserContext);
   if (!context) {

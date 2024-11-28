@@ -12,16 +12,6 @@ const allPermissions: string[] = [
   "MANAGE_DONATIONS",
   "MANAGE_CAMPAIGNS",
 ];
-const permissions: string[] = [
-  "SUPER_ADMIN",
-  "VIEW_STATISTICS",
-  "MANAGE_ROLES",
-  "MANAGE_USERS",
-  "MANAGE_CATEGORIES",
-  //   "MANAGE_BENEFICIARIES",
-  //   "MANAGE_DONATIONS",
-  //   "MANAGE_CAMPAIGNS",
-];
 
 /**
  * Description: kiểm tra người dùng chưa đăng nhập thì trả về false, còn nếu đã đăng nhập thì kiểm ra tiếp permission request có hợp lệ và được cho phép hay không
@@ -60,19 +50,22 @@ export function authorizeCheck(
  */
 export function useAuthorize(): {
   isAuthorized: boolean;
+  isLoading: boolean;
 } {
   const {
     state: { user },
+    isLoading,
   } = useUser();
   const permissions = (user?.profile?.authorities as string[]) ?? [];
   console.log({ permissions });
 
   const { requiredPermission } = useRoutePermission();
   const isAuthorized =
-    requiredPermission !== ""
+    !isLoading && requiredPermission !== ""
       ? authorizeCheck(user, requiredPermission, permissions)
       : true;
   return {
     isAuthorized,
+    isLoading,
   };
 }

@@ -31,6 +31,7 @@ import {
 } from "@/schemas/role.schema";
 import { handleErrorFromApi } from "@/lib/utils";
 import { useRefetch } from "@/contexts/app-context";
+import { RoleEnum } from "@/types/enum";
 
 export const RoleForm = () => {
   const params = useParams();
@@ -58,6 +59,7 @@ export const RoleForm = () => {
   const addRoleMutation = useAddRoleMutation();
   const getPermissonListQuery = useGetPermissionListQuery();
   const items = getPermissonListQuery.data?.payload;
+  console.log({ items });
 
   const { triggerRefetch } = useRefetch();
 
@@ -222,7 +224,11 @@ export const RoleForm = () => {
                                 className="font-normal"
                                 style={{ color: "inherit" }} //Prevent adding color in <FormLabel> in Shadcn and React
                               >
-                                {item.name}
+                                {
+                                  RoleEnum[
+                                    item.name as unknown as keyof typeof RoleEnum
+                                  ]
+                                }
                               </FormLabel>
                             </div>
                           ))}
