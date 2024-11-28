@@ -47,9 +47,10 @@ export const BeneficiaryUserTable = () => {
     },
   ];
 
-
   const [popupOpen, setPopupOpen] = useState(false);
-  const [popupMode, setPopupMode] = useState<"create" | "edit" | "show">("create");
+  const [popupMode, setPopupMode] = useState<"create" | "edit" | "show">(
+    "create"
+  );
   const [selectedId, setSelectedId] = useState<number | undefined>(undefined);
 
   const handleAddNew = () => {
@@ -62,14 +63,11 @@ export const BeneficiaryUserTable = () => {
     <>
       <div className="flex items-start justify-between">
         <Heading
-          title={`Quản lý người thụ hưởng (${data.page.totalElements})`}
+          title={`Lịch sử gửi nguyện vọng (${data.page.totalElements})`}
           description=""
         />
 
-        <Button
-          className="text-xs md:text-sm"
-          onClick={handleAddNew}
-        >
+        <Button className="text-xs md:text-sm" onClick={handleAddNew}>
           <Plus className="mr-2 h-4 w-4" /> Thêm mới
         </Button>
       </div>

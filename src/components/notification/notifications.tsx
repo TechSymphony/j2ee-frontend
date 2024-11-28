@@ -7,10 +7,11 @@ import { NotificationType } from "@/schemas/notification.schema";
 import { useEffect, useState } from "react";
 
 function Notifications() {
-  const { notifications, setCallback, updateReadNotifications } = useWebsockets();
+  const { notifications, setCallback, updateReadNotifications } =
+    useWebsockets();
   const [messages, setMessages] = useState<Array<NotificationType>>([]);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
-  
+
   setCallback(setMessages);
 
   useEffect(() => {
@@ -20,11 +21,11 @@ function Notifications() {
   }, [messages, notifications]);
 
   const setNotificationAsRead = () => {
-    for(const message of messages) {
+    for (const message of messages) {
       updateReadNotifications(message.id);
     }
     setUnreadNotifications(0);
-  }
+  };
 
   return (
     <Popover>
@@ -44,7 +45,7 @@ function Notifications() {
 
       <PopoverContent className="p-4 w-72 shadow-lg rounded-lg">
         {messages.length === 0 ? (
-          <p className="text-gray-500 text-sm">No new messages</p>
+          <p className="text-gray-500 text-sm">Không có thông báo mới</p>
         ) : (
           <ul className="space-y-2">
             {messages.map((message, index) => (

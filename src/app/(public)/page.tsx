@@ -8,6 +8,27 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div>
+      <div className="py-8 md:py-10 lg:py-14  bg-pink-50">
+        <div className="container">
+          <div className="mb-5 text-center md:mb-8" id="section-article">
+            <h2 className="text-2xl font-bold lg:text-3xl text-pink-darker">
+              Các hoàn cảnh quyên góp
+            </h2>
+            <h3 className="mx-auto mt-2 max-w-3xl text-md text-gray-500 lg:text-lg">
+              Chung tay quyên góp giúp đỡ các hoàn cảnh khó khăn trên khắp cả
+              nước.
+            </h3>
+          </div>
+          <CampaignList />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const oldSlide = () => {
+  return (
+    <>
       <Slider data={dataSliders} />
 
       <div className="py-8 md:py-10 lg:py-14 bg-white">
@@ -101,21 +122,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-
-      <div className="py-8 md:py-10 lg:py-14  bg-pink-50">
-        <div className="container">
-          <div className="mb-5 text-center md:mb-8" id="section-article">
-            <h2 className="text-2xl font-bold lg:text-3xl text-pink-darker">
-              Các hoàn cảnh quyên góp
-            </h2>
-            <h3 className="mx-auto mt-2 max-w-3xl text-md text-gray-500 lg:text-lg">
-              Chung tay quyên góp giúp đỡ các hoàn cảnh khó khăn trên khắp cả
-              nước.
-            </h3>
-          </div>
-          <CampaignList />
-        </div>
-      </div>
-    </div>
+    </>
   );
-}
+};
