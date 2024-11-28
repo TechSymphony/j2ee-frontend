@@ -79,9 +79,25 @@ export const CreateDonationBody = z
 export type CreateDonationBodyType = z.TypeOf<typeof CreateDonationBody>;
 export const ExportDonationBody = z.object({
   campaign: z.string().regex(/^\d+$/).transform(Number),
-  type: z
-    .optional(z.boolean())
-    .transform((value) => (value ? "student_only" : "")),
+  studentOnly: z.boolean().optional().default(false),
+  isAnonymous: z.boolean().optional().default(true),
+  from: z
+    .date()
+    .optional()
+    .transform((date) =>
+      date
+        ? new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1)
+        : date
+    ).default(new Date(new Date().getFullYear(), 0, 1)),
+  to: z
+    .date()
+    .optional()
+    .transform((date) =>
+      date
+        ? new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1)
+        : date
+    )
+    .default(new Date(new Date().getFullYear(), 11, 31)),
 });
 
 export type ExportDonationBodyType = z.infer<typeof ExportDonationBody>;
