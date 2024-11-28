@@ -8,6 +8,8 @@ import {
   ExportDonationBodyType,
   DonationStatisResType,
 } from "@/schemas/donation.schema";
+import { ReviewDonationEnum } from "@/types/enum";
+import { headers } from "next/headers";
 
 const prefix = "/donations";
 
@@ -31,5 +33,7 @@ const donationApi = {
       isBlob: true,
     }),
   getDonationStatis: () => http.get<DonationStatisResType>(`${prefix}/report`),
+  updateDonationVerifyStatus: (id: number, body: any) =>
+    http.put<DonationResType>(`${prefix}/${id}/payment`, body),
 };
 export default donationApi;

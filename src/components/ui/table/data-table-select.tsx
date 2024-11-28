@@ -37,7 +37,7 @@ export function DataTableFilterSelect({
       onValueChange={(value: string) => setFilterValue(value)}
       value={filterValue ?? ""}
     >
-      <SelectTrigger className="w-full">
+      <SelectTrigger className="min-w-[240px]">
         <SelectValue placeholder={title} />
       </SelectTrigger>
       <SelectContent>

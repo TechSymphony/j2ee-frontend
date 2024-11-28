@@ -11,9 +11,9 @@ export enum ReviewFrequencyEnum {
   YEARLY = 3,
 }
 export enum StatisEnum {
-  DAILY = "daily",
-  MONTHLY = "monthly",
-  YEARLY = "yearly",
+  DAY = "DAY",
+  MONTH = "MONTH",
+  YEAR = "YEAR",
 }
 
 // Create an array of options manually because js is too stupid
@@ -57,7 +57,7 @@ export const AnonymousDonationOptions = [
 ];
 
 export const StatisTypeOptions = [
-  { value: StatisEnum.DAILY, label: "Ngày" },
-  { value: StatisEnum.MONTHLY, label: "Tháng" },
-  { value: StatisEnum.YEARLY, label: "Năm" },
+  { value: StatisEnum.DAY, label: "Ngày" },
+  { value: StatisEnum.MONTH, label: "Tháng" },
+  { value: StatisEnum.YEAR, label: "Năm" },
 ];
