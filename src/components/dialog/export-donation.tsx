@@ -36,6 +36,7 @@ import { useExportDonationMutation } from "@/queries/useDonation";
 import { handleErrorFromApi } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
+import { CalendarDatePicker } from "../date-picker";
 
 export const ExportDonationDialog = () => {
   const [open, setOpen] = useState(false);
@@ -130,18 +131,68 @@ export const ExportDonationDialog = () => {
                   )}
                 />
               </div>
-            </div>
-            <div className="grid gap-4 py-4">
               <div className="">
                 <FormField
                   control={form.control}
-                  name="type"
+                  name="from"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Xuất danh sách chỉ sinh viên? </FormLabel>
+                      <FormLabel>Từ ngày</FormLabel>
+                      <FormControl>
+                        <CalendarDatePicker value={field.value ? new Date(field.value) : new Date(new Date().getFullYear(), 0, 1)}
+                          onChange={(date) => field.onChange(date)} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="">
+                <FormField
+                  control={form.control}
+                  name="to"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Đến ngày</FormLabel>
+                      <FormControl>
+                      <CalendarDatePicker value={field.value ? new Date(field.value) : new Date(new Date().getFullYear(), 11, 31)}
+                          onChange={(date) => field.onChange(date)} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="">
+                <FormField
+                  control={form.control}
+                  name="studentOnly"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Xuất danh sách theo sinh viên? </FormLabel>
                       <FormControl>
                         <Checkbox
                           id="type"
+                          required={false}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="">
+                <FormField
+                  control={form.control}
+                  name="isAnonymous"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Xuất danh sách bao gồm quyên góp ẩn danh? </FormLabel>
+                      <FormControl>
+                        <Checkbox
+                          id="type"
+                          defaultChecked={true}
                           required={false}
                           onCheckedChange={field.onChange}
                         />
