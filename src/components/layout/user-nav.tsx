@@ -18,6 +18,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Notifications from "../notification/notifications";
+import { ROUTE_PERMISSIONS } from "@/constants/route-permissions";
 // import { signOut } from "next-auth/react";
 export function UserNav() {
   // const { data: session } = useSession();
@@ -25,12 +26,31 @@ export function UserNav() {
   const [isOpenProfileForm, setIsOpenProfileForm] = useState(false);
   const router = useRouter();
   const user = useUser().state.user;
+  const permissions = (user?.profile?.authorities as string[]) ?? []; // ['IS_SUPERADMIN','MANAGE_DONATIONS', 'MANAGE_CAMPAIGNS']
+  // Lấy route tương ứng với quyền đầu tiên trong permissions
+  const getFirstPermissionRoute = (permissions: string[]): string => {
+    // Nếu permissions rỗng hoặc không có quyền tương ứng, trả về mặc định
+    if (!permissions.length) return "/dashboard";
+    // Tìm route đầu tiên phù hợp
+    const firstPermission = permissions.find((permission) =>
+      Object.values(ROUTE_PERMISSIONS).includes(permission as any)
+    );
+    // Trả về route phù hợp hoặc mặc định
+    return firstPermission
+      ? Object.entries(ROUTE_PERMISSIONS).find(
+          ([_, value]) => value === firstPermission
+        )?.[0] ?? "/dashboard"
+      : "/dashboard";
+  };
 
   if (user) {
     const menuItems = [
       {
         title: "Trang quản lý",
-        href: "/dashboard",
+        // href: "/dashboard",
+        href: permissions.includes("IS_SUPERADMIN")
+          ? "/dashboard"
+          : getFirstPermissionRoute(permissions),
         shortcut: "⌘B",
         // option chỉ có nếu user chứa bất kì authorities
         ignore: user?.authorities?.length,

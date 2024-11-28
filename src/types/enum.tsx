@@ -61,3 +61,13 @@ export const StatisTypeOptions = [
   { value: StatisEnum.MONTH, label: "Tháng" },
   { value: StatisEnum.YEAR, label: "Năm" },
 ];
+
+export enum RoleEnum {
+  VIEW_STATISTICS = "Xem thống kê",
+  MANAGE_ROLES = "Quản lý vai trò",
+  MANAGE_USERS = "Quản lý người dùng",
+  MANAGE_CATEGORIES = "Quản lý danh mục",
+  MANAGE_BENEFICIARIES = "Quản lý ngưyện vọng",
+  MANAGE_DONATIONS = "Quản lý quyên góp",
+  MANAGE_CAMPAIGNS = "Quản lý chiến dịch",
+}
