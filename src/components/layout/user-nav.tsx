@@ -2,6 +2,7 @@
 import ProfileForm from "@/components/forms/profile-form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +17,7 @@ import { useUser } from "@/contexts/user-context";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Notifications from "../notification/notifications";
 // import { signOut } from "next-auth/react";
 export function UserNav() {
   // const { data: session } = useSession();
@@ -33,9 +35,14 @@ export function UserNav() {
         // option chỉ có nếu user chứa bất kì authorities
         ignore: user?.authorities?.length,
       },
+      // {
+      //   title: "Gửi nguyện vọng",
+      //   href: "/beneficiary",
+      //   shortcut: "⇧⌘P",
+      // },
       {
-        title: "Gửi nguyện vọng",
-        href: "/beneficiary",
+        title: "Lịch sử gửi nguyện vọng",
+        href: "/history-beneficiary",
         shortcut: "⇧⌘P",
       },
       {
@@ -43,11 +50,11 @@ export function UserNav() {
         href: "/history-donation",
         shortcut: "⌘B",
       },
-      {
-        title: "Cài đặt",
-        href: "/settings",
-        shortcut: "⌘S",
-      },
+      // {
+      //   title: "Cài đặt",
+      //   href: "/settings",
+      //   shortcut: "⌘S",
+      // },
       {
         title: "Hồ sơ cá nhân",
         href: "/new-team",
@@ -55,6 +62,8 @@ export function UserNav() {
     ];
     return (
       <>
+        <Notifications />
+
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-8 w-8 rounded-full">

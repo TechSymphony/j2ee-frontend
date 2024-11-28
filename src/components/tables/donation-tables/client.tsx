@@ -79,7 +79,14 @@ export const DonationClient = ({ type }: Props) => {
   return (
     <>
       <div className="flex items-start justify-between mb-4">
-        <Heading title={`Quản lý quyên góp`} description={""} />
+        <Heading
+          title={
+            type === "admin"
+              ? `Quản lý quyên góp (${data.page.totalElements})`
+              : `Lịch sử quyên góp (${data.page.totalElements})`
+          }
+          description={""}
+        />
         {/* <Button
           className="text-xs md:text-sm"
           onClick={() => router.push(`/dashboard/campaign/new`)}
