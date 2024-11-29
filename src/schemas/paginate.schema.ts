@@ -6,6 +6,7 @@ const PageableSchema = z.object({
   size: z.number().default(10),
   totalPages: z.number().default(0),
   totalElements: z.number().default(0),
+  amountTotal: z.number().optional(),
 });
 
 // Combine both for reusable structure

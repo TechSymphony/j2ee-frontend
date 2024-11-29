@@ -36,6 +36,7 @@ const PaginatedCampaignResponseSchema = PaginatedResponseSchema(CampaignSchema);
 export type CampaignListResType = z.TypeOf<
   typeof PaginatedCampaignResponseSchema
 >;
+export type CampaignOptionsResType = z.TypeOf<typeof CampaignListRes>;
 
 export const CampaignRes = z.object({
   id: z.number(),
@@ -60,20 +61,29 @@ export const CreateCampaignBody = z
   .object({
     beneficiary: BeneficiarySchema.nullish(),
     category: CategorySchema,
-    code: z.string().trim()
-      .min(5, { message: "Vui lòng nhập khoảng từ 5-25 ký tự" })
-      .max(25, { message: "Vui lòng nhập khoảng từ 5-25 ký tự" }),
-    name: z.string().trim()
+    code: z
+      .string()
+      .trim()
+      .min(5, { message: "Vui lòng nhập khoảng từ 5-256 ký tự" })
+      .max(256, { message: "Vui lòng nhập khoảng từ 5-256 ký tự" }),
+    name: z
+      .string()
+      .trim()
       .min(2, { message: "Vui lòng nhập từ 2-256 ký tự" })
       .max(256, { message: "Vui lòng nhập khoảng từ 2-256 ký tự" }),
-    description: z.string().trim()
+    description: z
+      .string()
+      .trim()
       .min(2, { message: "Vui lòng nhập từ 2 ký tự trở lên" }),
-    targetAmount: z.number()
-      .min(500000, { message: "Vui lòng nhập số tiền - tối thiểu 500.000 đồng" }),
+    targetAmount: z
+      .number()
+      .min(500000, {
+        message: "Vui lòng nhập số tiền - tối thiểu 500.000 đồng",
+      }),
     currentAmount: z.number().min(0),
     startDate: z.date({ message: "Vui lòng chọn ngày bắt đầu" }),
     endDate: z.date({ message: "Vui lòng chọn ngày kết thúc" }),
-    status: z.number({message: "Vui lòng chọn trạng thái"}),
+    status: z.number({ message: "Vui lòng chọn trạng thái" }),
     disabledAt: z.boolean(),
     shortDescription: z.string().optional(),
   })
@@ -85,16 +95,25 @@ export const UpdateCampaignBody = z
   .object({
     beneficiary: BeneficiarySchema.nullish(),
     category: CategorySchema,
-    code: z.string().trim()
+    code: z
+      .string()
+      .trim()
       .min(5, { message: "Vui lòng nhập khoảng từ 5-256 ký tự" })
       .max(256, { message: "Vui lòng nhập khoảng từ 5-256 ký tự" }),
-    name: z.string().trim()
+    name: z
+      .string()
+      .trim()
       .min(2, { message: "Vui lòng nhập từ 2-256 ký tự" })
       .max(256, { message: "Vui lòng nhập khoảng từ 2-256 ký tự" }),
-    description: z.string().trim()
+    description: z
+      .string()
+      .trim()
       .min(2, { message: "Vui lòng nhập từ 2 ký tự trở lên" }),
-    targetAmount: z.number()
-      .min(500000, { message: "Vui lòng nhập số tiền - tối thiểu 500.000 đồng" }),
+    targetAmount: z
+      .number()
+      .min(500000, {
+        message: "Vui lòng nhập số tiền - tối thiểu 500.000 đồng",
+      }),
     currentAmount: z.number().min(0),
     startDate: z.date({ message: "Vui lòng chọn ngày bắt đầu" }),
     endDate: z.date({ message: "Vui lòng chọn ngày kết thúc" }),
