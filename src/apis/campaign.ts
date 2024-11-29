@@ -20,6 +20,12 @@ const campaignApi = {
   updateCampaign: (id: number, body: FormData) => {
     http.putWithFiles<CampaignResType>(`${prefix}/${id}`, body);
   },
+  updateCampaignStatus: (id: number, status: string) =>{
+    return http.patch(`${prefix}/${id}/status`, { status });
+  },
+  updateCampaignDisabled: (id: number, disabledAt: boolean) =>{
+    http.patch(`${prefix}/${id}/disabled`, { disabledAt });
+  },
   deleteCampaign: (id: number) => http.delete(`${prefix}/${id}`),
   getCampaign: (id: number) => http.get<CampaignResType>(`${prefix}/${id}`),
   getCampaignOptions: () =>

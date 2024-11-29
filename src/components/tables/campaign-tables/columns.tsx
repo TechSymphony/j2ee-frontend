@@ -5,7 +5,7 @@ import { CampaignType } from "@/schemas/campaign.schema";
 import { ReviewStatusEnum, ReviewStatusOptions } from "@/types/enum";// Import Select components
 import { useEffect, useState } from "react";
 import { Switch } from "@/components/ui/switch";
-import { useUpdateCampaignStatusMutation, useUpdateCampaignStatusShowMutation } from "@/queries/useCampaign";
+import { useUpdateCampaignStatusMutation, useUpdateCampaignDisabledMutation } from "@/queries/useCampaign";
 import SelectBoxEnum from "@/components/ui/select-box-enum";
 import { toast } from "@/hooks/use-toast";
 import { useRefetch } from "@/contexts/app-context";
@@ -30,7 +30,7 @@ export const columns: ColumnDef<CampaignType>[] = [
     header: "Trạng thái hiển thị",
     cell: ({ row }) => {
       const [isDisabled, setIsDisabled] = useState(row.original.disabledAt);
-      const updateCampaignStatusShowMutation = useUpdateCampaignStatusShowMutation();
+      const updateCampaignStatusShowMutation = useUpdateCampaignDisabledMutation();
 
       const handleToggle = async () => {
         setIsDisabled(!isDisabled);
@@ -97,10 +97,23 @@ const StatusCell = ({ row }: { row: any }) => {
     updateCampaignStatus(value);
   };
 
+  const getStatusLabel = (value: ReviewStatusEnum) => {
+    switch (value) {
+      case ReviewStatusEnum.WAITING:
+        return "WAITING";
+      case ReviewStatusEnum.APPROVED:
+        return "APPROVED";
+      case ReviewStatusEnum.REJECT:
+        return "REJECT";
+      default:
+        return "";
+    }
+  };
+
   const updateCampaignStatus = async (value: ReviewStatusEnum) => {
     await updateCampaignStatusMutation.mutateAsync({
       id: row.original.id,
-      status: value,
+      status: getStatusLabel(value),
     });
     setStatus(value);
     toast({

@@ -89,7 +89,7 @@ interface BaseHeader {
   "Content-Type"?: string;
 }
 const request = async <Response>(
-  method: "GET" | "POST" | "PUT" | "DELETE",
+  method: "GET" | "POST" | "PATCH" | "PUT" | "DELETE",
   url: string,
   options?: CustomOptions | undefined
 ) => {
@@ -246,6 +246,16 @@ const http = {
   ) {
     return request<Response>("PUT", url, {
       ...options,
+      body,
+    });
+  },
+  patch<Response>(
+    url: string,
+    body: any,
+    options?: Omit<CustomOptions, "body"> | undefined
+  ) {
+    return request<Response>("PATCH", url, {
+      ...withDefaultJsonHeaders(options),
       body,
     });
   },
