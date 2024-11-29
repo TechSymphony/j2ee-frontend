@@ -48,16 +48,16 @@ export const BeneficiaryClient = () => {
     <>
       <div className="flex items-start justify-between">
         <Heading
-          title={`Quản lý người thụ hưởng (${beneficiaryData?.payload?.page?.totalElements})`}
+          title={`Quản lý nguyện vọng (${beneficiaryData?.payload?.page?.totalElements})`}
           description=""
         />
 
-        <Button
+        {/* <Button
           className="text-xs md:text-sm"
           onClick={() => router.push(`/dashboard/beneficiary/new`)}
         >
           <Plus className="mr-2 h-4 w-4" /> Thêm mới
-        </Button>
+        </Button> */}
       </div>
       <Separator className="my-4" />
       <DataTablePagination

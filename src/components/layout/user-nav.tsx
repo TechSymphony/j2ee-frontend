@@ -48,18 +48,13 @@ export function UserNav() {
       {
         title: "Trang quản lý",
         // href: "/dashboard",
-        href: permissions.includes("IS_SUPERADMIN")
+        href: permissions.includes("SUPER_ADMIN")
           ? "/dashboard"
           : getFirstPermissionRoute(permissions),
         shortcut: "⌘B",
         // option chỉ có nếu user chứa bất kì authorities
-        ignore: user?.authorities?.length,
+        ignore: !permissions || permissions.length < 1,
       },
-      // {
-      //   title: "Gửi nguyện vọng",
-      //   href: "/beneficiary",
-      //   shortcut: "⇧⌘P",
-      // },
       {
         title: "Lịch sử gửi nguyện vọng",
         href: "/history-beneficiary",
@@ -70,11 +65,6 @@ export function UserNav() {
         href: "/history-donation",
         shortcut: "⌘B",
       },
-      // {
-      //   title: "Cài đặt",
-      //   href: "/settings",
-      //   shortcut: "⌘S",
-      // },
       {
         title: "Hồ sơ cá nhân",
         href: "/new-team",
