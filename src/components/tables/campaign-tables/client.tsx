@@ -35,8 +35,8 @@ export const CampaignClient = () => {
     {
       type: DataTableComponentType.Search,
       props: {
-        filterKey: "user.fullName",
-        title: "người dùng",
+        filterKey: "name",
+        title: "chiến dịch",
       },
     },
     {
