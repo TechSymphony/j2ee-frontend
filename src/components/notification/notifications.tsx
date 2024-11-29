@@ -5,24 +5,30 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { useWebsockets } from "@/contexts/websocket-context";
 import { NotificationType } from "@/schemas/notification.schema";
 import { useEffect, useState } from "react";
+import {  useUpdateNotificationAsRead } from "@/queries/useNotification";
 
 function Notifications() {
-  const { notifications, setCallback, updateReadNotifications } =
+  const { notifications } =
     useWebsockets();
   const [messages, setMessages] = useState<Array<NotificationType>>([]);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
 
-  setCallback(setMessages);
+  const updateNotificationAsRead = useUpdateNotificationAsRead();
 
   useEffect(() => {
-    console.log(messages.length);
-    console.log(notifications.length);
-    setMessages(messages);
-  }, [messages, notifications]);
+    setMessages(notifications);
+    for(const message of notifications) {
+      if (message.read === false) {
+        setUnreadNotifications(unreadNotifications + 1);
+      }
+    }
+  }, [notifications]);
 
   const setNotificationAsRead = () => {
-    for (const message of messages) {
-      updateReadNotifications(message.id);
+    for (const message of notifications) {
+      if (message.read === false) {
+        updateNotificationAsRead.mutate(message.id);
+      }
     }
     setUnreadNotifications(0);
   };
@@ -37,13 +43,13 @@ function Notifications() {
               variant="destructive"
               className="absolute top-0 right-0 h-4 w-4 flex items-center justify-center rounded-full text-white text-xs bg-red-600"
             >
-              {messages.length}
+              {unreadNotifications}
             </Badge>
           )}
         </button>
       </PopoverTrigger>
 
-      <PopoverContent className="p-4 w-72 shadow-lg rounded-lg">
+      <PopoverContent className="p-4 w-96 shadow-lg rounded-lg max-h-56 overflow-y-scroll">
         {messages.length === 0 ? (
           <p className="text-gray-500 text-sm">Không có thông báo mới</p>
         ) : (
