@@ -27,7 +27,10 @@ export const CategoryClient = () => {
   return (
     <React.Fragment>
       <div className="flex items-start justify-between">
-        <Heading title={`Quản lý danh mục`} description="" />
+        <Heading
+          title={`Quản lý danh mục (${data.page.totalElements})`}
+          description=""
+        />
 
         <Button
           className="text-xs md:text-sm"

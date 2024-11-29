@@ -37,6 +37,7 @@ import { handleErrorFromApi } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { CalendarDatePicker } from "../date-picker";
+import { FileDownIcon } from "lucide-react";
 
 export const ExportDonationDialog = () => {
   const [open, setOpen] = useState(false);
@@ -92,7 +93,10 @@ export const ExportDonationDialog = () => {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button variant="outline">Xuất báo cáo</Button>
+            <Button variant="outline">
+              <FileDownIcon className="mr-2 h-4 w-4" />
+              Xuất báo cáo
+            </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
@@ -139,8 +143,14 @@ export const ExportDonationDialog = () => {
                     <FormItem>
                       <FormLabel>Từ ngày</FormLabel>
                       <FormControl>
-                        <CalendarDatePicker value={field.value ? new Date(field.value) : new Date(new Date().getFullYear(), 0, 1)}
-                          onChange={(date) => field.onChange(date)} />
+                        <CalendarDatePicker
+                          value={
+                            field.value
+                              ? new Date(field.value)
+                              : new Date(new Date().getFullYear(), 0, 1)
+                          }
+                          onChange={(date) => field.onChange(date)}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -155,8 +165,14 @@ export const ExportDonationDialog = () => {
                     <FormItem>
                       <FormLabel>Đến ngày</FormLabel>
                       <FormControl>
-                      <CalendarDatePicker value={field.value ? new Date(field.value) : new Date(new Date().getFullYear(), 11, 31)}
-                          onChange={(date) => field.onChange(date)} />
+                        <CalendarDatePicker
+                          value={
+                            field.value
+                              ? new Date(field.value)
+                              : new Date(new Date().getFullYear(), 11, 31)
+                          }
+                          onChange={(date) => field.onChange(date)}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -188,7 +204,9 @@ export const ExportDonationDialog = () => {
                   name="isAnonymous"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Xuất danh sách bao gồm quyên góp ẩn danh? </FormLabel>
+                      <FormLabel>
+                        Xuất danh sách bao gồm quyên góp ẩn danh?{" "}
+                      </FormLabel>
                       <FormControl>
                         <Checkbox
                           id="type"

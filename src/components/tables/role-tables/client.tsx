@@ -37,7 +37,10 @@ export const RoleClient = () => {
   return (
     <>
       <div className="flex items-start justify-between">
-        <Heading title={`Quản lý chức vụ`} description="" />
+        <Heading
+          title={`Quản lý chức vụ (${data.page.totalElements})`}
+          description=""
+        />
 
         <Button
           className="text-xs md:text-sm"

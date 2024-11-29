@@ -1,5 +1,6 @@
 import z from "zod";
 import { RoleSchema } from "./role.schema";
+import { PaginatedResponseSchema } from "./paginate.schema";
 
 export const BasicUserSchema = z.object({
   id: z.number(),
@@ -27,6 +28,12 @@ export type UserType = z.TypeOf<typeof UserSchema>;
 export const UserListRes = z.array(UserSchema);
 
 export type UserListResType = z.TypeOf<typeof UserListRes>;
+
+const PaginatedUserResponseSchema = PaginatedResponseSchema(UserSchema);
+
+export type UserPaginatedListResType = z.TypeOf<
+  typeof PaginatedUserResponseSchema
+>;
 
 export const BasicUserRes = z.object({
   id: z.number(),

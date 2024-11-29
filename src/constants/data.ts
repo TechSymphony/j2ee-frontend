@@ -154,10 +154,10 @@ export const navItems: NavItem[] = [
     icon: "donation",
     label: "donation",
   },
-  {
-    title: "Cá nhân",
-    href: "/dashboard/profile",
-    icon: "profile",
-    label: "profile",
-  },
+  // {
+  //   title: "Cá nhân",
+  //   href: "/dashboard/profile",
+  //   icon: "profile",
+  //   label: "profile",
+  // },
 ];

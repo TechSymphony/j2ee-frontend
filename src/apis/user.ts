@@ -9,12 +9,14 @@ import {
   ResetUserPasswordBodyType,
   ChangePasswordBodyType,
   ImportStudentBodyType,
+  UserPaginatedListResType,
 } from "@/schemas/user.schema";
 
 const prefix = "/users";
 
 const userApi = {
-  getUserList: () => http.get<UserListResType>(prefix),
+  // getPaginatedUserList: () => http.get<UserPaginatedListResType>(prefix),
+  getUserList: () => http.get<UserPaginatedListResType>(prefix),
   addUser: (body: CreateUserBodyType) => http.post<UserResType>(prefix, body),
   updateUser: (id: number, body: UpdateUserBodyType) =>
     http.put<UserResType>(`${prefix}/${id}`, body),

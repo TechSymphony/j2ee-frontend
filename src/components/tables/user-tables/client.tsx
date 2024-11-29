@@ -17,7 +17,7 @@ import { ImportStudentDialog } from "@/components/dialog/import-student";
 export const UserClient = () => {
   const router = useRouter();
   const queryConfig = useQueryConfig();
-  
+
   const { data: fetchData, refetch } = useGetUserListQuery(queryConfig);
   const data = fetchData?.payload ?? getDefaultPaginatedResponse;
 
@@ -29,35 +29,37 @@ export const UserClient = () => {
 
   const filters = [
     {
-        type: DataTableComponentType.Search,
-        props: {
-            filterKey: "fullName",
-            title: "Họ và tên",
-        },
-    }
-];
+      type: DataTableComponentType.Search,
+      props: {
+        filterKey: "fullName",
+        title: "Họ và tên",
+      },
+    },
+  ];
   return (
     <>
       <div className="flex items-start justify-between">
         <Heading
-          title={`Người dùng`}
+          title={`Quản lý người dùng (${data.page.totalElements})`}
           description=""
         />
-
-        <ImportStudentDialog />
-        <Button
-          className="text-xs md:text-sm"
-          onClick={() => router.push(`/dashboard/user/new`)}
-        >
-          <Plus className="mr-2 h-4 w-4" /> Thêm mới
-        </Button>
+        <div className="flex items-start justify-between gap-4">
+          <ImportStudentDialog />
+          <Button
+            className="text-xs md:text-sm"
+            onClick={() => router.push(`/dashboard/user/new`)}
+          >
+            <Plus className="mr-2 h-4 w-4" /> Thêm mới
+          </Button>
+        </div>
       </div>
       <Separator />
-      <DataTablePagination 
-        searchKey="fullName" 
-        columns={columns} 
-        data={data} 
-        filters={filters} />
+      <DataTablePagination
+        searchKey="fullName"
+        columns={columns}
+        data={data}
+        filters={filters}
+      />
     </>
   );
 };

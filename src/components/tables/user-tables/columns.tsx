@@ -4,7 +4,10 @@ import { CellAction } from "./cell-action";
 import { Checkbox } from "@/components/ui/checkbox";
 import { UserType } from "@/schemas/user.schema";
 import { useState } from "react";
-import { useUpdateUserIsStudentMutation, useUpdateUserStatusMutation } from "@/queries/useUser";
+import {
+  useUpdateUserIsStudentMutation,
+  useUpdateUserStatusMutation,
+} from "@/queries/useUser";
 import { Switch } from "@/components/ui/switch";
 
 /**
@@ -39,7 +42,7 @@ export const columns: ColumnDef<UserType>[] = [
   },
   {
     accessorKey: "fullName",
-    header: "Họ và tên",
+    header: "Họ tên",
   },
   {
     accessorKey: "email",
@@ -55,11 +58,10 @@ export const columns: ColumnDef<UserType>[] = [
   },
   {
     accessorKey: "enabled",
-    header: "Trạng thái người dùng?",
+    header: "Hoạt động",
     cell: ({ row }) => {
       const [enabled, setEnabled] = useState(row.original.enabled);
       const updateUserStatusMutation = useUpdateUserStatusMutation();
-
 
       const handleToggle = async () => {
         setEnabled(!enabled);
@@ -71,7 +73,8 @@ export const columns: ColumnDef<UserType>[] = [
       };
 
       return (
-        <Switch className="bg-green-500 border-2 border-gray-300 rounded-full "
+        <Switch
+          className="bg-green-500 border-2 border-gray-300 rounded-full "
           checked={enabled}
           onCheckedChange={handleToggle}
         />
@@ -80,11 +83,10 @@ export const columns: ColumnDef<UserType>[] = [
   },
   {
     accessorKey: "isStudent",
-    header: "Là sinh viên?",
+    header: "Sinh viên",
     cell: ({ row }) => {
       const [isStudent, setIsStudent] = useState(row.original.isStudent);
       const updateUserIsStudentMutation = useUpdateUserIsStudentMutation();
-
 
       const handleToggle = async () => {
         setIsStudent(!isStudent);
@@ -96,7 +98,8 @@ export const columns: ColumnDef<UserType>[] = [
       };
 
       return (
-        <Switch className="bg-green-500 border-2 border-gray-300 rounded-full "
+        <Switch
+          className="bg-green-500 border-2 border-gray-300 rounded-full "
           checked={isStudent}
           onCheckedChange={handleToggle}
         />

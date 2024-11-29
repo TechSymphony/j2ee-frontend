@@ -28,7 +28,7 @@ import { useImportStudentMutation } from "@/queries/useUser";
 import { handleErrorFromApi } from "@/lib/utils";
 import { useState } from "react";
 import UserImportedTableDialog from "../tables/user-tables/user-imported-table-dialog";
-import { CheckIcon, X } from "lucide-react";
+import { CheckIcon, FileUpIcon, Upload, X } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -75,13 +75,16 @@ export function ImportStudentDialog() {
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline">Nhập danh sách sinh viên</Button>
+              <Button variant="outline">
+                <FileUpIcon className="mr-2 h-4 w-4" /> Nhập danh sách người
+                dùng
+              </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
                 <DialogTitle>Nhập danh sách</DialogTitle>
                 <DialogDescription>
-                  Nhập danh sách sinh viên vào hệ thống.
+                  Nhập danh sách người dùng vào hệ thống.
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
