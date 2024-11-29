@@ -57,7 +57,7 @@ export const AnonymousDonationOptions = [
 ];
 
 export const StatisTypeOptions = [
-  { value: StatisEnum.DAY, label: "Ngày" },
+  // { value: StatisEnum.DAY, label: "Ngày" },
   { value: StatisEnum.MONTH, label: "Tháng" },
   { value: StatisEnum.YEAR, label: "Năm" },
 ];

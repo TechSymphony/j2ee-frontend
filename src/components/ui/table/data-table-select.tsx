@@ -21,15 +21,17 @@ export interface DataTableSelectProps {
   title: string;
   options: FilterOption[];
   setPage?: (value: number) => void;
+  defaultValue?: string;
 }
 
 export function DataTableFilterSelect({
   filterKey,
   title,
   options,
+  defaultValue,
 }: DataTableSelectProps) {
   const [filterValue, setFilterValue] = useQueryState(filterKey, {
-    defaultValue: "",
+    defaultValue: defaultValue ?? "",
   });
 
   return (

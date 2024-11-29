@@ -45,7 +45,11 @@ import {
   DataTableFilterSelect,
   DataTableSelectProps,
 } from "@/components/ui/table/data-table-select";
-import { ReviewStatusOptions, StatisTypeOptions } from "@/types/enum";
+import {
+  ReviewStatusOptions,
+  StatisEnum,
+  StatisTypeOptions,
+} from "@/types/enum";
 import { useGetCampaignListQuery } from "@/queries/useCampaign";
 
 const chartConfig = {
@@ -96,6 +100,7 @@ export function BarGraph() {
         filterKey: "groupBy",
         title: "Loại thống kê",
         options: StatisTypeOptions,
+        defaultValue: StatisEnum.MONTH,
       },
     },
     {
