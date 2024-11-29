@@ -17,6 +17,7 @@ import {
   ReviewDonationOptions,
 } from "../../../types/enum";
 import { ExportDonationDialog } from "@/components/dialog/export-donation";
+import { formatCurrency } from "@/lib/utils";
 
 export const DonationClient = () => {
   // const router = useRouter();
@@ -87,6 +88,12 @@ export const DonationClient = () => {
         data={data}
         filters={filters}
       />
+      <p className="text-xl text-black font-bold text-right px-10 py-4 mb-8 bg-[#fcfcfc] border">
+        Tổng cộng:{" "}
+        <span className="text-lg font-normal">{`${formatCurrency(
+          data?.page.amountTotal as number
+        )}`}</span>
+      </p>
     </>
   );
 };

@@ -10,7 +10,10 @@ import {
 } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
-import { useGetCampaignListQuery } from "../../queries/useCampaign";
+import {
+  useGetCampaignListQuery,
+  useGetCampaignOptionsQuery,
+} from "../../queries/useCampaign";
 import {
   Select,
   SelectContent,
@@ -42,8 +45,8 @@ import { FileDownIcon } from "lucide-react";
 export const ExportDonationDialog = () => {
   const [open, setOpen] = useState(false);
 
-  const getCampaignListQuery = useGetCampaignListQuery();
-  const items = getCampaignListQuery.data?.payload.content;
+  const getCampaignListQuery = useGetCampaignOptionsQuery();
+  const items = getCampaignListQuery.data?.payload;
 
   const formSchema = ExportDonationBody;
 

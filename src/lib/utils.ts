@@ -50,3 +50,10 @@ export const logFormData = (formData: FormData) => {
     console.log(key, value);
   });
 };
+
+export const formatCurrency = (number: number) => {
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  }).format(number);
+};
