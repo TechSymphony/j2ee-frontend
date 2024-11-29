@@ -5,11 +5,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { useWebsockets } from "@/contexts/websocket-context";
 import { NotificationType } from "@/schemas/notification.schema";
 import { useEffect, useState } from "react";
-import {  useUpdateNotificationAsRead } from "@/queries/useNotification";
+import { useUpdateNotificationAsRead } from "@/queries/useNotification";
 
 function Notifications() {
-  const { notifications } =
-    useWebsockets();
+  const { notifications } = useWebsockets();
   const [messages, setMessages] = useState<Array<NotificationType>>([]);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
 
@@ -17,7 +16,7 @@ function Notifications() {
 
   useEffect(() => {
     setMessages(notifications);
-    for(const message of notifications) {
+    for (const message of notifications) {
       if (message.read === false) {
         setUnreadNotifications(unreadNotifications + 1);
       }
@@ -59,7 +58,7 @@ function Notifications() {
                 key={index}
                 className="p-2 bg-gray-100 rounded-md hover:bg-gray-200 transition"
               >
-                {message.message}
+                <p dangerouslySetInnerHTML={{ __html: message.message }}></p>
               </li>
             ))}
           </ul>
