@@ -45,12 +45,8 @@ import {
   DataTableFilterSelect,
   DataTableSelectProps,
 } from "@/components/ui/table/data-table-select";
-import {
-  ReviewStatusOptions,
-  StatisEnum,
-  StatisTypeOptions,
-} from "@/types/enum";
-import { useGetCampaignListQuery } from "@/queries/useCampaign";
+import { StatisEnum, StatisTypeOptions } from "@/types/enum";
+import { useGetCampaignOptionsQuery } from "@/queries/useCampaign";
 
 const chartConfig = {
   views: {
@@ -82,8 +78,8 @@ export function BarGraph() {
     string,
     string | number
   >[];
-  const { data: campaignListData } = useGetCampaignListQuery();
-  const campaigns = campaignListData?.payload.content;
+  const { data: campaignListData } = useGetCampaignOptionsQuery();
+  const campaigns = campaignListData?.payload;
   console.log({ campaigns });
   const campaignOptions = React.useMemo(() => {
     if (!campaigns) return [];
@@ -108,6 +104,7 @@ export function BarGraph() {
       props: {
         filterKey: "period",
         title: "Khoảng ngày",
+        defaultValue: new Date(),
       },
     },
     {
