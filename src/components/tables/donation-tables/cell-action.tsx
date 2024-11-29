@@ -1,6 +1,4 @@
 "use client";
-import EditBeneficiary from "@/app/(public)/(personal)/history-beneficiary/edit-beneficiary";
-import { AlertModal } from "@/components/modal/alert-modal";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,11 +9,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/hooks/use-toast";
 import { handleErrorFromApi } from "@/lib/utils";
-import { useDeleteMyBeneficiaryMutation } from "@/queries/useBeneficiary";
 import { DonationType } from "@/schemas/donation.schema";
-import { ReviewDonationEnum, ReviewStatusEnum } from "@/types/enum";
-import { Edit, Eye, MoreHorizontal, Trash, Check, X } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { ReviewDonationEnum } from "@/types/enum";
+import { Eye, MoreHorizontal, Check, X } from "lucide-react";
 import { useState } from "react";
 import DonationDetailDialog from "./donation-detail-dialog";
 import { useUpdateDonationVerifyStatus } from "@/queries/useDonation";
@@ -25,16 +21,13 @@ interface CellActionProps {
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
-  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const [id, setId] = useState<number | undefined>(undefined);
-  const router = useRouter();
 
   const updateDonationVerifyStatus = useUpdateDonationVerifyStatus();
 
   const onCompleted = async () => {
     try {
-      setLoading(true);
+      if (updateDonationVerifyStatus.isPending) return;
       // const formData = new FormData();
 
       await updateDonationVerifyStatus.mutateAsync({
@@ -47,13 +40,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     } catch (error: any) {
       handleErrorFromApi({ error });
     } finally {
-      setLoading(false);
       setOpen(false);
     }
   };
   const onCanceled = async () => {
     try {
-      setLoading(true);
+      if (updateDonationVerifyStatus.isPending) return;
       // const formData = new FormData();
 
       await updateDonationVerifyStatus.mutateAsync({
@@ -66,7 +58,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     } catch (error: any) {
       handleErrorFromApi({ error });
     } finally {
-      setLoading(false);
       setOpen(false);
     }
   };

@@ -1,4 +1,4 @@
-import { DonationClient } from "@/components/tables/donation-tables/client";
+import { DonationUserClient } from "@/components/tables/donation-user-tables/client";
 import React from "react";
 import { Suspense } from "react";
 
@@ -15,7 +15,7 @@ export default function page() {
       </div>
       <div className="mt-8">
         <Suspense>
-          <DonationClient type="user" />
+          <DonationUserClient />
         </Suspense>
       </div>
     </div>

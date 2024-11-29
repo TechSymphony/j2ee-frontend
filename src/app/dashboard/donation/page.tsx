@@ -11,7 +11,7 @@ export default function page() {
     <PageContainer>
       <div className="space-y-2">
         <Breadcrumbs items={breadcrumbItems} />
-        <DonationClient type="admin" />
+        <DonationClient />
       </div>
     </PageContainer>
   );
