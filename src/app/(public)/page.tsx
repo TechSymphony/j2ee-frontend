@@ -8,7 +8,7 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div>
-      <div className="py-8 md:py-10 lg:py-14  bg-pink-50">
+      <div className="py-8 md:py-10 lg:py-14  bg-pink-50 min-h-[71vh]">
         <div className="container">
           <div className="mb-5 text-center md:mb-8" id="section-article">
             <h2 className="text-2xl font-bold lg:text-3xl text-pink-darker">
