@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useGetDonationQuery } from "@/queries/useDonation";
+import { useGetDonationQuery, useGetMyDonationQuery } from "@/queries/useDonation";
 import { ReviewDonationEnum, ReviewDonationOptions } from "../../../types/enum";
 import Component from "@/app/loading";
 
@@ -16,11 +16,13 @@ interface DonationDetailDialogProps {
   open: boolean;
   donationId: number;
   onOpenChange: (open: boolean) => void;
+  isAdmin: boolean;
 }
 export function DonationDetailDialog({
   open,
   onOpenChange,
   donationId,
+  isAdmin,
 }: DonationDetailDialogProps) {
   // Dữ liệu quyên góp nhận được
 
@@ -28,7 +30,9 @@ export function DonationDetailDialog({
     return <></>;
   }
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { data, isLoading } = useGetDonationQuery(donationId);
+  const { data, isLoading } = isAdmin
+    ? useGetDonationQuery(donationId)
+    : useGetMyDonationQuery(donationId);
 
   if (isLoading) {
     return (
@@ -104,7 +108,7 @@ export function DonationDetailDialog({
             <strong>Trạng thái:</strong>{" "}
             {donationInfo?.status
               ? ReviewDonationOptions[ReviewDonationEnum[donationInfo.status]]
-                  ?.label
+                ?.label
               : "Không rõ"}
           </div>
 

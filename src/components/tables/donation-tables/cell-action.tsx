@@ -93,6 +93,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         open={open}
         onOpenChange={setOpen}
         donationId={data.id}
+        isAdmin={true}
       />
     </>
   );

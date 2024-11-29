@@ -16,6 +16,7 @@ const prefix = "/donations";
 const donationApi = {
   getDonationList: () => http.get<DonationListResType>(prefix),
   getDonation: (id: number) => http.get<DonationResType>(`${prefix}/${id}`),
+  getMyDonation: (id: number) => http.get<DonationResType>(`/me${prefix}/${id}`),
   addDonation: (body: CreateDonationBodyType) =>
     http.post<CreatedDonationResType>("public" + prefix, body),
   updateDonationClient: (id: number) =>

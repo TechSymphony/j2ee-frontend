@@ -23,6 +23,15 @@ export const useGetDonationQuery = (id: number) => {
   });
 };
 
+export const useGetMyDonationQuery = (id: number) => {
+  return useQuery({
+    queryKey: ["donation-detail", id],
+    queryFn: () => donationApi.getMyDonation(id),
+    staleTime: 0,
+    enabled: true,
+  });
+};
+
 export const useGetMyDonationListQuery = (queryConfig?: QueryConfig) => {
   return useQuery({
     queryKey: ["my-donations", queryConfig],
@@ -125,7 +134,7 @@ export const useUpdateDonationVerifyStatus = () => {
         {
           donationStatus:
             ReviewDonationEnum[
-              donationStatus as unknown as keyof typeof ReviewDonationEnum
+            donationStatus as unknown as keyof typeof ReviewDonationEnum
             ], // COMPLETED | CANCELLED
         }
       );
