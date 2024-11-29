@@ -8,6 +8,7 @@ import {
 const prefix = "/campaigns";
 
 const campaignApi = {
+
     getCampaignClientList: () =>
         http.get<CampaignListResType>("/public" + prefix),
     getCampaignClient: (id: number) =>
