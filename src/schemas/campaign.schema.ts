@@ -25,7 +25,6 @@ export const CampaignSchema = z.object({
   numberOfDonations: z.number().optional(),
   disabledAt: z.boolean(),
   shortDescription: z.string().optional(),
-  image: z.string(),
 });
 
 export type CampaignType = z.TypeOf<typeof CampaignSchema>;
@@ -53,6 +52,7 @@ export const CampaignRes = z.object({
   numberOfDonations: z.number().default(0),
   disabledAt: z.boolean(),
   shortDescription: z.string().optional(),
+  image: z.string(),
 });
 export type CampaignResType = z.TypeOf<typeof CampaignRes>;
 
@@ -61,8 +61,8 @@ export const CreateCampaignBody = z
     beneficiary: BeneficiarySchema.nullish(),
     category: CategorySchema,
     code: z.string().trim()
-      .min(5, { message: "Vui lòng nhập khoảng từ 5-256 ký tự" })
-      .max(256, { message: "Vui lòng nhập khoảng từ 5-256 ký tự" }),
+      .min(5, { message: "Vui lòng nhập khoảng từ 5-25 ký tự" })
+      .max(25, { message: "Vui lòng nhập khoảng từ 5-25 ký tự" }),
     name: z.string().trim()
       .min(2, { message: "Vui lòng nhập từ 2-256 ký tự" })
       .max(256, { message: "Vui lòng nhập khoảng từ 2-256 ký tự" }),

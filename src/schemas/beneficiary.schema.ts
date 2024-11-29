@@ -39,7 +39,7 @@ export type UpdateBeneficiaryBodyType = z.TypeOf<typeof UpdateBeneficiaryBody>;
 
 export const UpdateMyBeneficiaryBody = z
   .object({
-    situationDetail: z.string().optional(),
+    situationDetail: z.string().min(2, { message: "Vui lòng nhập ít nhất 2 ký tự" }),
     supportReceived: z.number().min(500000, { message: "Vui lòng nhập số tiền - tối thiểu 500.000 đồng" }),
     verificationStatus: z.number(),
   })
@@ -50,7 +50,7 @@ export type UpdateMyBeneficiaryBodyType = z.TypeOf<
 >;
 
 export const CreateBeneficiaryBody = z.object({
-  situationDetail: z.string(),
+  situationDetail: z.string().min(2, { message: "Vui lòng nhập ít nhất 2 ký tự" }),
   supportReceived: z.number().min(500000, { message: "Vui lòng nhập số tiền - tối thiểu 500.000 đồng" }),
   verificationStatus: z.number(),
 });

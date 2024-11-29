@@ -45,7 +45,7 @@ import QuillEditor from "@/components/ui/quill-editor";
 export const CampaignForm = () => {
   const params = useParams();
   const [loading, setLoading] = useState(false);
-  const [image, setImage] = useState<File | null>();
+  const [imageFile, setImageFile] = useState<File | null>();
   const [error, setError] = useState<string | null>();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,10 +53,10 @@ export const CampaignForm = () => {
     if (file) {
       if (!file.type.startsWith('image/')) {
         setError('Vui lòng chọn tệp có định dạng là hình ảnh.');
-        setImage(null);
+        setImageFile(null);
       } else {
         setError(null);
-        setImage(file);
+        setImageFile(file);
       }
     }
   };
@@ -140,24 +140,24 @@ export const CampaignForm = () => {
     }
   }, [initialData, form]);
 
-  console.log(form.getValues());
+  console.log("initialData", initialData);
 
   const onSubmit = async (data: UpdateCampaignBodyType | CreateCampaignBodyType) => {
-    if (!image) {
-      toast({
-        description: "Vui lòng chọn hình ảnh cho chiến dịch",
-      });
-      return;
-    }
+
 
     try {
       setLoading(true);
       const formData = new FormData();
       formData.append("campaign", new Blob([JSON.stringify(data)], { type: "application/json" }));
-      formData.append("image", image);
 
       if (initialData) {
-        formData.append("id", updateCampaignId.toString());
+        if (imageFile) {
+          formData.append("image", imageFile);
+          formData.append("old_image", toString(""));
+        } else {
+          formData.append("image", new Blob());
+          formData.append("old_image", initialData.payload.image);
+        }
         await updateCampaignMutation.mutateAsync({ id: updateCampaignId, formData });
         toast({
           description: "Cập nhật chiến dịch thành công",
@@ -166,8 +166,13 @@ export const CampaignForm = () => {
         await refetch();
         triggerRefetch();
       } else {
-
-
+        if (!imageFile) {
+          toast({
+            description: "Vui lòng chọn hình ảnh cho chiến dịch",
+          });
+          return;
+        }
+        formData.append("image", imageFile);
         await addCampaignMutation.mutateAsync(formData);
         triggerRefetch();
         toast({
