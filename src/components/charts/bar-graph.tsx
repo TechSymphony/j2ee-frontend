@@ -78,6 +78,7 @@ export function BarGraph() {
     string,
     string | number
   >[];
+  console.log({ chartData });
   const { data: campaignListData } = useGetCampaignOptionsQuery();
   const campaigns = campaignListData?.payload;
   console.log({ campaigns });
@@ -104,7 +105,7 @@ export function BarGraph() {
       props: {
         filterKey: "period",
         title: "Khoảng ngày",
-        defaultValue: new Date(),
+        // defaultValue: new Date(),
       },
     },
     {
