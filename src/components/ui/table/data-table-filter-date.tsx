@@ -9,44 +9,29 @@ import {
 import { Button } from "@/components/ui/button";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { Calendar } from "@/components/ui/calendar";
-import { endOfYear, format, parse, startOfYear } from "date-fns";
+import { format, parse, subDays } from "date-fns";
 import { useQueryState } from "nuqs"; // Using `nuqs` to manage query state
+import { cn } from "@/lib/utils";
 import { DateRange } from "react-day-picker";
 
 export interface DataTableFilterDateProps {
   filterKey: string;
   title: string;
   setPage?: (value: number) => void;
-  defaultValue?: Date;
 }
 
 export function DataTableFilterDateRange({
   filterKey,
   title,
   setPage,
-  defaultValue,
 }: DataTableFilterDateProps) {
-  const formatDate = "dd-MM-yyyy";
-
-  // Lấy năm hiện tại từ defaultValue hoặc năm hiện tại
-  const currentYear = defaultValue
-    ? defaultValue.getFullYear()
-    : new Date().getFullYear();
-
-  // Tính ngày đầu năm và ngày cuối năm
-  const startOfYearDate = startOfYear(new Date(currentYear, 0, 1));
-  const endOfYearDate = endOfYear(new Date(currentYear, 11, 31));
-
-  // Format ngày đầu năm và cuối năm thành chuỗi
-  const defaultStartDate = format(startOfYearDate, formatDate);
-  const defaultEndDate = format(endOfYearDate, formatDate);
-
   const [startDate, setStartDate] = useQueryState(`${filterKey}_gt`, {
-    defaultValue: defaultStartDate ?? "",
+    defaultValue: "",
   });
   const [endDate, setEndDate] = useQueryState(`${filterKey}_lt`, {
-    defaultValue: defaultEndDate ?? "",
+    defaultValue: "",
   });
+  const formatDate = "dd-MM-yyyy";
 
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: startDate ? parse(startDate, formatDate, new Date()) : undefined,
