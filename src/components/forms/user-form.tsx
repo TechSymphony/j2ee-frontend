@@ -85,10 +85,10 @@ export const UserForm = () => {
   const form = useForm<UserFormValuesType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      role: {},
+      role: null,
       fullName: "",
       email: "",
-      phone: "",
+      phone: null,
     },
   });
 
@@ -108,6 +108,8 @@ export const UserForm = () => {
       });
     }
   }, [initialData, form]);
+
+  console.log("form", form.getValues())
 
   const onSubmit = async (data: UpdateUserBodyType | CreateUserBodyType) => {
     try {
@@ -184,7 +186,7 @@ export const UserForm = () => {
               name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="phone">Số điện thoại</FormLabel>
+                  <FormLabel htmlFor="phone">Số điện thoại <span className="text-xs text-red-600"> (*không bắt buộc)</span> </FormLabel>
                   <FormControl>
                     <Input id="phone" disabled={loading} {...field} />
                   </FormControl>
@@ -197,7 +199,7 @@ export const UserForm = () => {
               name="role"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Vai trò</FormLabel>
+                  <FormLabel>Vai trò <span className="text-xs text-red-600"> (*không bắt buộc)</span></FormLabel>
                   <Select
                     onValueChange={(value) => {
                       const selectedRole = items?.find(
@@ -230,13 +232,13 @@ export const UserForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="block">Trạng thái người dùng</FormLabel>
-                    <FormControl>
-                      <Switch className="bg-green-500 border-2 border-gray-300 rounded-full"
-                        checked={field.value}
-                        onCheckedChange={(value) => field.onChange(value)}
-                        defaultChecked={true}
-                      />
-                    </FormControl>
+                  <FormControl>
+                    <Switch className="bg-green-500 border-2 border-gray-300 rounded-full"
+                      checked={field.value}
+                      onCheckedChange={(value) => field.onChange(value)}
+                      defaultChecked={true}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -247,13 +249,13 @@ export const UserForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="block">Là sinh viên</FormLabel>
-                    <FormControl>
-                      <Switch className="bg-green-500 border-2 border-gray-300 rounded-full"
-                        checked={field.value}
-                        onCheckedChange={(value) => field.onChange(value)}
-                        defaultChecked={false}
-                      />
-                    </FormControl>
+                  <FormControl>
+                    <Switch className="bg-green-500 border-2 border-gray-300 rounded-full"
+                      checked={field.value}
+                      onCheckedChange={(value) => field.onChange(value)}
+                      defaultChecked={false}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

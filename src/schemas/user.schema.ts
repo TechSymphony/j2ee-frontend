@@ -58,8 +58,10 @@ export const CreateUserBody = z
     fullName: z.string().trim().min(2).max(256),
     email: z.string().trim().min(2).max(256).email(),
     username: z.string().trim().min(2).max(256).optional(),
-    phone: z.string().trim().min(2).max(256),
-    role: RoleSchema,
+    phone: z.string().nullable().refine((val) => val === null || /^0\d{9}$/.test(val), {
+      message: "Số điện thoại không hợp lệ",
+    }),
+    role: RoleSchema.nullable(),
     enabled: z.boolean().optional().default(true),
     isStudent: z.boolean().optional().default(false),
   })
@@ -71,7 +73,9 @@ export const UpdateBasicUserBody = z
   .object({
     fullName: z.string().trim().min(2).max(256),
     email: z.string().trim().min(2).max(256).email(),
-    phone: z.string().trim().min(2).max(256).optional(),
+    phone: z.string().nullable().refine((val) => val === null || /^0\d{9}$/.test(val), {
+      message: "Số điện thoại không hợp lệ",
+    }),
   })
   .strict();
 
@@ -79,7 +83,7 @@ export type UpdateBasicUserBodyType = z.TypeOf<typeof UpdateBasicUserBody>;
 
 export const UpdateUserBody = UpdateBasicUserBody.extend({
   username: z.string().trim().min(2).max(256).optional(),
-  role: RoleSchema,
+  role: RoleSchema.nullable(),
   enabled: z.boolean().optional().default(true),
   isStudent: z.boolean().optional().default(false),
 }).strict();
